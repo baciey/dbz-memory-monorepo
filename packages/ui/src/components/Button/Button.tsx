@@ -5,7 +5,7 @@ import {
   Text,
   Pressable,
 } from "react-native";
-import { styles } from "./button.styles";
+import { styles } from "./Button.styles";
 
 export interface ButtonProps {
   text: string;
@@ -16,7 +16,7 @@ export function Button({ text, onClick }: ButtonProps) {
   console.log("btn231");
   return (
     <Pressable style={styles.button} onPress={onClick}>
-      <Text style={styles.text}>{"zxc"}</Text>
+      <Text style={styles.text}>{"123"}</Text>
     </Pressable>
   );
 }

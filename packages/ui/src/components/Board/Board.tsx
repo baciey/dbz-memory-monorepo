@@ -4,7 +4,7 @@ import React from "react";
 import { Text, View, Image } from "react-native";
 import { BoardProps } from "./Board.types";
 import { styles } from "./Board.styles";
-import CardBack from "./cardBack.jpg";
+// import CardBack from "./cardBack.jpg";
 
 // export const Board = ({ imageList, cardBackSrc, screenWidth }: BoardProps) => {
 export const Board = () => {
@@ -25,8 +25,8 @@ export const Board = () => {
   //     />
   //   );
   // });
-  return <Image source={{ uri: CardBack }} width={100} height={100} />;
-  // return <Text>Boar333</Text>;
+  // return <Image source={{ uri: CardBack }} width={100} height={100} />;
+  return <Text>Boar333</Text>;
 
   // return (
   //   <View style={[styles.container, { width: screenWidth }]}>
