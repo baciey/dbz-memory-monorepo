@@ -1,38 +1,9 @@
-import { Image, StyleSheet, Platform, Dimensions } from "react-native";
+import { Image, StyleSheet, Platform } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Board } from "@repo/ui";
-
-import goku from "./../../assets/images/cards/goku.jpg";
-import vegita from "./../../assets/images/cards/vegita.jpg";
-import bulma from "./../../assets/images/cards/bulma.jpg";
-import beerus from "./../../assets/images/cards/beerus.jpg";
-import buu from "./../../assets/images/cards/buu.jpg";
-import haiya from "./../../assets/images/cards/haiya.jpg";
-import picolo from "./../../assets/images/cards/picolo.jpg";
-import frieza from "./../../assets/images/cards/frieza.jpg";
-import mutenroshi from "./../../assets/images/cards/mutenroshi.jpg";
-import pilaf from "./../../assets/images/cards/pilaf.jpg";
-import CardBackSrc from "./../../assets/images/cards/cardBack.jpg";
-
-const imageList = [
-  goku,
-  vegita,
-  bulma,
-  beerus,
-  buu,
-  haiya,
-  picolo,
-  frieza,
-  mutenroshi,
-  pilaf,
-];
-
-const screenWidth = Dimensions.get("window").width;
-
 
 export default function HomeScreen() {
   return (
@@ -45,12 +16,6 @@ export default function HomeScreen() {
         />
       }
     >
-      <Board
-        imageList={imageList}
-        cardBackSrc={CardBackSrc}
-        screenWidth={screenWidth}
-      />
-
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">4!</ThemedText>
         <HelloWave />

@@ -31,8 +31,6 @@ const imageList = [
 
 import { useEffect, useState } from "react";
 
-
-
 export default function Web() {
   const [screenWidth, setScreenWidth] = useState(0);
 
@@ -43,7 +41,6 @@ export default function Web() {
     <div className={styles.container}>
       <h1>Wes</h1>
       <Button onClick={() => console.log("Pressed!")} text="Boop" />
-      {/* <Image src={goku} alt="goku" width={100} height={100} /> */}
       <Board
         imageList={imageList}
         cardBackSrc={CardBackSrc}
