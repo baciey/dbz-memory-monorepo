@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "monorepo",
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "starts": "cd apps/cool-app && EXPO_USE_METRO_WORKSPACE_ROOT=1 yarn expo start"
+  }
+}
