@@ -1,6 +1,6 @@
 "use client";
 
-import { Board, Button } from "@repo/ui";
+import { Board, Button, useSetLanguage, useSetTheme } from "@repo/ui";
 
 import styles from "../styles/index.module.css";
 
@@ -12,6 +12,10 @@ export default function Web() {
   useEffect(() => {
     setScreenWidth(window.innerWidth);
   }, []);
+
+  useSetLanguage();
+  useSetTheme();
+
   return (
     <div className={styles.container}>
       <h1>Web</h1>
