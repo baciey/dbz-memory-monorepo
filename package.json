@@ -7,6 +7,6 @@
     "packages/*"
   ],
   "scripts": {
-    "starts": "cd apps/cool-app && EXPO_USE_METRO_WORKSPACE_ROOT=1 yarn expo start"
+    "starts": "cd apps/expo-app && EXPO_USE_METRO_WORKSPACE_ROOT=1 yarn expo start -c"
   }
 }
