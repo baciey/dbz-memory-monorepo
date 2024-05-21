@@ -15,8 +15,6 @@ import frieza from "./../assets/images/frieza.jpg";
 import mutenroshi from "./../assets/images/mutenroshi.jpg";
 import pilaf from "./../assets/images/pilaf.jpg";
 import CardBackSrc from "./../assets/images/cardBack.jpg";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 const imageList = [
   goku,
@@ -30,6 +28,10 @@ const imageList = [
   mutenroshi,
   pilaf,
 ];
+
+import { useEffect, useState } from "react";
+
+
 
 export default function Web() {
   const [screenWidth, setScreenWidth] = useState(0);
