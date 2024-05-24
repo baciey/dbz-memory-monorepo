@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { appSelectors, THEME_MODES, useAppSelector, COLORS } from "@repo/ui";
+import { appSelectors, useAppSelector, COLORS } from "@repo/ui";
 
 export default function TabLayout() {
   const themeMode = useAppSelector(appSelectors.getThemeMode);
@@ -9,8 +9,11 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: COLORS[themeMode ?? THEME_MODES.light].tint,
+        tabBarActiveTintColor: COLORS[themeMode].tint,
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor: COLORS[themeMode].background2,
+        },
       }}
     >
       <Tabs.Screen

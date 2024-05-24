@@ -3,9 +3,12 @@ export { Button, type ButtonProps } from "./src/components/Button";
 export { Board } from "./src/components/Board";
 export { ThemedView } from "./src/components/ThemedView";
 export { ThemedText } from "./src/components/ThemedText";
-export { SettingsPage } from "./src/components/SettingsPage";
 export { PaperProviderWrapper } from "./src/components/PaperProviderWrapper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
+
+//PAGES
+export { SettingsPage } from "./src/components/SettingsPage";
+export { HomePage } from "./src/components/HomePage";
 
 //REDUX
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";
@@ -25,3 +28,6 @@ export { THEME_MODES } from "./src/constants/theme";
 
 //LOCALES
 export { i18nInit } from "./src/locales";
+
+//UTILS
+export { getTheme } from "./src/utils/getTheme";

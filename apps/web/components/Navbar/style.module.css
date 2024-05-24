@@ -1,0 +1,20 @@
+.container {
+  background-color: pink;
+}
+.list {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+}
+.listItem {
+  font-weight: normal;
+}
+.listItem.active {
+  font-weight: bold;
+}
+.listItem.active .anchor {
+  text-decoration: underline;
+}
+.anchor {
+  text-decoration: none;
+}

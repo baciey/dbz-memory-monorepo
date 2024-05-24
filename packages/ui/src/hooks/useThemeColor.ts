@@ -12,7 +12,6 @@ export function useThemeColor(
   colorName: keyof typeof COLORS.light & keyof typeof COLORS.dark,
 ) {
   const theme = useAppSelector(appSelectors.getThemeMode);
-
   const colorFromProps = props[theme];
 
   if (colorFromProps) {
