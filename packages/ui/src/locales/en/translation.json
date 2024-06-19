@@ -1,0 +1,8 @@
+{
+  "settings": {
+    "settings": "Settings",
+    "language": "Language",
+    "select-language": "Select the application language",
+    "dark-mode": "Dark theme"
+  }
+}
