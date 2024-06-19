@@ -10,7 +10,7 @@
     "start-mobile": "cd apps/expo-app && EXPO_USE_METRO_WORKSPACE_ROOT=1 yarn expo start",
     "start-web": "cd apps/web && yarn dev",
     "start-ui": "cd packages/ui && yarn dev",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .prettierignore"
   },
   "devDependencies": {
     "prettier": "^3.1.1"
