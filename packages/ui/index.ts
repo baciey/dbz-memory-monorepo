@@ -25,9 +25,12 @@ export { useSetTheme } from "./src/hooks/useSetTheme";
 export { COLORS } from "./src/constants/colors";
 export { STORAGE_KEYS } from "./src/constants/storage";
 export { THEME_MODES } from "./src/constants/theme";
+export { ROUTES } from "./src/constants/routes";
 
 //LOCALES
 export { i18nInit } from "./src/locales";
 
 //UTILS
 export { getTheme } from "./src/utils/getTheme";
+export { capitalizeFirst } from "./src/utils/capitalizeFirst";
+export { useTranslation } from "react-i18next";

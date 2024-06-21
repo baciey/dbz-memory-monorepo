@@ -1,10 +1,19 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { appSelectors, useAppSelector, COLORS } from "@repo/ui";
+import {
+  appSelectors,
+  useAppSelector,
+  COLORS,
+  ROUTES,
+  capitalizeFirst,
+  useTranslation,
+} from "@repo/ui";
 
 export default function TabLayout() {
   const themeMode = useAppSelector(appSelectors.getThemeMode);
+
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -19,7 +28,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: t("home.home"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "home" : "home-outline"}
@@ -29,9 +38,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name={ROUTES.settings}
         options={{
-          title: "Settings",
+          title: t("settings.settings"),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "settings" : "settings-outline"}

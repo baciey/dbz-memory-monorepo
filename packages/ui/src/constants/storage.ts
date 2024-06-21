@@ -1,4 +1,4 @@
-export const STORAGE_KEYS = {
-  themeMode: "themeMode",
-  language: "language",
-};
+export enum STORAGE_KEYS {
+  themeMode = "themeMode",
+  language = "language",
+}

@@ -10,7 +10,7 @@ export const HomePage = () => {
   return (
     <ThemedView style={styles.container}>
       <Text variant="headlineSmall" style={styles.heading}>
-        Home page
+        {t("home.home")}
       </Text>
     </ThemedView>
   );
