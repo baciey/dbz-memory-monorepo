@@ -14,7 +14,7 @@ export const Navbar = () => {
   const textColor = COLORS[theme].text;
 
   const settingsPath = `/${ROUTES.settings}`;
-  const homePath = `/${ROUTES.home}`;
+  const homePath = `/`;
 
   return (
     <nav className={styles.container} style={{ backgroundColor: bgColor }}>
