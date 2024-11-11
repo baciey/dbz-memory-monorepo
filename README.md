@@ -43,3 +43,5 @@ For ios, the developer account is needed, so we only generate apk for android. I
 ```bash
 Expo SDK 50 and higher has improved support for more complete node_modules patterns, such as isolated modules. Unfortunately, React Native can still cause issues when installing multiple versions inside a single monorepo. Because of that, it's recommended to only use a single version of React Native.
 ```
+
+TODO: apk się nie odpala na emulatorze
