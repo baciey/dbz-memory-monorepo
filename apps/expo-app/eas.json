@@ -6,15 +6,16 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
     },
     "preview": {
       "distribution": "internal",
-      "android": {
-        "image": "latest"
-      },
-      "ios": {
-        "image": "latest"
+      "env": {
+        "EAS_BUILD_DISABLE_NPM_CACHE": "0",
+        "EAS_BUILD_DISABLE_MAVEN_CACHE": "0"
       }
     },
     "production": {
