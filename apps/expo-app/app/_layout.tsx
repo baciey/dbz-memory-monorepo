@@ -49,7 +49,7 @@ export const AppWithStore = () => {
     <Provider store={store}>
       <PaperProviderWrapper>
         <ThemeProvider value={isDarkMode ? DarkTheme : DefaultTheme}>
-          <StatusBar translucent={true} backgroundColor="transparent" />
+          <StatusBar style={isDarkMode ? "light" : "dark"} />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
