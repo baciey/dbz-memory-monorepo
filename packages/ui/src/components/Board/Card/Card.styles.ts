@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     borderRadius: 10,
-    // margin: 5,
     overflow: "hidden",
   },
   image: {

@@ -1,5 +1,5 @@
 .container {
-  background-color: pink;
+  height: 50px;
 }
 .list {
   list-style: none;
@@ -10,7 +10,7 @@
   font-weight: normal;
 }
 .listItem.active {
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .listItem.active .anchor {
   text-decoration: underline;

@@ -8,8 +8,8 @@ export default function Settings() {
   useSetTheme();
 
   return (
-    <>
+    <div className="pageContainer">
       <SettingsPage />
-    </>
+    </div>
   );
 }

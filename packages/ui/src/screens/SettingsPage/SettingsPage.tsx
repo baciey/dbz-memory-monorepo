@@ -1,7 +1,6 @@
 import React from "react";
-
 import { useTranslation } from "react-i18next";
-import { Button, Menu, Text } from "react-native-paper";
+import { Button, Menu } from "react-native-paper";
 import { THEME_MODES } from "../../constants/theme";
 import { LANGUAGES } from "../../constants/lang";
 import { styles } from "./SettingsPage.styles";
@@ -9,8 +8,9 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { appSelectors } from "../../redux/selectors";
 import { AppState } from "../../redux/slice.types";
 import { appActions } from "../../redux/actions";
-import { ThemedView } from "../ThemedView";
-import { CustomSwitch } from "../CustomSwitch";
+import { ThemedView } from "../../components/ThemedView";
+import { CustomSwitch } from "../../components/CustomSwitch";
+import { ThemedText } from "../../components/ThemedText";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -39,25 +39,26 @@ export const SettingsPage = () => {
 
   return (
     <ThemedView style={styles.container}>
-      <Text variant="headlineSmall" style={styles.heading}>
-        {t("settings.settings")}
-      </Text>
+      <ThemedText
+        variant="headlineSmall"
+        style={styles.heading}
+        text={t("settings.settings")}
+      />
       <ThemedView style={styles.row}>
-        <Text style={styles.mr10}>{t("settings.dark-mode")}</Text>
-
+        <ThemedText style={styles.mr10} text={t("settings.dark-mode")} />
         <CustomSwitch
           value={themeMode === "dark"}
           onValueChange={() => changeThemeMode(themeMode === "dark")}
         />
       </ThemedView>
       <ThemedView style={styles.row}>
-        <Text style={styles.mr10}>{t("settings.select-language")}</Text>
+        <ThemedText style={styles.mr10} text={t("settings.select-language")} />
         <Menu
           visible={visible}
           onDismiss={closeMenu}
           anchor={
             <Button onPress={openMenu}>
-              <Text variant="bodyLarge">{language.toUpperCase()}</Text>
+              <ThemedText variant="bodyLarge" text={language.toUpperCase()} />
             </Button>
           }
         >

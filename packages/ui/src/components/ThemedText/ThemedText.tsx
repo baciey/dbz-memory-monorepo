@@ -1,27 +1,25 @@
 import React from "react";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { ThemedTextProps } from "./ThemedText.types";
-import { useThemeColor } from "../../hooks/useThemeColor";
 
 export const ThemedText = ({
   style,
   variant,
-  children,
-  lightColor,
-  darkColor,
+  text,
+  type = "onBackground",
 }: ThemedTextProps) => {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "background",
-  );
+  const theme = useTheme();
+  let color = theme.colors.onBackground;
+
+  if (type === "onSurface") {
+    color = theme.colors.onSurface;
+  } else if (type === "onPrimary") {
+    color = theme.colors.onPrimary;
+  }
 
   return (
-    <Text
-      variant={variant || "bodyMedium"}
-      style={[{ color, backgroundColor }, style]}
-    >
-      {children}
+    <Text variant={variant || "bodyMedium"} style={[{ color }, style]}>
+      {text}
     </Text>
   );
 };

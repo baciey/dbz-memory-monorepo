@@ -7,5 +7,11 @@
   },
   "home": {
     "home": "Strona główna"
+  },
+  "board": {
+    "start-timer": "Kliknij dowolną kartę aby uruchomić czas",
+    "seconds": "sek",
+    "time": "Czas",
+    "winner": "Winner"
   }
 }

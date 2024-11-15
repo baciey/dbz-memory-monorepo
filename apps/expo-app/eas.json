@@ -16,6 +16,12 @@
       "env": {
         "EAS_BUILD_DISABLE_NPM_CACHE": "0",
         "EAS_BUILD_DISABLE_MAVEN_CACHE": "0"
+      },
+      "android": {
+        "image": "latest"
+      },
+      "ios": {
+        "image": "latest"
       }
     },
     "production": {

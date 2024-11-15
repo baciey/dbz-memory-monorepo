@@ -1,15 +1,15 @@
 import { Providers } from "../components/Providers";
 import { Navbar } from "../components/Navbar";
+import "../styles/global.css";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const style = { height: "100%" };
   return (
-    <html lang="en" style={style}>
-      <body style={style}>
+    <html lang="en">
+      <body>
         <Providers>
           <Navbar />
           {children}

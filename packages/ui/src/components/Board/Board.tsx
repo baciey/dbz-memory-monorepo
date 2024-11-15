@@ -1,32 +1,177 @@
-import React from "react";
-
-import { Card } from "../Card";
-import { Text, View, Image } from "react-native";
-import { BoardProps } from "./Board.types";
+import React, { useEffect, useState } from "react";
+import { Card } from "./Card";
 import { styles } from "./Board.styles";
+import { GLOBAL_STYLES } from "../../styles/globalStyles";
+import { boardImages } from "../../constants/images";
+import { ThemedView } from "../ThemedView";
+import { CardType, SelectedCardType } from "./Card/Card.types";
+import {
+  BOARD_MODE,
+  BoardProps,
+  PLAYER_TURN,
+  Scores,
+  SCORES_KEY,
+} from "./Board.types";
+import { GameInfo } from "./GameInfo";
 
-export const Board = ({ imageList, cardBackSrc, screenWidth }: BoardProps) => {
-  const imageListDoubled = imageList
+const shuffleBoardImages = (): CardType[] =>
+  boardImages
     .flatMap((image) => [image, image])
-    .sort(function () {
-      return 0.5 - Math.random();
-    });
+    .sort(() => Math.random() - 0.5)
+    .map((image) => ({
+      isRevealed: false,
+      isPaired: false,
+      src: image,
+    }));
 
-  const cardElements = imageListDoubled.map((imgSrc, index) => {
-    return (
-      <Card
-        key={index}
-        imgSrc={imgSrc}
-        onClick={() => console.log("clik")}
-        cardBackSrc={cardBackSrc}
-        screenWidth={screenWidth}
-      />
-    );
-  });
+export const Board = ({ mode }: BoardProps) => {
+  const [cardWidth, setCardWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [cards, setCards] = useState<CardType[]>(shuffleBoardImages);
+  const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
+  const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
+
+  // Timer and score state
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [endTime, setEndTime] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0); // Elapsed time for 1-player mode
+  const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
+  const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (mode === BOARD_MODE.player1 && startTime && !endTime) {
+      timer = setInterval(() => {
+        setElapsedTime(Math.floor((Date.now() - startTime) / 1000)); // Update elapsed time every second
+      }, 1000);
+    }
+
+    if (endTime && timer) {
+      clearInterval(timer); // Stop updating when the game ends
+    }
+
+    return () => {
+      if (timer) clearInterval(timer); // Clean up interval on component unmount
+    };
+  }, [startTime, endTime, mode]);
+
+  // Dynamically calculate card and container dimensions
+  useEffect(() => {
+    const padding = 16;
+    const gap = 16;
+    const scrollBarWidth = 20;
+    const smallScreenItemsInRow = 4;
+    const largeScreenItemsInRow = 5;
+
+    const { width: deviceWidth, height: deviceHeight } = GLOBAL_STYLES.window;
+
+    const isSmallScreen = deviceWidth <= 600;
+    const itemsInRow = isSmallScreen
+      ? smallScreenItemsInRow
+      : largeScreenItemsInRow;
+
+    const mainDimension = Math.min(deviceWidth, deviceHeight);
+    const totalGap = gap * (itemsInRow - 1) + 2 * padding + scrollBarWidth;
+    const cardWidth = mainDimension / itemsInRow - totalGap / itemsInRow;
+    const containerWidth = cardWidth * itemsInRow + totalGap - scrollBarWidth;
+
+    setCardWidth(cardWidth);
+    setContainerWidth(containerWidth);
+  }, []);
+
+  const handleCardPress = (index: number) => {
+    if (firstCard && secondCard) return; // Prevent further clicks
+    if (cards[index].isRevealed) return; // Prevent clicking revealed cards
+
+    const updatedCards = [...cards];
+    updatedCards[index].isRevealed = true;
+
+    if (!firstCard) {
+      // Start timer for 1-player mode
+      if (!startTime) setStartTime(Date.now());
+
+      // Set first card
+      setFirstCard({ ...updatedCards[index], index });
+    } else {
+      // Set second card and handle match logic
+      const currentCard = { ...updatedCards[index], index };
+      setSecondCard(currentCard);
+
+      const isMatch = firstCard.src === currentCard.src;
+
+      setTimeout(() => {
+        if (isMatch) {
+          updatedCards[firstCard.index!].isPaired = true;
+          updatedCards[currentCard.index!].isPaired = true;
+
+          // Update scores in 2-players mode
+          if (mode === BOARD_MODE.player2) {
+            const key = `player${playerTurn}`;
+            const value =
+              playerTurn === PLAYER_TURN.player1
+                ? SCORES_KEY.player1
+                : SCORES_KEY.player2;
+            setScores((prevScores) => ({
+              ...prevScores,
+              [key]: prevScores[value] + 1,
+            }));
+          }
+        } else {
+          updatedCards[firstCard.index!].isRevealed = false;
+          updatedCards[currentCard.index!].isRevealed = false;
+
+          // Switch turn in 2-players mode
+          if (mode === BOARD_MODE.player2) {
+            setPlayerTurn((prevTurn) =>
+              prevTurn === PLAYER_TURN.player1
+                ? PLAYER_TURN.player2
+                : PLAYER_TURN.player1,
+            );
+          }
+        }
+
+        setFirstCard(null);
+        setSecondCard(null);
+        setCards(updatedCards);
+
+        // End game in 1-player mode
+        if (updatedCards.every((card) => card.isPaired)) {
+          setEndTime(Date.now());
+        }
+      }, 2000);
+    }
+
+    setCards(updatedCards);
+  };
 
   return (
-    <View style={[styles.container, { width: screenWidth }]}>
-      {cardElements}
-    </View>
+    <>
+      <GameInfo
+        mode={mode}
+        elapsedTime={elapsedTime}
+        scores={scores}
+        cards={cards}
+        playerTurn={playerTurn}
+      />
+      <ThemedView
+        style={[
+          styles.cardsContainer,
+          {
+            maxWidth: containerWidth,
+          },
+        ]}
+      >
+        {cards.map((card, index) => (
+          <Card
+            key={index}
+            src={card.src}
+            onPress={() => handleCardPress(index)}
+            width={cardWidth}
+            card={card}
+          />
+        ))}
+      </ThemedView>
+    </>
   );
 };

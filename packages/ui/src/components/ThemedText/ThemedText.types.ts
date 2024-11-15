@@ -3,6 +3,6 @@ import { VariantProp } from "react-native-paper/lib/typescript/components/Typogr
 
 export type ThemedTextProps = TextProps & {
   variant?: VariantProp<never>;
-  lightColor?: string;
-  darkColor?: string;
+  text: string;
+  type?: "onBackground" | "onSurface" | "onPrimary";
 };

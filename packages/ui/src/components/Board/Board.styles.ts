@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
+  cardsContainer: {
     flexDirection: "row",
-    backgroundColor: "pink",
     flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 16,
   },
 });
