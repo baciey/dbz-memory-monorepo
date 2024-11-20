@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import SpaceMono from "../assets/fonts/SpaceMono-Regular.ttf";
 import "react-native-reanimated";
 
 import { Provider } from "react-redux";
@@ -21,7 +22,7 @@ SplashScreen.preventAutoHideAsync();
 
 export const AppWithStore = () => {
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: SpaceMono,
   });
 
   const isDarkMode =

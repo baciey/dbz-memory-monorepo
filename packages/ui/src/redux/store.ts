@@ -2,10 +2,12 @@ import { PayloadAction, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { baseApi } from "./services/api";
 import { APP_REDUCER_NAME, appReducer } from "./slice";
+import { BOARD_REDUCER_NAME, boardReducer } from "../modules/Board/slice";
 
 export const store = configureStore({
   reducer: {
     [APP_REDUCER_NAME]: appReducer,
+    [BOARD_REDUCER_NAME]: boardReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -2,6 +2,7 @@ export type CardType = {
   isRevealed: boolean;
   isPaired: boolean;
   src: string;
+  isLoaded: boolean;
 };
 
 export type SelectedCardType = CardType & {
@@ -9,8 +10,8 @@ export type SelectedCardType = CardType & {
 };
 
 export type CardProps = {
-  onPress: () => void;
-  src: string;
   width: number;
   card: CardType;
+  onPress: () => void;
+  setIsLoaded: () => void;
 };

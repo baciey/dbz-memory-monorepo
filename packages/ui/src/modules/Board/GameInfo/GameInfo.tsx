@@ -1,7 +1,7 @@
 import React from "react";
-import { ThemedText } from "../../ThemedText";
-import { BOARD_MODE, PLAYER_TURN } from "../Board.types";
-import { ThemedView } from "../../ThemedView";
+import { ThemedText } from "../../../components/ThemedText";
+import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard/GameBoard.types";
+import { ThemedView } from "../../../components/ThemedView";
 import { View } from "react-native";
 import { GameInfoProps } from "./GameInfo.types";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ export const GameInfo = ({
 }: GameInfoProps) => {
   const { t } = useTranslation();
 
-  if (mode === BOARD_MODE.player1) {
+  if (mode === GAME_BOARD_MODE.player1) {
     return (
       <ThemedText
         variant="titleLarge"
@@ -31,7 +31,7 @@ export const GameInfo = ({
     );
   }
 
-  if (mode === BOARD_MODE.player2) {
+  if (mode === GAME_BOARD_MODE.player2) {
     const winner =
       cards.every((card) => card.isPaired) &&
       (scores.player1 > scores.player2

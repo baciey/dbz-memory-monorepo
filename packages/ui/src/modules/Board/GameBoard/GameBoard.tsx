@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "./Card";
-import { styles } from "./Board.styles";
-import { GLOBAL_STYLES } from "../../styles/globalStyles";
-import { boardImages } from "../../constants/images";
-import { ThemedView } from "../ThemedView";
-import { CardType, SelectedCardType } from "./Card/Card.types";
+import { Card } from "./../Card";
+import { styles } from "./GameBoard.styles";
+import { GLOBAL_STYLES } from "../../../styles/globalStyles";
+import { boardImages } from "../../../constants/images";
+import { ThemedView } from "../../../components/ThemedView";
+import { CardType, SelectedCardType } from "./../Card/Card.types";
 import {
-  BOARD_MODE,
-  BoardProps,
+  GAME_BOARD_MODE,
+  GameBoardProps,
   PLAYER_TURN,
   Scores,
   SCORES_KEY,
-} from "./Board.types";
-import { GameInfo } from "./GameInfo";
+} from "./GameBoard.types";
+import { GameInfo } from "./../GameInfo";
+import { View } from "react-native";
+import { useAppDispatch } from "../../../redux/store";
+import { boardSliceActions } from "../slice";
 
 const shuffleBoardImages = (): CardType[] =>
   boardImages
@@ -22,9 +25,12 @@ const shuffleBoardImages = (): CardType[] =>
       isRevealed: false,
       isPaired: false,
       src: image,
+      isLoaded: false,
     }));
 
-export const Board = ({ mode }: BoardProps) => {
+export const GameBoard = ({ mode }: GameBoardProps) => {
+  const dispatch = useAppDispatch();
+
   const [cardWidth, setCardWidth] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [cards, setCards] = useState<CardType[]>(shuffleBoardImages);
@@ -38,10 +44,14 @@ export const Board = ({ mode }: BoardProps) => {
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
 
+  const loadedImages = cards.filter((card) => card.isLoaded);
+  const percentageLoaded = (loadedImages.length / cards.length) * 100;
+  const isEveryImageLoaded = loadedImages.length === cards.length;
+
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
-    if (mode === BOARD_MODE.player1 && startTime && !endTime) {
+    if (mode === GAME_BOARD_MODE.player1 && startTime && !endTime) {
       timer = setInterval(() => {
         setElapsedTime(Math.floor((Date.now() - startTime) / 1000)); // Update elapsed time every second
       }, 1000);
@@ -106,7 +116,7 @@ export const Board = ({ mode }: BoardProps) => {
           updatedCards[currentCard.index!].isPaired = true;
 
           // Update scores in 2-players mode
-          if (mode === BOARD_MODE.player2) {
+          if (mode === GAME_BOARD_MODE.player2) {
             const key = `player${playerTurn}`;
             const value =
               playerTurn === PLAYER_TURN.player1
@@ -122,7 +132,7 @@ export const Board = ({ mode }: BoardProps) => {
           updatedCards[currentCard.index!].isRevealed = false;
 
           // Switch turn in 2-players mode
-          if (mode === BOARD_MODE.player2) {
+          if (mode === GAME_BOARD_MODE.player2) {
             setPlayerTurn((prevTurn) =>
               prevTurn === PLAYER_TURN.player1
                 ? PLAYER_TURN.player2
@@ -145,8 +155,29 @@ export const Board = ({ mode }: BoardProps) => {
     setCards(updatedCards);
   };
 
+  const handleIsImageLoaded = (index: number) => {
+    if (isEveryImageLoaded) return;
+    const updatedCards = [...cards];
+    updatedCards[index].isLoaded = true;
+    setCards(updatedCards);
+  };
+
+  useEffect(() => {
+    dispatch(boardSliceActions.setImagesPercentageLoaded(percentageLoaded));
+  }, [isEveryImageLoaded, percentageLoaded, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(boardSliceActions.setImagesPercentageLoaded(0));
+    };
+  }, [dispatch]);
+
   return (
-    <>
+    <View
+      style={{
+        opacity: isEveryImageLoaded ? 1 : 0,
+      }}
+    >
       <GameInfo
         mode={mode}
         elapsedTime={elapsedTime}
@@ -165,13 +196,13 @@ export const Board = ({ mode }: BoardProps) => {
         {cards.map((card, index) => (
           <Card
             key={index}
-            src={card.src}
-            onPress={() => handleCardPress(index)}
             width={cardWidth}
             card={card}
+            onPress={() => handleCardPress(index)}
+            setIsLoaded={() => handleIsImageLoaded(index)}
           />
         ))}
       </ThemedView>
-    </>
+    </View>
   );
 };

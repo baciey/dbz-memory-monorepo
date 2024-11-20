@@ -12,6 +12,7 @@ export const CombinedDefaultTheme = {
     onPrimary: "#ffffff",
     secondary: "green",
     // tertiary: "#0a7ea4",
+    backdrop: "rgba(1, 1, 1, 0.7)",
   },
 };
 export const CombinedDarkTheme = {
@@ -27,5 +28,6 @@ export const CombinedDarkTheme = {
     onPrimary: "#11181C",
     secondary: "green",
     // tertiary: "#0a7ea4",
+    backdrop: "rgba(1, 1, 1, 0.7)",
   },
 };

@@ -18,4 +18,7 @@ export const GLOBAL_STYLES = StyleSheet.create({
   mb8: {
     marginBottom: 8,
   },
+  borderRadius: {
+    borderRadius: 10,
+  },
 });

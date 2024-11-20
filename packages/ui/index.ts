@@ -1,10 +1,14 @@
 //COMPONENTS
 export { ThemedButton } from "./src/components/ThemedButton";
-export { Board } from "./src/components/Board";
 export { ThemedView } from "./src/components/ThemedView";
 export { ThemedText } from "./src/components/ThemedText";
 export { PaperProviderWrapper } from "./src/components/PaperProviderWrapper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
+export {
+  GameBoard,
+  PLAYER_TURN,
+  GAME_BOARD_MODE,
+} from "./src/modules/Board/GameBoard";
 
 //PAGES
 export { SettingsPage } from "./src/screens/SettingsPage";
@@ -14,6 +18,7 @@ export { HomePage } from "./src/screens/HomePage";
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";
 export { appActions } from "./src/redux/actions";
 export { appSelectors } from "./src/redux/selectors";
+export { boardSelectors } from "./src/modules/Board/selectors";
 export { type AppState } from "./src/redux/slice.types";
 
 //HOOKS
@@ -24,6 +29,10 @@ export { useSetTheme } from "./src/hooks/useSetTheme";
 export { STORAGE_KEYS } from "./src/constants/storage";
 export { THEME_MODES } from "./src/constants/theme";
 export { ROUTES } from "./src/constants/routes";
+export { IMAGES } from "./src/constants/images";
+
+// STYLES
+export { GLOBAL_STYLES } from "./src/styles/globalStyles";
 
 //LOCALES
 export { i18nInit } from "./src/locales";

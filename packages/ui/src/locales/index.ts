@@ -1,15 +1,17 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import pl from "./pl/translation.json";
+import en from "./en/translation.json";
 
 export const i18nInit = i18n
   .use(initReactI18next)
   .init({
     resources: {
       pl: {
-        translation: require("./pl/translation.json"),
+        translation: pl,
       },
       en: {
-        translation: require("./en/translation.json"),
+        translation: en,
       },
     },
     compatibilityJSON: "v3",

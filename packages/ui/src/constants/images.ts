@@ -29,3 +29,21 @@ export const boardImages = [
   picolo,
   pilaf,
 ];
+
+export const IMAGES = {
+  bulma,
+  beerus,
+  buu,
+  frieza,
+  goku,
+  haiya,
+  mutenroshi,
+  picolo,
+  pilaf,
+  vegita,
+  logoImage,
+  sonHQImage,
+  sonLGImage,
+  cardBackImage,
+  boardImages,
+};

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "react-native";
 import { useAppDispatch } from "../redux/store";
@@ -24,7 +24,7 @@ export const useSetTheme = () => {
     };
 
     setThemeMode();
-  }, [dispatch]);
+  }, [dispatch, colorScheme]);
 
   return null;
 };

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,9 +8,21 @@ export const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
-  heading: {
-    alignSelf: "center",
-    marginBottom: 50,
+  backgroundImageContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  backgroundImage: {
+    aspectRatio: Platform.OS === "web" ? 1.5 : 0.4,
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
 });

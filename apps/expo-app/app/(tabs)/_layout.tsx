@@ -7,19 +7,23 @@ import { useTheme } from "react-native-paper";
 export default function TabLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
+  const homeIcon = "home";
+  const homeIconOutline = "home-outline";
+  const settingsIcon = "settings";
+  const settingsIconOutline = "settings-outline";
 
   const tabs = [
     {
       name: "index",
       title: t("home.home"),
-      icon: "home" as "home",
-      iconOutline: "home-outline" as "home-outline",
+      icon: homeIcon,
+      iconOutline: homeIconOutline,
     },
     {
       name: ROUTES.settings,
       title: t("settings.settings"),
-      icon: "settings" as "settings",
-      iconOutline: "settings-outline" as "settings-outline",
+      icon: settingsIcon,
+      iconOutline: settingsIconOutline,
     },
   ];
   return (

@@ -1,5 +1,5 @@
-export type BoardProps = {
-  mode: BOARD_MODE;
+export type GameBoardProps = {
+  mode: GAME_BOARD_MODE;
 };
 
 export enum SCORES_KEY {
@@ -12,7 +12,7 @@ export type Scores = {
   [SCORES_KEY.player2]: number;
 };
 
-export enum BOARD_MODE {
+export enum GAME_BOARD_MODE {
   player1 = "player1",
   player2 = "player2",
 }

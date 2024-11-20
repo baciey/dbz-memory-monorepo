@@ -2,7 +2,6 @@
 
 import React from "react";
 import { HomePage, useSetLanguage, useSetTheme } from "@repo/ui";
-import styles from "./style.module.css";
 
 export default function Home() {
   useSetLanguage();

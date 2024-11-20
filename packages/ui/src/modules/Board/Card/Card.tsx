@@ -1,13 +1,12 @@
-import React from "react";
+import React, { memo } from "react";
 import { styles } from "./Card.styles";
 import { Image, Pressable, View } from "react-native";
 import { CardProps } from "./Card.types";
 import { cardBackImage } from "../../../constants/images";
 
-export const Card = ({ onPress, src, width, card }: CardProps) => {
-  let classes = "";
+export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
   return (
-    <Pressable style={styles.container} onPress={() => onPress()}>
+    <Pressable onPress={onPress}>
       <View
         style={[
           styles.imageContainer,
@@ -19,27 +18,25 @@ export const Card = ({ onPress, src, width, card }: CardProps) => {
         ]}
       >
         <Image
-          style={[styles.image, styles.imageFront]}
+          style={[styles.image]}
           source={{
             width: width,
             height: width,
-            uri: src,
+            uri: card.src,
           }}
         />
         {!card.isRevealed && (
           <Image
-            style={[styles.image, styles.imageBack]}
+            style={[styles.image]}
             source={{
               width: width,
               height: width,
               uri: cardBackImage,
             }}
+            onLoadEnd={setIsLoaded}
           />
         )}
       </View>
-      <View style={[styles.inner, classes]}>
-        <View style={styles.front} />
-      </View>
     </Pressable>
   );
-};
+});
