@@ -25,4 +25,9 @@ export const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
+  returnButton: {
+    position: "absolute",
+    top: 0,
+    left: 16,
+  },
 });

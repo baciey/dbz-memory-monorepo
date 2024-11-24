@@ -21,7 +21,7 @@ export const GameInfo = ({
     return (
       <ThemedText
         variant="titleLarge"
-        style={GLOBAL_STYLES.mb16}
+        style={GLOBAL_STYLES.m.mb16}
         text={
           elapsedTime === 0
             ? t("board.start-timer")
@@ -40,8 +40,8 @@ export const GameInfo = ({
           ? "Player 2"
           : null);
 
-    const activeStyle = { color: "lightgreen" };
-    const inactiveStyle = { color: "grey" };
+    const activeStyle = { color: GLOBAL_STYLES.colors.blueLight };
+    const inactiveStyle = { color: GLOBAL_STYLES.colors.grey };
     const player1Style =
       playerTurn === PLAYER_TURN.player1 ? activeStyle : inactiveStyle;
     const player2Style =
@@ -69,7 +69,7 @@ export const GameInfo = ({
             text={`${t("board.winner")}: ${winner}!`}
           />
         )}
-        <View style={GLOBAL_STYLES.mt16} />
+        <View style={GLOBAL_STYLES.m.mt16} />
       </ThemedView>
     );
   }

@@ -12,7 +12,8 @@ import { boardSelectors } from "../../modules/Board/selectors";
 import { IMAGES } from "../../constants/images";
 import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
-import { ActivityIndicator } from "react-native";
+import { Platform } from "react-native";
+import { Loader } from "../../components/Loader/";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ export const HomePage = () => {
         isVisible={isAlertVisible}
         setIsVisible={setIsAlertVisible}
       />
-
+      <Loader isVisible={gameMode !== null && imagesPercentageLoaded !== 100} />
       <View
         style={[
           styles.backgroundImageContainer,
@@ -53,11 +54,7 @@ export const HomePage = () => {
           },
         ]}
       >
-        {gameMode !== null && imagesPercentageLoaded !== 100 && (
-          <ActivityIndicator size="large" />
-        )}
         <Image
-          // blurRadius={2}
           style={[
             styles.backgroundImage,
             {
@@ -74,13 +71,27 @@ export const HomePage = () => {
         />
       </View>
 
+      {gameMode !== null && imagesPercentageLoaded === 100 && (
+        <ThemedButton
+          text="Return"
+          mode="contained"
+          type="primary"
+          onPress={handleShowModal}
+          style={[
+            GLOBAL_STYLES.m.mt16,
+            GLOBAL_STYLES.m.mb16,
+            Platform.OS === "web" ? styles.returnButton : {},
+          ]}
+        />
+      )}
+
       {gameMode === null && (
         <View>
           <ThemedButton
             text="1 player"
             mode="contained"
             onPress={() => handleSetGameMode(GAME_BOARD_MODE.player1)}
-            style={GLOBAL_STYLES.mb8}
+            style={GLOBAL_STYLES.m.mb8}
           />
           <ThemedButton
             text="2 players"
@@ -92,19 +103,6 @@ export const HomePage = () => {
       )}
 
       {gameMode !== null && <GameBoard mode={gameMode} />}
-
-      {gameMode !== null && imagesPercentageLoaded === 100 && (
-        <ThemedButton
-          text="Return"
-          mode="contained"
-          type="primary"
-          onPress={handleShowModal}
-          style={[
-            GLOBAL_STYLES.mt16,
-            { position: "absolute", top: 0, left: 16 },
-          ]}
-        />
-      )}
     </ThemedView>
   );
 };

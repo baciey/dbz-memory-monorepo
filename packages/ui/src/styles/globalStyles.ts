@@ -1,24 +1,74 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
-export const GLOBAL_STYLES = StyleSheet.create({
+export const GLOBAL_STYLES = {
   window: {
     width,
     height,
   },
-  mt16: {
-    marginTop: 16,
+  m: {
+    mt32: {
+      marginTop: 32,
+    },
+    mb32: {
+      marginBottom: 32,
+    },
+    ml32: {
+      marginLeft: 32,
+    },
+    mr32: {
+      marginRight: 32,
+    },
+    mt16: {
+      marginTop: 16,
+    },
+    mb16: {
+      marginBottom: 16,
+    },
+    ml16: {
+      marginLeft: 16,
+    },
+    mr16: {
+      marginRight: 16,
+    },
+    mt8: {
+      marginTop: 8,
+    },
+    mb8: {
+      marginBottom: 8,
+    },
+    ml8: {
+      marginLeft: 8,
+    },
+    mr8: {
+      marginRight: 8,
+    },
+    mt4: {
+      marginTop: 4,
+    },
+    mb4: {
+      marginBottom: 4,
+    },
+    ml4: {
+      marginLeft: 4,
+    },
+    mr4: {
+      marginRight: 4,
+    },
   },
-  mb16: {
-    marginBottom: 16,
-  },
-  mt8: {
-    marginTop: 8,
-  },
-  mb8: {
-    marginBottom: 8,
-  },
-  borderRadius: {
+  br10: {
     borderRadius: 10,
   },
-});
+  colors: {
+    black: "#151718",
+    blackLight: "#37383b",
+    white: "#ffffff",
+    whiteDark: "#F9F7F5",
+    blue: "#4b6cdb",
+    blueLight: "#0a7ea4",
+    grey: "#b3b4b5",
+    greyLight: "#cccecf",
+    green: "green",
+    backdrop: "rgba(1, 1, 1, 0.7)",
+  },
+};

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   contentContainer: {
     padding: 20,
     alignSelf: "center",
-    ...GLOBAL_STYLES.borderRadius,
+    ...GLOBAL_STYLES.br10,
   },
   buttonsContainer: {
     flexDirection: "row",
