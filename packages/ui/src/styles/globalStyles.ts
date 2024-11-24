@@ -1,7 +1,9 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const GLOBAL_STYLES = {
+  isWeb: Platform.OS === "web",
+  isWebMobile: Platform.OS === "web" && width < 480,
   window: {
     width,
     height,
@@ -56,8 +58,10 @@ export const GLOBAL_STYLES = {
       marginRight: 4,
     },
   },
-  br10: {
-    borderRadius: 10,
+  br: {
+    small: 10,
+    medium: 12,
+    large: 16,
   },
   colors: {
     black: "#151718",
@@ -70,5 +74,7 @@ export const GLOBAL_STYLES = {
     greyLight: "#cccecf",
     green: "green",
     backdrop: "rgba(1, 1, 1, 0.7)",
+    error: "red",
+    warning: "orange",
   },
 };

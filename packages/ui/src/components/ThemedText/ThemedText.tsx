@@ -15,6 +15,8 @@ export const ThemedText = ({
     color = theme.colors.onSurface;
   } else if (type === "onPrimary") {
     color = theme.colors.onPrimary;
+  } else if (type === "error") {
+    color = theme.colors.error;
   }
 
   return (

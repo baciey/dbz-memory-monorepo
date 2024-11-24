@@ -7,6 +7,7 @@ import { GameInfoProps } from "./GameInfo.types";
 import { useTranslation } from "react-i18next";
 import { styles } from "./GameInfo.styles";
 import { GLOBAL_STYLES } from "../../../styles/globalStyles";
+import { useAppSelector } from "../../../redux/store";
 
 export const GameInfo = ({
   mode,
@@ -16,6 +17,13 @@ export const GameInfo = ({
   playerTurn,
 }: GameInfoProps) => {
   const { t } = useTranslation();
+
+  const player1Name =
+    useAppSelector((state) => state.board.playersNames[0]) || "Player 1";
+  const player2Name =
+    useAppSelector((state) => state.board.playersNames[1]) || "Player 2";
+  const singlePlayerName =
+    useAppSelector((state) => state.board.playerName) || "";
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (
@@ -35,9 +43,9 @@ export const GameInfo = ({
     const winner =
       cards.every((card) => card.isPaired) &&
       (scores.player1 > scores.player2
-        ? "Player 1"
+        ? player1Name
         : scores.player2 > scores.player1
-          ? "Player 2"
+          ? player2Name
           : null);
 
     const activeStyle = { color: GLOBAL_STYLES.colors.blueLight };
@@ -53,13 +61,13 @@ export const GameInfo = ({
           <ThemedText
             variant="titleLarge"
             style={player1Style}
-            text={`Player 1: ${scores.player1}`}
+            text={`${player1Name}: ${scores.player1}`}
           />
 
           <ThemedText
             variant="titleLarge"
             style={[player2Style, styles.player2text]}
-            text={`Player 2: ${scores.player2}`}
+            text={`${player2Name}: ${scores.player2}`}
           />
         </View>
         {winner && (

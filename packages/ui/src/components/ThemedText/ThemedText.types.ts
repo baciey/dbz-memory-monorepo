@@ -4,5 +4,5 @@ import { VariantProp } from "react-native-paper/lib/typescript/components/Typogr
 export type ThemedTextProps = TextProps & {
   variant?: VariantProp<never>;
   text: string;
-  type?: "onBackground" | "onSurface" | "onPrimary";
+  type?: "onBackground" | "onSurface" | "onPrimary" | "error";
 };

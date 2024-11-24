@@ -8,4 +8,5 @@ export type ThemedButtonProps = {
   mode: "text" | "outlined" | "contained" | "elevated" | "contained-tonal";
   style?: StyleProp<ViewStyle>;
   type?: "primary" | "secondary";
+  disabled?: boolean;
 };

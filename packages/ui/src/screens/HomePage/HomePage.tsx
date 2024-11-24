@@ -14,6 +14,7 @@ import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
 import { Platform } from "react-native";
 import { Loader } from "../../components/Loader/";
+import { NamesModal } from "../../modules/Board/NamesModal";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export const HomePage = () => {
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
   const [backgroundImageWidth, setBackgroundImageWidth] = useState<number>(0);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [isNamesModalVisible, setIsNamesModalVisible] = useState(true);
 
   const imagesPercentageLoaded = useAppSelector(
     boardSelectors.getImagesPercentageLoaded,
@@ -36,6 +38,12 @@ export const HomePage = () => {
   };
 
   const handleShowModal = () => setIsAlertVisible(true);
+
+  useEffect(() => {
+    if (gameMode !== null) {
+      setIsNamesModalVisible(true);
+    }
+  }, [gameMode]);
 
   return (
     <ThemedView style={styles.container}>
@@ -102,6 +110,13 @@ export const HomePage = () => {
         </View>
       )}
 
+      {gameMode !== null && (
+        <NamesModal
+          isVisible={isNamesModalVisible}
+          setIsVisible={setIsNamesModalVisible}
+          mode={gameMode}
+        />
+      )}
       {gameMode !== null && <GameBoard mode={gameMode} />}
     </ThemedView>
   );
