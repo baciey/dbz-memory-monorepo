@@ -29,7 +29,7 @@ const shuffleBoardImages = (): CardType[] =>
       isLoaded: false,
     }));
 
-export const GameBoard = ({ mode }: GameBoardProps) => {
+export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const dispatch = useAppDispatch();
 
   const [cardWidth, setCardWidth] = useState(0);
@@ -44,15 +44,10 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   const [elapsedTime, setElapsedTime] = useState<number>(0); // Elapsed time for 1-player mode
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
-  // const [isNamesModalVisible, setIsNamesModalVisible] = useState(true);
 
   const loadedImages = cards.filter((card) => card.isLoaded);
   const percentageLoaded = (loadedImages.length / cards.length) * 100;
   const isEveryImageLoaded = loadedImages.length === cards.length;
-
-  // useEffect(() => {
-  //   setIsNamesModalVisible(true);
-  // }, []);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -181,14 +176,9 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   return (
     <View
       style={{
-        opacity: isEveryImageLoaded ? 1 : 0,
+        opacity: isEveryImageLoaded && isVisible ? 1 : 0,
       }}
     >
-      {/* <NamesModal
-        isVisible={isNamesModalVisible}
-        setIsVisible={setIsNamesModalVisible}
-        mode={mode}
-      /> */}
       <GameInfo
         mode={mode}
         elapsedTime={elapsedTime}

@@ -20,7 +20,4 @@ export const styles = StyleSheet.create({
     gap: 16,
     marginTop: 16,
   },
-  errorText: {
-    color: GLOBAL_STYLES.colors.error,
-  },
 });

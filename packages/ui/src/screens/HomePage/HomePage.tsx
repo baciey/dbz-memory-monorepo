@@ -15,10 +15,12 @@ import { styles } from "./HomePage.styles";
 import { Platform } from "react-native";
 import { Loader } from "../../components/Loader/";
 import { NamesModal } from "../../modules/Board/NamesModal";
+import { useGetPlayerName } from "../../hooks/useGetPlayerName";
 
 export const HomePage = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  useGetPlayerName();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
   const [backgroundImageWidth, setBackgroundImageWidth] = useState<number>(0);
@@ -58,7 +60,8 @@ export const HomePage = () => {
           styles.backgroundImageContainer,
           {
             width: backgroundImageWidth,
-            opacity: imagesPercentageLoaded !== 100 ? 1 : 0,
+            opacity:
+              imagesPercentageLoaded !== 100 || isNamesModalVisible ? 1 : 0,
           },
         ]}
       >
@@ -117,7 +120,9 @@ export const HomePage = () => {
           mode={gameMode}
         />
       )}
-      {gameMode !== null && <GameBoard mode={gameMode} />}
+      {gameMode !== null && (
+        <GameBoard mode={gameMode} isVisible={!isNamesModalVisible} />
+      )}
     </ThemedView>
   );
 };

@@ -74,7 +74,5 @@ export const GLOBAL_STYLES = {
     greyLight: "#cccecf",
     green: "green",
     backdrop: "rgba(1, 1, 1, 0.7)",
-    error: "red",
-    warning: "orange",
   },
 };

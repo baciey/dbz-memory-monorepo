@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Portal, TextInput, useTheme } from "react-native-paper";
 import { NamesModalProps } from "./NamesModal.types";
 import { styles } from "./NamesModal.styles";
@@ -6,8 +6,9 @@ import { ThemedText } from "../../../components/ThemedText";
 import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedView } from "../../../components/ThemedView";
 import { GAME_BOARD_MODE } from "../GameBoard";
-import { useAppDispatch } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { boardSliceActions } from "../slice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const NamesModal = ({
   isVisible,
@@ -20,6 +21,15 @@ export const NamesModal = ({
   const [playerName, setPlayerName] = useState("");
   const [playersNames, setPlayersNames] = useState(["", ""]);
   const [error, setError] = useState(["", ""]);
+
+  const player1Name = useAppSelector((state) => state.board.playersNames[0]);
+  const player2Name = useAppSelector((state) => state.board.playersNames[1]);
+  const singlePlayerName = useAppSelector((state) => state.board.playerName);
+
+  useEffect(() => {
+    if (singlePlayerName) setPlayerName(singlePlayerName);
+    if (player1Name || player2Name) setPlayersNames([player1Name, player2Name]);
+  }, []);
 
   const isPlayer2Mode = mode === GAME_BOARD_MODE.player2;
 
@@ -40,13 +50,13 @@ export const NamesModal = ({
   const handleSaveName = () => {
     setIsVisible(false);
     if (isPlayer2Mode) {
-      dispatch(
-        boardSliceActions.setPlayersNames(
-          playersNames.map((name) => name.trim()),
-        ),
-      );
+      const names = playersNames.map((name) => name.trim());
+      dispatch(boardSliceActions.setPlayersNames(names));
+      AsyncStorage.setItem("playersNames", JSON.stringify(names));
     } else {
-      dispatch(boardSliceActions.setPlayerName(playerName.trim()));
+      const name = playerName.trim();
+      dispatch(boardSliceActions.setPlayerName(name));
+      AsyncStorage.setItem("playerName", JSON.stringify(name));
     }
   };
 
@@ -103,7 +113,11 @@ export const NamesModal = ({
             error={!!error[0]}
           />
           {error[0] ? (
-            <ThemedText type="error" text={error[0]} style={styles.errorText} />
+            <ThemedText
+              type="error"
+              text={error[0]}
+              style={{ color: theme.colors.error }}
+            />
           ) : null}
           {isPlayer2Mode ? (
             <>
@@ -117,7 +131,7 @@ export const NamesModal = ({
                 <ThemedText
                   type="error"
                   text={error[1]}
-                  style={styles.errorText}
+                  style={{ color: theme.colors.error }}
                 />
               ) : null}
             </>
