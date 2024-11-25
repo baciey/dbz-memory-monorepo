@@ -7,8 +7,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: GLOBAL_STYLES.br.small,
     margin: 16,
-    alignSelf: GLOBAL_STYLES.isWeb ? "center" : "stretch",
-    minWidth: GLOBAL_STYLES.isWeb ? 300 : "auto",
   },
   buttonsContainer: {
     flexDirection: "row",

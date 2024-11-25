@@ -1,13 +1,4 @@
-import { Dimensions, Platform } from "react-native";
-const { width, height } = Dimensions.get("window");
-
 export const GLOBAL_STYLES = {
-  isWeb: Platform.OS === "web",
-  isWebMobile: Platform.OS === "web" && width < 480,
-  window: {
-    width,
-    height,
-  },
   m: {
     mt32: {
       marginTop: 32,

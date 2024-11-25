@@ -18,4 +18,9 @@ export const styles = StyleSheet.create({
   mr10: {
     marginRight: 10,
   },
+  authContainer: {
+    width: "100%",
+    minWidth: 300,
+    maxWidth: 400,
+  },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Portal, TextInput, useTheme } from "react-native-paper";
+import { Modal, Portal, useTheme } from "react-native-paper";
 import { NamesModalProps } from "./NamesModal.types";
 import { styles } from "./NamesModal.styles";
 import { ThemedText } from "../../../components/ThemedText";
@@ -9,6 +9,9 @@ import { GAME_BOARD_MODE } from "../GameBoard";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { boardSliceActions } from "../slice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
+import { validateName } from "../../../utils/validateName";
+import { ThemedTextInput } from "../../../components/ThemedTextInput";
 
 export const NamesModal = ({
   isVisible,
@@ -20,32 +23,20 @@ export const NamesModal = ({
 
   const [playerName, setPlayerName] = useState("");
   const [playersNames, setPlayersNames] = useState(["", ""]);
-  const [error, setError] = useState(["", ""]);
+  const [errorText, setErrorText] = useState(["", ""]);
 
   const player1Name = useAppSelector((state) => state.board.playersNames[0]);
   const player2Name = useAppSelector((state) => state.board.playersNames[1]);
   const singlePlayerName = useAppSelector((state) => state.board.playerName);
 
+  const { isMobile } = useGetScreenDimensions();
+
   useEffect(() => {
     if (singlePlayerName) setPlayerName(singlePlayerName);
     if (player1Name || player2Name) setPlayersNames([player1Name, player2Name]);
-  }, []);
+  }, [player1Name, player2Name, singlePlayerName]);
 
   const isPlayer2Mode = mode === GAME_BOARD_MODE.player2;
-
-  const validateInput = (text: string) => {
-    const trimmedText = text.trim();
-    if (!/^[a-zA-Z0-9 ]*$/.test(trimmedText)) {
-      return "Only letters, numbers, and spaces are allowed.";
-    }
-    if (trimmedText.length > 10) {
-      return "Maximum length is 20 characters.";
-    }
-    if (/\s{2,}/.test(trimmedText)) {
-      return "No consecutive spaces allowed.";
-    }
-    return "";
-  };
 
   const handleSaveName = () => {
     setIsVisible(false);
@@ -62,8 +53,8 @@ export const NamesModal = ({
 
   const handleInputChange = (index: number, text: string) => {
     const trimmedText = text.trimStart();
-    const errorText = validateInput(trimmedText);
-    setError((prev) => {
+    const errorText = validateName(trimmedText);
+    setErrorText((prev) => {
       const updatedErrors = [...prev];
       updatedErrors[index] = errorText;
       return updatedErrors;
@@ -82,11 +73,11 @@ export const NamesModal = ({
   const isConfirmButtonDisabled = () => {
     if (isPlayer2Mode) {
       return (
-        playersNames.some((name) => validateInput(name) !== "") ||
-        error.some((e) => e !== "")
+        playersNames.some((name) => validateName(name) !== "") ||
+        errorText.some((e) => e !== "")
       );
     }
-    return validateInput(playerName) !== "";
+    return validateName(playerName) !== "";
   };
 
   return (
@@ -96,7 +87,11 @@ export const NamesModal = ({
         onDismiss={() => setIsVisible(false)}
         contentContainerStyle={[
           styles.contentContainer,
-          { backgroundColor: theme.colors.surface },
+          {
+            backgroundColor: theme.colors.surface,
+            alignSelf: isMobile ? "stretch" : "center",
+            minWidth: isMobile ? "auto" : 300,
+          },
         ]}
       >
         <ThemedText
@@ -106,41 +101,24 @@ export const NamesModal = ({
         />
 
         <ThemedView type="surface" style={styles.inputsContainer}>
-          <TextInput
+          <ThemedTextInput
             label={isPlayer2Mode ? "Player 1 name" : "Name"}
             value={isPlayer2Mode ? playersNames[0] : playerName}
             onChangeText={(text) => handleInputChange(0, text)}
-            error={!!error[0]}
+            errorText={errorText[0]}
           />
-          {error[0] ? (
-            <ThemedText
-              type="error"
-              text={error[0]}
-              style={{ color: theme.colors.error }}
-            />
-          ) : null}
           {isPlayer2Mode ? (
-            <>
-              <TextInput
-                label="Player 2 name"
-                value={playersNames[1]}
-                onChangeText={(text) => handleInputChange(1, text)}
-                error={!!error[1]}
-              />
-              {error[1] ? (
-                <ThemedText
-                  type="error"
-                  text={error[1]}
-                  style={{ color: theme.colors.error }}
-                />
-              ) : null}
-            </>
+            <ThemedTextInput
+              label="Player 2 name"
+              value={playersNames[1]}
+              onChangeText={(text) => handleInputChange(1, text)}
+              errorText={errorText[1]}
+            />
           ) : null}
         </ThemedView>
         <ThemedView type="surface" style={styles.buttonsContainer}>
           <ThemedButton
             text="Confirm"
-            mode="contained"
             type="primary"
             onPress={handleSaveName}
             disabled={isConfirmButtonDisabled()}

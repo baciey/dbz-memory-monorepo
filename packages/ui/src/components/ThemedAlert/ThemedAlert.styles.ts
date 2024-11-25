@@ -3,9 +3,9 @@ import { GLOBAL_STYLES } from "../../styles/globalStyles";
 
 export const styles = StyleSheet.create({
   contentContainer: {
-    padding: 20,
+    padding: 16,
     alignSelf: "center",
-    ...GLOBAL_STYLES.br10,
+    borderRadius: GLOBAL_STYLES.br.small,
   },
   buttonsContainer: {
     flexDirection: "row",

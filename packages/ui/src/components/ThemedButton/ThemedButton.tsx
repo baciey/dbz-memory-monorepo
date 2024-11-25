@@ -6,7 +6,6 @@ export const ThemedButton = ({
   style,
   text,
   icon,
-  mode,
   onPress,
   type = "primary",
   disabled,
@@ -21,7 +20,7 @@ export const ThemedButton = ({
   return (
     <Button
       icon={icon}
-      mode={mode}
+      mode="contained"
       onPress={onPress}
       style={style}
       buttonColor={buttonColor}

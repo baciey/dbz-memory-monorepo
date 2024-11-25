@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import styles from "./style.module.css";
-import { ROUTES, useTheme, useTranslation } from "@repo/ui";
+import {
+  ROUTES,
+  supabase,
+  ThemedButton,
+  useTheme,
+  useTranslation,
+} from "@repo/ui";
 import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
@@ -13,8 +19,9 @@ export const Navbar = () => {
   const bgColor = theme.colors.surface;
   const textColor = theme.colors.onSurface;
 
-  const settingsPath = `/${ROUTES.settings}`;
   const homePath = `/`;
+  const settingsPath = `/${ROUTES.settings}`;
+  const statisticsPath = `/${ROUTES.statistics}`;
 
   const pages = [
     {
@@ -24,6 +31,10 @@ export const Navbar = () => {
     {
       name: t("settings.settings"),
       path: settingsPath,
+    },
+    {
+      name: t("statistics.statistics"),
+      path: statisticsPath,
     },
   ];
 

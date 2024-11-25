@@ -11,6 +11,8 @@ export const ThemedAlert = ({
   setIsVisible,
   actionButtonText = "OK",
   actionButtonOnPress,
+  text,
+  withCancel = false,
 }: ThemedAlertProps) => {
   const theme = useTheme();
 
@@ -24,27 +26,24 @@ export const ThemedAlert = ({
           { backgroundColor: theme.colors.surface },
         ]}
       >
-        <ThemedText
-          variant="titleMedium"
-          text="Do you want to return to main menu?"
-          type="onSurface"
-        />
+        <ThemedText variant="bodyMedium" text={text} type="onSurface" />
         <ThemedView type="surface" style={styles.buttonsContainer}>
           <ThemedButton
             text={actionButtonText}
-            mode="contained"
             type="primary"
             onPress={() => {
               setIsVisible(false);
+              if (!actionButtonOnPress) return;
               actionButtonOnPress();
             }}
           />
-          <ThemedButton
-            text="Cancel"
-            mode="contained"
-            type="primary"
-            onPress={() => setIsVisible(false)}
-          />
+          {withCancel && (
+            <ThemedButton
+              text="Cancel"
+              type="primary"
+              onPress={() => setIsVisible(false)}
+            />
+          )}
         </ThemedView>
       </Modal>
     </Portal>

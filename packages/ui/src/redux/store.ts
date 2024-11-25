@@ -3,11 +3,13 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { baseApi } from "./services/api";
 import { APP_REDUCER_NAME, appReducer } from "./slice";
 import { BOARD_REDUCER_NAME, boardReducer } from "../modules/Board/slice";
+import { GAMES_REDUCER_NAME, gamesReducer } from "./Games/slice";
 
 export const store = configureStore({
   reducer: {
     [APP_REDUCER_NAME]: appReducer,
     [BOARD_REDUCER_NAME]: boardReducer,
+    [GAMES_REDUCER_NAME]: gamesReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -1,6 +1,5 @@
 const baseUrl =
-  "https://omomtmzcmzgexxuzimge.supabase.co/storage/v1/object/public/DBZ%20Images/";
-
+  "https://iyiklcyyvmubcqjqhuhc.supabase.co/storage/v1/object/public/DBZ%20Images/";
 const bulma = baseUrl + "bulma.jpg";
 const beerus = baseUrl + "beerus.jpg";
 const buu = baseUrl + "buu.jpg";
@@ -19,15 +18,15 @@ export const cardBackImage = baseUrl + "cardBack.jpg";
 
 export const boardImages = [
   vegita,
-  beerus,
-  bulma,
-  buu,
-  frieza,
-  goku,
-  haiya,
-  mutenroshi,
-  picolo,
-  pilaf,
+  // beerus,
+  // bulma,
+  // buu,
+  // frieza,
+  // goku,
+  // haiya,
+  // mutenroshi,
+  // picolo,
+  // pilaf,
 ];
 
 export const IMAGES = {

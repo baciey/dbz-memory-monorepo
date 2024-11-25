@@ -9,10 +9,12 @@ export {
   PLAYER_TURN,
   GAME_BOARD_MODE,
 } from "./src/modules/Board/GameBoard";
+export { AuthModal } from "./src/components/AuthModal";
 
 //PAGES
 export { SettingsPage } from "./src/screens/SettingsPage";
 export { HomePage } from "./src/screens/HomePage";
+export { StatisticsPage } from "./src/screens/StatisticsPage";
 
 //REDUX
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";
@@ -24,6 +26,7 @@ export { type AppState } from "./src/redux/slice.types";
 //HOOKS
 export { useSetLanguage } from "./src/hooks/useSetLanguage";
 export { useSetTheme } from "./src/hooks/useSetTheme";
+export { useGetUser } from "./src/hooks/useGetUser";
 
 //CONSTANTS
 export { STORAGE_KEYS } from "./src/constants/storage";
@@ -41,3 +44,4 @@ export { i18nInit } from "./src/locales";
 export { useTheme } from "react-native-paper";
 export { capitalizeFirst } from "./src/utils/capitalizeFirst";
 export { useTranslation } from "react-i18next";
+export { supabase } from "./src/utils/supabase";

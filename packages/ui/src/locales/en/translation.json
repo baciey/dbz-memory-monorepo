@@ -8,6 +8,9 @@
   "home": {
     "home": "Home"
   },
+  "statistics": {
+    "statistics": "Statistics"
+  },
   "board": {
     "start-timer": "Press any card to start the timer",
     "seconds": "sec",

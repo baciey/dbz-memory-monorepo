@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Menu } from "react-native-paper";
 import { THEME_MODES } from "../../constants/theme";
@@ -11,13 +11,18 @@ import { appActions } from "../../redux/actions";
 import { ThemedView } from "../../components/ThemedView";
 import { CustomSwitch } from "../../components/CustomSwitch";
 import { ThemedText } from "../../components/ThemedText";
+import { Account } from "./Account";
+import { GLOBAL_STYLES } from "../../styles/globalStyles";
+import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
 
   const themeMode = useAppSelector(appSelectors.getThemeMode);
   const language = useAppSelector(appSelectors.getLanguage);
+  const me = useAppSelector(appSelectors.getMe);
 
+  const isAuthenticated = useGetIsAuthenticated();
   const { t } = useTranslation();
 
   const changeThemeMode = (isDarkMode: boolean) => {
@@ -27,7 +32,7 @@ export const SettingsPage = () => {
     dispatch(appActions.changeThemeMode(mode));
   };
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -72,6 +77,7 @@ export const SettingsPage = () => {
           />
         </Menu>
       </ThemedView>
+      <Account />
     </ThemedView>
   );
 };

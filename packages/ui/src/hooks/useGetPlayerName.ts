@@ -10,7 +10,8 @@ export const useGetPlayerName = () => {
     const getNames = async () => {
       const playerName = await AsyncStorage.getItem("playerName");
       const playersNames = await AsyncStorage.getItem("playersNames");
-      if (playerName) dispatch(boardSliceActions.setPlayerName(playerName));
+      if (playerName)
+        dispatch(boardSliceActions.setPlayerName(JSON.parse(playerName)));
       if (playersNames)
         dispatch(boardSliceActions.setPlayersNames(JSON.parse(playersNames)));
     };

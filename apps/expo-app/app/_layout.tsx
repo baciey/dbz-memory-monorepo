@@ -14,6 +14,8 @@ import {
   useSetTheme,
   PaperProviderWrapper,
   THEME_MODES,
+  useGetUser,
+  AuthModal,
 } from "@repo/ui";
 import { StatusBar } from "expo-status-bar";
 
@@ -30,6 +32,7 @@ export const AppWithStore = () => {
 
   useSetLanguage();
   useSetTheme();
+  useGetUser();
 
   useEffect(() => {
     if (loaded) {
@@ -45,9 +48,12 @@ export const AppWithStore = () => {
     <Provider store={store}>
       <PaperProviderWrapper>
         <StatusBar style={isDarkMode ? "light" : "dark"} />
+        <AuthModal />
+
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
+          <Stack.Screen name="test" />
         </Stack>
       </PaperProviderWrapper>
     </Provider>

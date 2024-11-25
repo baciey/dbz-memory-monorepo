@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "./../Card";
 import { styles } from "./GameBoard.styles";
-import { GLOBAL_STYLES } from "../../../styles/globalStyles";
 import { boardImages } from "../../../constants/images";
 import { ThemedView } from "../../../components/ThemedView";
 import { CardType, SelectedCardType } from "./../Card/Card.types";
@@ -13,10 +12,12 @@ import {
   SCORES_KEY,
 } from "./GameBoard.types";
 import { GameInfo } from "./../GameInfo";
-import { View } from "react-native";
-import { useAppDispatch } from "../../../redux/store";
+import { Platform, View } from "react-native";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { boardSliceActions } from "../slice";
-import { NamesModal } from "../NamesModal";
+import { supabase } from "../../../utils/supabase";
+import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
+import { TABLES } from "../../../constants/database";
 
 const shuffleBoardImages = (): CardType[] =>
   boardImages
@@ -45,9 +46,15 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
 
+  const player1Name = useAppSelector((state) => state.board.playersNames[0]);
+  const player2Name = useAppSelector((state) => state.board.playersNames[1]);
+  const singlePlayerName = useAppSelector((state) => state.board.playerName);
+
   const loadedImages = cards.filter((card) => card.isLoaded);
   const percentageLoaded = (loadedImages.length / cards.length) * 100;
   const isEveryImageLoaded = loadedImages.length === cards.length;
+
+  const me = useAppSelector((state) => state.app.me);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -67,6 +74,8 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
     };
   }, [startTime, endTime, mode]);
 
+  const { width: deviceWidth, height: deviceHeight } = useGetScreenDimensions();
+
   // Dynamically calculate card and container dimensions
   useEffect(() => {
     const padding = 16;
@@ -74,8 +83,6 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
     const scrollBarWidth = 20;
     const smallScreenItemsInRow = 4;
     const largeScreenItemsInRow = 5;
-
-    const { width: deviceWidth, height: deviceHeight } = GLOBAL_STYLES.window;
 
     const isSmallScreen = deviceWidth <= 600;
     const itemsInRow = isSmallScreen
@@ -89,7 +96,51 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
 
     setCardWidth(cardWidth);
     setContainerWidth(containerWidth);
-  }, []);
+  }, [deviceWidth, deviceHeight]);
+
+  // Save single player score to the database
+  useEffect(() => {
+    if (
+      mode === GAME_BOARD_MODE.player1 &&
+      endTime &&
+      singlePlayerName &&
+      me?.id
+    ) {
+      supabase
+        .from(TABLES.single_player_games)
+        .insert({
+          name: singlePlayerName,
+          time: elapsedTime,
+          platform: Platform.OS,
+          user_id: me.id,
+        })
+        .then(() => {});
+    }
+  }, [endTime, elapsedTime, singlePlayerName, mode, me?.id]);
+
+  // Save 2-players scores to the database
+  useEffect(() => {
+    const is2PlayerGameEnd = cards.every((card) => card.isPaired);
+    if (
+      mode === GAME_BOARD_MODE.player2 &&
+      is2PlayerGameEnd &&
+      player1Name &&
+      player2Name &&
+      me?.id
+    ) {
+      supabase
+        .from(TABLES.multiplayer_games)
+        .insert({
+          player1_name: player1Name,
+          player2_name: player2Name,
+          player1_score: scores.player1,
+          player2_score: scores.player2,
+          platform: Platform.OS,
+          user_id: me.id,
+        })
+        .then(() => {});
+    }
+  }, [scores, player1Name, player2Name, mode, cards, me?.id]);
 
   const handleCardPress = (index: number) => {
     if (firstCard && secondCard) return; // Prevent further clicks

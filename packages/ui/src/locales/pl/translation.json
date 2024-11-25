@@ -8,6 +8,9 @@
   "home": {
     "home": "Strona główna"
   },
+  "statistics": {
+    "statistics": "Statystyki"
+  },
   "board": {
     "start-timer": "Kliknij dowolną kartę aby uruchomić czas",
     "seconds": "sek",

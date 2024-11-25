@@ -25,6 +25,12 @@ export default function TabLayout() {
       icon: settingsIcon,
       iconOutline: settingsIconOutline,
     },
+    {
+      name: ROUTES.statistics,
+      title: t("statistics.statistics"),
+      icon: settingsIcon,
+      iconOutline: settingsIconOutline,
+    },
   ];
   return (
     <Tabs

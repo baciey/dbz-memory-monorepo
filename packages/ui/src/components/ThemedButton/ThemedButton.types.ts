@@ -5,7 +5,6 @@ export type ThemedButtonProps = {
   text: string;
   onPress: (event: GestureResponderEvent) => void;
   icon?: IconSource;
-  mode: "text" | "outlined" | "contained" | "elevated" | "contained-tonal";
   style?: StyleProp<ViewStyle>;
   type?: "primary" | "secondary";
   disabled?: boolean;

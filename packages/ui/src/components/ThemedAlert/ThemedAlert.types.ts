@@ -2,7 +2,9 @@ import { Dispatch, SetStateAction } from "react";
 
 export type ThemedAlertProps = {
   actionButtonText?: string;
-  actionButtonOnPress: () => void;
+  actionButtonOnPress?: () => void;
   isVisible: boolean;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
+  text: string;
+  withCancel?: boolean;
 };
