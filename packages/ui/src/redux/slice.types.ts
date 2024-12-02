@@ -13,6 +13,7 @@ export enum AUTH_MODAL_TYPES {
   LOGIN = "login",
   REGISTER = "register",
   SET_PASSWORD = "set_password",
+  FORGOT_PASSWORD = "forgot_password",
 }
 
 export type AuthModalType = {

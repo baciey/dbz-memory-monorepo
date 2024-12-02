@@ -18,6 +18,7 @@ export const Account = () => {
   const meUpdateStatus = useAppSelector(appSelectors.getMeUpdateStatus);
 
   const [alert, setAlert] = useState<string>("");
+  const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
 
   const isAnonymous = me?.isAnonymous;
   const isAnonymousWithEmailSet =
@@ -26,6 +27,24 @@ export const Account = () => {
   const loading =
     meUpdateStatus === ACTION_STATUS.LOADING ||
     meStatus === ACTION_STATUS.LOADING;
+
+  const showLogoutWarning = () => {
+    setAlert(
+      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
+    );
+    setAlertOnPress(() => {
+      return logOut;
+    });
+  };
+
+  const showRegisterInfo = () => {
+    setAlert(
+      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
+    );
+    setAlertOnPress(() => {
+      return () => openModal(AUTH_MODAL_TYPES.REGISTER);
+    });
+  };
 
   const logOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -63,7 +82,7 @@ export const Account = () => {
   const logoutButtonElement = (
     <ThemedButton
       text="Log Out"
-      onPress={logOut}
+      onPress={isAnonymous ? showLogoutWarning : logOut}
       disabled={meStatus === ACTION_STATUS.LOADING}
     />
   );
@@ -79,15 +98,7 @@ export const Account = () => {
   const registerButtonElement = (
     <ThemedButton
       text="Register"
-      onPress={() => openModal(AUTH_MODAL_TYPES.REGISTER)}
-      disabled={loading}
-    />
-  );
-
-  const loginButtonElement = (
-    <ThemedButton
-      text="Log In"
-      onPress={() => openModal(AUTH_MODAL_TYPES.LOGIN)}
+      onPress={showRegisterInfo}
       disabled={loading}
     />
   );
@@ -105,7 +116,7 @@ export const Account = () => {
     <>
       {anonymousTextElement}
       {registerButtonElement}
-      {loginButtonElement}
+      {logoutButtonElement}
     </>
   );
 
@@ -123,6 +134,8 @@ export const Account = () => {
         isVisible={Boolean(alert)}
         setIsVisible={() => setAlert("")}
         text={alert}
+        actionButtonOnPress={alertOnPress}
+        withCancel={Boolean(alertOnPress)}
       />
       {isLoggedIn && loggedInContent}
       {isAnonymous && !isAnonymousWithEmailSet && anonymousContent}
