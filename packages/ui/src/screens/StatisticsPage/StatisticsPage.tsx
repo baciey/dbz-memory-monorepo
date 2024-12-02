@@ -1,42 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { ThemedView } from "../../components/ThemedView";
-import { useTheme } from "react-native-paper";
-import { useTranslation } from "react-i18next";
-import { ThemedButton } from "../../components/ThemedButton";
-import { GLOBAL_STYLES } from "../../styles/globalStyles";
-import { View } from "react-native";
 import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { gamesActions } from "../../redux/Games/actions";
 import { appSelectors } from "../../redux/selectors";
-import { gamesSelectors } from "../../redux/Games/selectors";
+import { ThemedTable } from "../../components/ThemedTable";
+import { SegmentedButtons } from "react-native-paper";
+import { STATISTICS_PAGE_TABS } from "./StatisticsPage.types";
 import { ThemedText } from "../../components/ThemedText";
-import { supabase } from "../../utils/supabase";
+import { useTranslation } from "react-i18next";
+import { globalStyles } from "../../styles/globalStyles";
+import { gamesSelectors } from "../../redux/Games/selectors";
+import {
+  onePlayerTableConfig,
+  twoPlayerTableConfig,
+} from "./StatisticsPage.const";
 
 export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
 
+  const { t } = useTranslation();
+
   const me = useAppSelector(appSelectors.getMe);
-  const singlePlayerGames = useAppSelector(gamesSelectors.getSinglePlayerGames);
+  const onePlayerGames = useAppSelector(gamesSelectors.getOnePlayerGames);
+  const twoPlayerGames = useAppSelector(gamesSelectors.getTwoPlayerGames);
+
+  const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
 
   useEffect(() => {
-    if (me?.id) dispatch(gamesActions.getSinglePlayerGames(me.id));
+    if (me?.id) {
+      dispatch(gamesActions.getOnePlayerGames(me.id));
+      dispatch(gamesActions.getTwoPlayerGames(me.id));
+    }
   }, [me, dispatch]);
-
-  const singlePlayerGamesElements = singlePlayerGames?.map((game) => {
-    return (
-      <View key={game.id}>
-        <ThemedText text={String(game.time)} />
-        <ThemedText text={String(game.name)} />
-      </View>
-    );
-  });
 
   return (
     <ThemedView style={styles.container}>
+      <ThemedText
+        variant="headlineSmall"
+        style={globalStyles.heading}
+        text={t("statistics.statistics")}
+      />
+
       <Loader isVisible={false} />
-      <View>{singlePlayerGamesElements}</View>
+      <SegmentedButtons
+        style={styles.segmentedButtons}
+        value={tab}
+        onValueChange={(value) => setTab(value as STATISTICS_PAGE_TABS)}
+        buttons={[
+          {
+            value: STATISTICS_PAGE_TABS.player1,
+            label: "1 player",
+          },
+          {
+            value: STATISTICS_PAGE_TABS.player2,
+            label: "2 players",
+          },
+        ]}
+      />
+
+      {tab === STATISTICS_PAGE_TABS.player1 ? (
+        <ThemedTable config={onePlayerTableConfig} data={onePlayerGames} />
+      ) : (
+        <ThemedTable config={twoPlayerTableConfig} data={twoPlayerGames} />
+      )}
     </ThemedView>
   );
 };

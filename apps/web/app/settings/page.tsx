@@ -1,21 +1,13 @@
 "use client";
 
 import React from "react";
-import {
-  SettingsPage,
-  useGetUser,
-  useSetLanguage,
-  useSetTheme,
-} from "@repo/ui";
+import { SettingsPage } from "@repo/ui";
+import { PageWrapper } from "../../components/PageWrapper/PagerWrapper";
 
 export default function Settings() {
-  useSetLanguage();
-  useSetTheme();
-  useGetUser();
-
   return (
-    <div className="pageContainer">
+    <PageWrapper>
       <SettingsPage />
-    </div>
+    </PageWrapper>
   );
 }

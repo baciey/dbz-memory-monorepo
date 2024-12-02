@@ -13,8 +13,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <script src="https://accounts.google.com/gsi/client" async></script>
-
         <Providers>
           <Navbar />
           <AuthModal />

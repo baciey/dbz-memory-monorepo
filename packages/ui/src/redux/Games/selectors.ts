@@ -1,16 +1,15 @@
 import { RootState } from "./../store";
 
-const getSinglePlayerGames = (state: RootState) =>
-  state.games.singlePlayerGames;
-const getSinglePlayerGamesStatus = (state: RootState) =>
-  state.games.singlePlayerGamesStatus;
-const getMultiPlayerGames = (state: RootState) => state.games.multiPlayerGames;
-const getMultiPlayerGamesStatus = (state: RootState) =>
-  state.games.multiPlayerGamesStatus;
+const getOnePlayerGames = (state: RootState) => state.games.onePlayerGames;
+const getOnePlayerGamesStatus = (state: RootState) =>
+  state.games.onePlayerGamesStatus;
+const getTwoPlayerGames = (state: RootState) => state.games.twoPlayerGames;
+const getTwoPlayerGamesStatus = (state: RootState) =>
+  state.games.twoPlayerGamesStatus;
 
 export const gamesSelectors = {
-  getSinglePlayerGames,
-  getSinglePlayerGamesStatus,
-  getMultiPlayerGames,
-  getMultiPlayerGamesStatus,
+  getOnePlayerGames,
+  getOnePlayerGamesStatus,
+  getTwoPlayerGames,
+  getTwoPlayerGamesStatus,
 };

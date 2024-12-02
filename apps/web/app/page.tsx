@@ -1,16 +1,13 @@
 "use client";
 
 import React from "react";
-import { HomePage, useGetUser, useSetLanguage, useSetTheme } from "@repo/ui";
+import { HomePage } from "@repo/ui";
+import { PageWrapper } from "../components/PageWrapper/PagerWrapper";
 
 export default function Home() {
-  useSetLanguage();
-  useSetTheme();
-  useGetUser();
-
   return (
-    <div className="pageContainer">
+    <PageWrapper>
       <HomePage />
-    </div>
+    </PageWrapper>
   );
 }

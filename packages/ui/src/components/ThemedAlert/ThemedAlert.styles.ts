@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     padding: 16,
     alignSelf: "center",
     borderRadius: GLOBAL_STYLES.br.small,
+    maxWidth: 600,
   },
   buttonsContainer: {
     flexDirection: "row",

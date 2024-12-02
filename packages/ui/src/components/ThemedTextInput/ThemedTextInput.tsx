@@ -1,6 +1,5 @@
 import React from "react";
-import { TextInput, useTheme } from "react-native-paper";
-import { ThemedText } from "../ThemedText";
+import { HelperText, TextInput, useTheme } from "react-native-paper";
 import { ThemedTextInputProps } from "./ThemedTextInput.types";
 import { styles } from "./ThemedTextInput.styles";
 import { View } from "react-native";
@@ -24,13 +23,13 @@ export const ThemedTextInput = ({
         error={!!errorText}
         {...textInputProps}
       />
-      {errorText ? (
-        <ThemedText
-          type="error"
-          text={errorText}
-          style={{ color: theme.colors.error }}
-        />
-      ) : null}
+      <HelperText
+        type="error"
+        visible={Boolean(errorText)}
+        style={styles.helperText}
+      >
+        {errorText}
+      </HelperText>
     </View>
   );
 };

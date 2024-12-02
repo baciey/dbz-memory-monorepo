@@ -20,10 +20,15 @@ export const Account = () => {
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
 
-  const isAnonymous = me?.isAnonymous;
-  const isAnonymousWithEmailSet =
-    isAnonymous && Boolean(me?.session?.user?.new_email);
-  const isLoggedIn = Boolean(me?.session?.user.email_confirmed_at);
+  const { isAnonymous, password } = me || {};
+  const isAnonymousWithEmailNotConfirmed =
+    isAnonymous && Boolean(me?.session?.user?.new_email) && !me?.email;
+  const isAnonymousWithEmailConfirmed = Boolean(
+    !isAnonymous && me?.email && !password,
+  );
+  const isLoggedIn = Boolean(me?.email && me?.password);
+  // console.log({ isLoggedIn, isAnonymousWithEmailNotConfirmed, isAnonymous });
+  console.log(me);
   const loading =
     meUpdateStatus === ACTION_STATUS.LOADING ||
     meStatus === ACTION_STATUS.LOADING;
@@ -67,8 +72,11 @@ export const Account = () => {
 
   const loggedinTextElement = <ThemedText text="You are logged in" />;
   const anonymousTextElement = <ThemedText text="You are a guest" />;
-  const anonymousWithEmailSetTextElement = (
-    <ThemedText text="You are still a guest. Confirm your email and set a password." />
+  const anonymousWithEmailNotConfirmedTextElement = (
+    <ThemedText text="You are still a guest. Confirm your email." />
+  );
+  const anonymousWithEmailConfirmedTextElement = (
+    <ThemedText text="You are still a guest. Set a password." />
   );
 
   const emailElement = (
@@ -82,7 +90,7 @@ export const Account = () => {
   const logoutButtonElement = (
     <ThemedButton
       text="Log Out"
-      onPress={isAnonymous ? showLogoutWarning : logOut}
+      onPress={isLoggedIn && password ? logOut : showLogoutWarning}
       disabled={meStatus === ACTION_STATUS.LOADING}
     />
   );
@@ -120,14 +128,23 @@ export const Account = () => {
     </>
   );
 
-  const anonymousWithEmailSetContent = (
+  const anonymousWithEmailNotConfirmedContent = (
     <>
-      {anonymousWithEmailSetTextElement}
+      {anonymousWithEmailNotConfirmedTextElement}
       {emailElement}
-      {setPasswordButtonElement}
+      {logoutButtonElement}
     </>
   );
 
+  const anonymousWithEmailConfirmedContent = (
+    <>
+      {anonymousWithEmailConfirmedTextElement}
+      {emailElement}
+      {setPasswordButtonElement}
+      {logoutButtonElement}
+    </>
+  );
+  console.log({ password });
   return (
     <View style={styles.container}>
       <ThemedAlert
@@ -138,8 +155,12 @@ export const Account = () => {
         withCancel={Boolean(alertOnPress)}
       />
       {isLoggedIn && loggedInContent}
-      {isAnonymous && !isAnonymousWithEmailSet && anonymousContent}
-      {isAnonymousWithEmailSet && anonymousWithEmailSetContent}
+      {isAnonymous && !isAnonymousWithEmailNotConfirmed && anonymousContent}
+      {isAnonymousWithEmailNotConfirmed &&
+        anonymousWithEmailNotConfirmedContent}
+      {isAnonymousWithEmailConfirmed &&
+        !password &&
+        anonymousWithEmailConfirmedContent}
     </View>
   );
 };

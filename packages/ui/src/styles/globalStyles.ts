@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const GLOBAL_STYLES = {
   m: {
     mt32: {
@@ -54,16 +56,11 @@ export const GLOBAL_STYLES = {
     medium: 12,
     large: 16,
   },
-  colors: {
-    black: "#151718",
-    blackLight: "#37383b",
-    white: "#ffffff",
-    whiteDark: "#F9F7F5",
-    blue: "#4b6cdb",
-    blueLight: "#0a7ea4",
-    grey: "#b3b4b5",
-    greyLight: "#cccecf",
-    green: "green",
-    backdrop: "rgba(1, 1, 1, 0.7)",
-  },
 };
+
+export const globalStyles = StyleSheet.create({
+  heading: {
+    alignSelf: "center",
+    marginBottom: 32,
+  },
+});

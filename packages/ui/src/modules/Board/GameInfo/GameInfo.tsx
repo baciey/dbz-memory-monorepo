@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { styles } from "./GameInfo.styles";
 import { GLOBAL_STYLES } from "../../../styles/globalStyles";
 import { useAppSelector } from "../../../redux/store";
+import { useTheme } from "react-native-paper";
 
 export const GameInfo = ({
   mode,
@@ -17,6 +18,7 @@ export const GameInfo = ({
   playerTurn,
 }: GameInfoProps) => {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const player1Name =
     useAppSelector((state) => state.board.playersNames[0]) || "Player 1";
@@ -48,8 +50,8 @@ export const GameInfo = ({
           ? player2Name
           : null);
 
-    const activeStyle = { color: GLOBAL_STYLES.colors.blueLight };
-    const inactiveStyle = { color: GLOBAL_STYLES.colors.grey };
+    const activeStyle = { color: theme.colors.primary };
+    const inactiveStyle = { color: theme.colors.secondary };
     const player1Style =
       playerTurn === PLAYER_TURN.player1 ? activeStyle : inactiveStyle;
     const player2Style =

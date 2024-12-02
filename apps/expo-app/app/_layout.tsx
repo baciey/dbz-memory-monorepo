@@ -14,7 +14,7 @@ import {
   useSetTheme,
   PaperProviderWrapper,
   THEME_MODES,
-  useGetUser,
+  useGetIsAuthenticated,
   AuthModal,
 } from "@repo/ui";
 import { StatusBar } from "expo-status-bar";
@@ -32,7 +32,7 @@ export const AppWithStore = () => {
 
   useSetLanguage();
   useSetTheme();
-  useGetUser();
+  useGetIsAuthenticated();
 
   useEffect(() => {
     if (loaded) {

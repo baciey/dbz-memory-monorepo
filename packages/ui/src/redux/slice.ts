@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { ACTION_STATUS, AppState, AUTH_MODAL_TYPES } from "./slice.types";
+import { ACTION_STATUS, AppState } from "./slice.types";
 import { THEME_MODES } from "../constants/theme";
 import { LANGUAGES } from "../constants/lang";
 

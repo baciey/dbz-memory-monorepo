@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import styles from "./style.module.css";
-import {
-  ROUTES,
-  supabase,
-  ThemedButton,
-  useTheme,
-  useTranslation,
-} from "@repo/ui";
+import { ROUTES, useTheme, useTranslation } from "@repo/ui";
 import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
@@ -16,7 +10,7 @@ export const Navbar = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const bgColor = theme.colors.surface;
+  const bgColor = theme.colors.surfaceVariant;
   const textColor = theme.colors.onSurface;
 
   const homePath = `/`;

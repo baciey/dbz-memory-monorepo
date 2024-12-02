@@ -1,5 +1,5 @@
 export enum TABLES {
   profiles = "profiles",
-  multiplayer_games = "multiplayer_games",
-  single_player_games = "single_player_games",
+  two_player_games = "two_player_games",
+  one_player_games = "one_player_games",
 }

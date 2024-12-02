@@ -26,7 +26,7 @@ export { type AppState } from "./src/redux/slice.types";
 //HOOKS
 export { useSetLanguage } from "./src/hooks/useSetLanguage";
 export { useSetTheme } from "./src/hooks/useSetTheme";
-export { useGetUser } from "./src/hooks/useGetUser";
+export { useGetIsAuthenticated } from "./src/hooks/useGetIsAuthenticated";
 
 //CONSTANTS
 export { STORAGE_KEYS } from "./src/constants/storage";

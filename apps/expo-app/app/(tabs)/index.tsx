@@ -1,16 +1,10 @@
-import { useTheme, HomePage } from "@repo/ui";
-import { ScrollView } from "react-native";
+import { ScreenWrapper } from "@/components/ScreenWrapper";
+import { HomePage } from "@repo/ui";
 
 export default function Home() {
-  const theme = useTheme();
-
   return (
-    <ScrollView
-      style={{
-        backgroundColor: theme.colors.background,
-      }}
-    >
+    <ScreenWrapper>
       <HomePage />
-    </ScrollView>
+    </ScreenWrapper>
   );
 }

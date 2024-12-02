@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import i18next from "i18next";
 import { STORAGE_KEYS } from "../constants/storage";
 import { appSliceActions } from "./slice";
-import { AppState, MeUpdate } from "./slice.types";
+import { AppState, AUTH_MODAL_TYPES, MeUpdate } from "./slice.types";
 import { supabase } from "../utils/supabase";
 import { Session } from "@supabase/supabase-js";
 import { PayloadThunkAction } from "./store";
@@ -34,17 +34,26 @@ const getMe = (session: Session): PayloadThunkAction => {
 
     supabase
       .from(TABLES.profiles)
-      .select(`username, avatar_url`)
+      .select(`username, avatar_url, password`)
       .eq("id", session.user.id)
       .single()
       .then(({ data, error, status }) => {
         // console.log(error, status);
+        if (error) {
+          dispatch(
+            appSliceActions.setAuthModal({
+              isVisible: true,
+              type: AUTH_MODAL_TYPES.LOGIN,
+            }),
+          );
+        }
         if (data) {
           const me: Me = {
             avatarUrl: data.avatar_url,
             username: data.username,
             email: session.user.email || "",
             id: session.user.id,
+            password: data.password,
             session,
             isAnonymous: Boolean(session.user.is_anonymous),
           };
@@ -66,6 +75,7 @@ const updateMe = (me: MeUpdate, session: Session): PayloadThunkAction => {
       .upsert(me)
       .then(({ error }) => {
         if (error) {
+          console.log({ error });
           dispatch(appSliceActions.meUpdateError());
         } else {
           dispatch(appSliceActions.meUpdateSuccess());

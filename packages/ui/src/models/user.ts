@@ -5,6 +5,7 @@ export type Me = {
   avatarUrl: string;
   id: string;
   email?: string;
+  password?: string;
   isAnonymous: boolean;
   session: Session;
 };

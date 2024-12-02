@@ -12,6 +12,7 @@ import { ThemedView } from "../../components/ThemedView";
 import { CustomSwitch } from "../../components/CustomSwitch";
 import { ThemedText } from "../../components/ThemedText";
 import { Account } from "./Account";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -42,7 +43,7 @@ export const SettingsPage = () => {
     <ThemedView style={styles.container}>
       <ThemedText
         variant="headlineSmall"
-        style={styles.heading}
+        style={globalStyles.heading}
         text={t("settings.settings")}
       />
       <ThemedView style={styles.row}>

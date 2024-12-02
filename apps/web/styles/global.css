@@ -8,3 +8,9 @@ body {
   min-height: calc(100vh - 50px);
   display: flex;
 }
+
+/* this import is needed so react-native-paper icons are visible */
+@font-face {
+  font-family: MaterialCommunityIcons;
+  src: url("./../../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf");
+}

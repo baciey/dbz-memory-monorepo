@@ -107,7 +107,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       me?.id
     ) {
       supabase
-        .from(TABLES.single_player_games)
+        .from(TABLES.one_player_games)
         .insert({
           name: singlePlayerName,
           time: elapsedTime,
@@ -129,7 +129,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       me?.id
     ) {
       supabase
-        .from(TABLES.multiplayer_games)
+        .from(TABLES.two_player_games)
         .insert({
           player1_name: player1Name,
           player2_name: player2Name,

@@ -1,21 +1,13 @@
 "use client";
 
 import React from "react";
-import {
-  StatisticsPage,
-  useGetUser,
-  useSetLanguage,
-  useSetTheme,
-} from "@repo/ui";
+import { StatisticsPage } from "@repo/ui";
+import { PageWrapper } from "../../components/PageWrapper/PagerWrapper";
 
 export default function Statistics() {
-  useSetLanguage();
-  useSetTheme();
-  useGetUser();
-
   return (
-    <div className="pageContainer">
+    <PageWrapper>
       <StatisticsPage />
-    </div>
+    </PageWrapper>
   );
 }

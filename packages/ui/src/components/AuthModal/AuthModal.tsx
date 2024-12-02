@@ -4,7 +4,6 @@ import { Pressable, View } from "react-native";
 import { ThemedText } from "../ThemedText";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { appSelectors } from "../../redux/selectors";
-import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
 import { styles } from "./AuthModal.styles";
 import { Button, Modal, Portal, useTheme } from "react-native-paper";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
@@ -18,6 +17,9 @@ import { validateEmail } from "../../utils/validateEmail";
 import { validatePassword } from "../../utils/validatePassword";
 import { Loader } from "../Loader";
 import * as Linking from "expo-linking";
+import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
+import { appActions } from "../../redux/actions";
+import { Session } from "@supabase/supabase-js";
 
 const headerText = {
   [AUTH_MODAL_TYPES.LOGIN]: "Log in",
@@ -30,9 +32,8 @@ export const AuthModal = () => {
   const dispatch = useAppDispatch();
 
   const me = useAppSelector(appSelectors.getMe);
-  const isAuthenticated = useGetIsAuthenticated();
   const authModal = useAppSelector(appSelectors.getAuthModal);
-
+  const isAuthenticated = useGetIsAuthenticated();
   const theme = useTheme();
   const { isMobile, isWeb } = useGetScreenDimensions();
 
@@ -50,11 +51,12 @@ export const AuthModal = () => {
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
 
   const url = Linking.useURL();
-
   const isAnonymous = Boolean(me?.isAnonymous);
-  const redirectUrl = isWeb
-    ? "http://localhost:3000/settings"
-    : "myapp://settings";
+  const redirectUrl = Linking.createURL(isWeb ? "/settings" : "settings");
+  // console.log({ redirectUrl });
+  //forgot password redirect url is ok
+  //sign up redirect url is ok
+  //
 
   const validateInputs = (inputsToValidate: string[]) => {
     const emailErrorText = inputsToValidate.includes("email")
@@ -79,7 +81,7 @@ export const AuthModal = () => {
   const signIn = async () => {
     console.log("signIn");
 
-    const hasError = validateInputs([]);
+    const hasError = validateInputs(["email", "password"]);
     if (hasError) return;
 
     setLoading(true);
@@ -159,18 +161,24 @@ export const AuthModal = () => {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({
-      email: email,
-    });
+    const { error } = await supabase.auth.updateUser(
+      {
+        email: email,
+      },
+      {
+        emailRedirectTo: redirectUrl,
+      },
+    );
 
     if (error) {
       setAlert(error.message);
     } else {
       setAlertOnPress(() => {
-        return () => openModal(AUTH_MODAL_TYPES.SET_PASSWORD);
+        return closeModal;
       });
       setAlert(
-        "We have sent you an email to verify your account. Once you verify your email, please set a password.",
+        "We have sent you an email to verify your account. Once you verify your email, please set a password." +
+          redirectUrl,
       );
     }
 
@@ -190,6 +198,7 @@ export const AuthModal = () => {
   };
 
   const closeModal = useCallback(() => {
+    console.log("slose modal");
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
@@ -225,7 +234,8 @@ export const AuthModal = () => {
       setAlert(error.message);
     } else {
       setAlert(
-        "We have sent you an email to reset your password. Please check your inbox.",
+        "We have sent you an email to reset your password. Please check your inbox." +
+          redirectUrl,
       );
     }
 
@@ -241,11 +251,9 @@ export const AuthModal = () => {
     const handleUrlFromForgotPasswordRedirect = async () => {
       if (!url) return;
       const urlFixed = url.replace("#", "?");
-      const baseUrl = urlFixed.split("?")[0];
-      const { hostname, path, scheme, queryParams } = Linking.parse(urlFixed);
+      const { queryParams } = Linking.parse(urlFixed || "");
       const accessToken = queryParams?.access_token;
       const refreshToken = queryParams?.refresh_token;
-      console.log({ baseUrl });
       if (
         accessToken &&
         refreshToken &&
@@ -260,13 +268,17 @@ export const AuthModal = () => {
         if (error) {
           setAlert(error.message);
         } else {
-          openModal(AUTH_MODAL_TYPES.SET_PASSWORD);
+          if (isWeb) {
+            Linking.openURL(redirectUrl);
+          } else {
+            openModal(AUTH_MODAL_TYPES.SET_PASSWORD);
+          }
         }
       }
     };
 
     handleUrlFromForgotPasswordRedirect();
-  }, [url, openModal]);
+  }, [url, openModal, redirectUrl, isWeb]);
 
   const emailInputElement = (
     <ThemedTextInput

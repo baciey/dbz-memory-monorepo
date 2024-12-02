@@ -33,8 +33,8 @@ export type MultiPlayerGame = {
 };
 
 export type GamesState = {
-  singlePlayerGames: SinglePlayerGame[];
-  multiPlayerGames: MultiPlayerGame[];
-  singlePlayerGamesStatus: ACTION_STATUS;
-  multiPlayerGamesStatus: ACTION_STATUS;
+  onePlayerGames: SinglePlayerGame[];
+  twoPlayerGames: MultiPlayerGame[];
+  onePlayerGamesStatus: ACTION_STATUS;
+  twoPlayerGamesStatus: ACTION_STATUS;
 };

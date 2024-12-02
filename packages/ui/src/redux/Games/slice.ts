@@ -3,10 +3,10 @@ import { GamesState } from "./slice.types";
 import { ACTION_STATUS } from "../slice.types";
 
 const initialState: GamesState = {
-  singlePlayerGames: [],
-  multiPlayerGames: [],
-  singlePlayerGamesStatus: ACTION_STATUS.IDLE,
-  multiPlayerGamesStatus: ACTION_STATUS.IDLE,
+  onePlayerGames: [],
+  twoPlayerGames: [],
+  onePlayerGamesStatus: ACTION_STATUS.IDLE,
+  twoPlayerGamesStatus: ACTION_STATUS.IDLE,
 };
 
 export const GAMES_REDUCER_NAME = "games";
@@ -15,37 +15,37 @@ const gamesSlice = createSlice({
   name: GAMES_REDUCER_NAME,
   initialState,
   reducers: {
-    singlePlayerGamesLoading(state) {
-      state.singlePlayerGamesStatus = ACTION_STATUS.LOADING;
+    onePlayerGamesLoading(state) {
+      state.onePlayerGamesStatus = ACTION_STATUS.LOADING;
     },
-    singlePlayerGamesSuccess(
+    onePlayerGamesSuccess(
       state,
-      action: PayloadAction<GamesState["singlePlayerGames"]>,
+      action: PayloadAction<GamesState["onePlayerGames"]>,
     ) {
-      state.singlePlayerGames = action.payload;
-      state.singlePlayerGamesStatus = ACTION_STATUS.SUCCESS;
+      state.onePlayerGames = action.payload;
+      state.onePlayerGamesStatus = ACTION_STATUS.SUCCESS;
     },
-    singlePlayerGamesError(state) {
-      state.singlePlayerGamesStatus = ACTION_STATUS.ERROR;
+    onePlayerGamesError(state) {
+      state.onePlayerGamesStatus = ACTION_STATUS.ERROR;
     },
-    singlePlayerGamesIdle(state) {
-      state.singlePlayerGamesStatus = ACTION_STATUS.IDLE;
+    onePlayerGamesIdle(state) {
+      state.onePlayerGamesStatus = ACTION_STATUS.IDLE;
     },
-    multiPlayerGamesLoading(state) {
-      state.multiPlayerGamesStatus = ACTION_STATUS.LOADING;
+    twoPlayerGamesLoading(state) {
+      state.twoPlayerGamesStatus = ACTION_STATUS.LOADING;
     },
-    multiPlayerGamesSuccess(
+    twoPlayerGamesSuccess(
       state,
-      action: PayloadAction<GamesState["multiPlayerGames"]>,
+      action: PayloadAction<GamesState["twoPlayerGames"]>,
     ) {
-      state.multiPlayerGames = action.payload;
-      state.multiPlayerGamesStatus = ACTION_STATUS.SUCCESS;
+      state.twoPlayerGames = action.payload;
+      state.twoPlayerGamesStatus = ACTION_STATUS.SUCCESS;
     },
-    multiPlayerGamesError(state) {
-      state.multiPlayerGamesStatus = ACTION_STATUS.ERROR;
+    twoPlayerGamesError(state) {
+      state.twoPlayerGamesStatus = ACTION_STATUS.ERROR;
     },
-    multiPlayerGamesIdle(state) {
-      state.multiPlayerGamesStatus = ACTION_STATUS.IDLE;
+    twoPlayerGamesIdle(state) {
+      state.twoPlayerGamesStatus = ACTION_STATUS.IDLE;
     },
   },
 });

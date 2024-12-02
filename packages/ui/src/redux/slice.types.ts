@@ -32,4 +32,5 @@ export interface AppState {
 export type MeUpdate = {
   id: string;
   username: string;
+  password: string;
 };
