@@ -12,17 +12,13 @@ import { ThemedView } from "../../components/ThemedView";
 import { CustomSwitch } from "../../components/CustomSwitch";
 import { ThemedText } from "../../components/ThemedText";
 import { Account } from "./Account";
-import { GLOBAL_STYLES } from "../../styles/globalStyles";
-import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
 
   const themeMode = useAppSelector(appSelectors.getThemeMode);
   const language = useAppSelector(appSelectors.getLanguage);
-  const me = useAppSelector(appSelectors.getMe);
 
-  const isAuthenticated = useGetIsAuthenticated();
   const { t } = useTranslation();
 
   const changeThemeMode = (isDarkMode: boolean) => {

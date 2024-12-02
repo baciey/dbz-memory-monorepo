@@ -17,11 +17,13 @@ import { appSliceActions } from "../../redux/slice";
 import { validateEmail } from "../../utils/validateEmail";
 import { validatePassword } from "../../utils/validatePassword";
 import { Loader } from "../Loader";
+import * as Linking from "expo-linking";
 
 const headerText = {
   [AUTH_MODAL_TYPES.LOGIN]: "Log in",
   [AUTH_MODAL_TYPES.REGISTER]: "Register",
   [AUTH_MODAL_TYPES.SET_PASSWORD]: "Set password",
+  [AUTH_MODAL_TYPES.FORGOT_PASSWORD]: "Forgot password",
 };
 
 export const AuthModal = () => {
@@ -32,7 +34,7 @@ export const AuthModal = () => {
   const authModal = useAppSelector(appSelectors.getAuthModal);
 
   const theme = useTheme();
-  const { isMobile, isWeb } = useGetScreenDimensions();
+  const { isMobile } = useGetScreenDimensions();
 
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<string>("");
@@ -47,7 +49,10 @@ export const AuthModal = () => {
   const [passwordError, setPasswordError] = useState("");
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
 
+  const url = Linking.useURL();
   const isAnonymous = Boolean(me?.isAnonymous);
+  const redirectUrl = Linking.createURL("/settings");
+  console.log({ redirectUrl });
 
   const validateInputs = (inputsToValidate: string[]) => {
     const emailErrorText = inputsToValidate.includes("email")
@@ -98,10 +103,6 @@ export const AuthModal = () => {
     if (hasError) return;
 
     setLoading(true);
-
-    const redirectUrl = isWeb
-      ? "http://localhost:3000/settings?asd=zxc"
-      : "myapp://settings?asd=zxc";
 
     const { data, error } = await supabase.auth.signUp({
       email: email,
@@ -186,13 +187,13 @@ export const AuthModal = () => {
     setAlertOnPress(undefined);
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
       }),
     );
-  };
+  }, [dispatch]);
 
   const openModal = useCallback(
     (type: AUTH_MODAL_TYPES) => {
@@ -206,10 +207,62 @@ export const AuthModal = () => {
     [dispatch],
   );
 
+  const handleForgotPassword = async () => {
+    console.log("handleForgotPassword");
+
+    const hasError = validateInputs(["email"]);
+    if (hasError) return;
+
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    });
+
+    if (error) {
+      setAlert(error.message);
+    } else {
+      setAlert(
+        "We have sent you an email to reset your password. Please check your inbox.",
+      );
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
     clearModal();
     if (!isAuthenticated) openModal(AUTH_MODAL_TYPES.LOGIN);
   }, [authModal.isVisible, isAuthenticated, openModal]);
+
+  useEffect(() => {
+    const handleUrlFromForgotPasswordRedirect = async () => {
+      if (!url) return;
+      const urlFixed = url.replace("#", "?");
+      const { queryParams } = Linking.parse(urlFixed || "");
+      const accessToken = queryParams?.access_token;
+      const refreshToken = queryParams?.refresh_token;
+      if (
+        accessToken &&
+        refreshToken &&
+        typeof accessToken === "string" &&
+        typeof refreshToken === "string"
+      ) {
+        const { error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+
+        if (error) {
+          setAlert(error.message);
+        } else {
+          Linking.openURL(redirectUrl);
+        }
+      }
+    };
+
+    handleUrlFromForgotPasswordRedirect();
+  }, [url, openModal, redirectUrl]);
 
   const emailInputElement = (
     <ThemedTextInput
@@ -270,6 +323,14 @@ export const AuthModal = () => {
     />
   );
 
+  const confirmButtonElement = (
+    <ThemedButton
+      text="Confirm"
+      disabled={loading}
+      onPress={handleForgotPassword}
+    />
+  );
+
   const cancelButtonElement = (
     <Button
       textColor={theme.colors.onSurface}
@@ -292,6 +353,12 @@ export const AuthModal = () => {
     </Pressable>
   );
 
+  const forgotPasswordLinkElement = (
+    <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.FORGOT_PASSWORD)}>
+      <ThemedText text="Forgot password?" />
+    </Pressable>
+  );
+
   const loginContent = (
     <>
       {emailInputElement}
@@ -299,6 +366,7 @@ export const AuthModal = () => {
       {loginButtonElement}
       {continueAsGuestButtonElement}
       {registerLinkElement}
+      {forgotPasswordLinkElement}
     </>
   );
 
@@ -331,12 +399,21 @@ export const AuthModal = () => {
     </>
   );
 
+  const forgotPasswordContent = (
+    <>
+      {emailInputElement}
+      {confirmButtonElement}
+      {cancelButtonElement}
+    </>
+  );
+
   const content = {
     [AUTH_MODAL_TYPES.LOGIN]: loginContent,
     [AUTH_MODAL_TYPES.REGISTER]: isAnonymous
       ? registerFromAnonymousToPermanentContent
       : registerContent,
     [AUTH_MODAL_TYPES.SET_PASSWORD]: setPasswordContent,
+    [AUTH_MODAL_TYPES.FORGOT_PASSWORD]: forgotPasswordContent,
   };
 
   return (
