@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "./../Card";
 import { styles } from "./GameBoard.styles";
-import { boardImages } from "../../../constants/images";
 import { ThemedView } from "../../../components/ThemedView";
 import { CardType, SelectedCardType } from "./../Card/Card.types";
 import {
@@ -18,27 +17,16 @@ import { boardSliceActions } from "../slice";
 import { supabase } from "../../../utils/supabase";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { TABLES } from "../../../constants/database";
-
-const shuffleBoardImages = (): CardType[] =>
-  boardImages
-    .flatMap((image) => [image, image])
-    .sort(() => Math.random() - 0.5)
-    .map((image) => ({
-      isRevealed: false,
-      isPaired: false,
-      src: image,
-      isLoaded: false,
-    }));
+import { useGetImages } from "../../../hooks/useGetImages";
 
 export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const dispatch = useAppDispatch();
 
   const [cardWidth, setCardWidth] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [cards, setCards] = useState<CardType[]>(shuffleBoardImages);
+  const [cards, setCards] = useState<CardType[]>([]);
   const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
   const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
-
   // Timer and score state
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
@@ -49,10 +37,29 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const player1Name = useAppSelector((state) => state.board.playersNames[0]);
   const player2Name = useAppSelector((state) => state.board.playersNames[1]);
   const singlePlayerName = useAppSelector((state) => state.board.playerName);
-
   const loadedImages = cards.filter((card) => card.isLoaded);
-  const percentageLoaded = (loadedImages.length / cards.length) * 100;
+  console.log(cards.length, loadedImages.length);
+
+  const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
   const isEveryImageLoaded = loadedImages.length === cards.length;
+
+  const images = useGetImages();
+
+  useEffect(() => {
+    const shuffleBoardImages = (): CardType[] =>
+      images.board
+        .flatMap((image) => [image, image])
+        .sort(() => Math.random() - 0.5)
+        .map((image) => ({
+          isRevealed: false,
+          isPaired: false,
+          src: image,
+          isLoaded: false,
+        }));
+
+    setCards(shuffleBoardImages());
+  }, [images]);
+  console.log(cards);
 
   const me = useAppSelector((state) => state.app.me);
 

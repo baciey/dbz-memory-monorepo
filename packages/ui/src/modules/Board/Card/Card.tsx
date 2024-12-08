@@ -2,9 +2,10 @@ import React, { memo } from "react";
 import { styles } from "./Card.styles";
 import { Image, Pressable, View } from "react-native";
 import { CardProps } from "./Card.types";
-import { cardBackImage } from "../../../constants/images";
+import { useGetImages } from "../../../hooks/useGetImages";
 
 export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
+  const images = useGetImages();
   return (
     <Pressable onPress={onPress}>
       <View
@@ -31,7 +32,7 @@ export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
             source={{
               width: width,
               height: width,
-              uri: cardBackImage,
+              uri: images.view.cardBackImage,
             }}
             onLoadEnd={setIsLoaded}
           />

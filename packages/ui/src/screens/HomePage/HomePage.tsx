@@ -9,13 +9,13 @@ import { GLOBAL_STYLES } from "../../styles/globalStyles";
 import { Image, View } from "react-native";
 import { useAppSelector } from "../../redux/store";
 import { boardSelectors } from "../../modules/Board/selectors";
-import { IMAGES } from "../../constants/images";
 import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
 import { Loader } from "../../components/Loader/";
 import { NamesModal } from "../../modules/Board/NamesModal";
 import { useGetPlayerName } from "../../hooks/useGetPlayerName";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
+import { useGetImages } from "../../hooks/useGetImages";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -37,12 +37,15 @@ export const HomePage = () => {
   };
 
   const handleShowModal = () => setIsAlertVisible(true);
+  const images = useGetImages();
 
   useEffect(() => {
     if (gameMode !== null) {
       setIsNamesModalVisible(true);
     }
   }, [gameMode]);
+
+  console.log({ imagesPercentageLoaded });
 
   return (
     <ThemedView style={styles.container}>
@@ -75,7 +78,7 @@ export const HomePage = () => {
             },
           ]}
           source={{
-            uri: IMAGES.sonHQImage,
+            uri: images.view.sonHQImage,
           }}
         />
       </View>

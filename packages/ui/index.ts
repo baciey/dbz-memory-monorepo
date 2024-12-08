@@ -32,7 +32,6 @@ export { useGetIsAuthenticated } from "./src/hooks/useGetIsAuthenticated";
 export { STORAGE_KEYS } from "./src/constants/storage";
 export { THEME_MODES } from "./src/constants/theme";
 export { ROUTES } from "./src/constants/routes";
-export { IMAGES } from "./src/constants/images";
 
 // STYLES
 export { GLOBAL_STYLES } from "./src/styles/globalStyles";
