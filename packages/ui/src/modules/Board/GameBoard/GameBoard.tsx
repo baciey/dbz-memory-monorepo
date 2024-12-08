@@ -18,6 +18,7 @@ import { supabase } from "../../../utils/supabase";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { DATABASE_TABLE } from "../../../constants/database";
+import { gamesActions } from "../../../redux/Games/actions";
 
 export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const dispatch = useAppDispatch();
@@ -113,17 +114,12 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       singlePlayerName &&
       me?.id
     ) {
-      supabase
-        .from(DATABASE_TABLE.one_player_games)
-        .insert({
-          name: singlePlayerName,
-          time: elapsedTime,
-          platform: Platform.OS,
-          user_id: me.id,
-        })
-        .then(() => {});
+      console.log("upadte");
+      dispatch(
+        gamesActions.updateOnePlayerGames(me.id, singlePlayerName, elapsedTime)
+      );
     }
-  }, [endTime, elapsedTime, singlePlayerName, mode, me?.id]);
+  }, [endTime, elapsedTime, singlePlayerName, mode, me?.id, dispatch]);
 
   // Save 2-players scores to the database
   useEffect(() => {
@@ -135,19 +131,17 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       player2Name &&
       me?.id
     ) {
-      supabase
-        .from(DATABASE_TABLE.two_player_games)
-        .insert({
-          player1_name: player1Name,
-          player2_name: player2Name,
-          player1_score: scores.player1,
-          player2_score: scores.player2,
-          platform: Platform.OS,
-          user_id: me.id,
-        })
-        .then(() => {});
+      dispatch(
+        gamesActions.updateTwoPlayerGames(
+          player1Name,
+          player2Name,
+          scores.player1,
+          scores.player2,
+          me.id
+        )
+      );
     }
-  }, [scores, player1Name, player2Name, mode, cards, me?.id]);
+  }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch]);
 
   const handleCardPress = (index: number) => {
     if (firstCard && secondCard) return; // Prevent further clicks

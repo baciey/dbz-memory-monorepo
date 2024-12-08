@@ -24,18 +24,16 @@ export const Account = () => {
   const isAnonymousWithEmailNotConfirmed =
     isAnonymous && Boolean(me?.session?.user?.new_email) && !me?.email;
   const isAnonymousWithEmailConfirmed = Boolean(
-    !isAnonymous && me?.email && !password,
+    !isAnonymous && me?.email && !password
   );
   const isLoggedIn = Boolean(me?.email && me?.password);
-  // console.log({ isLoggedIn, isAnonymousWithEmailNotConfirmed, isAnonymous });
-  console.log(me);
   const loading =
     meUpdateStatus === ACTION_STATUS.LOADING ||
     meStatus === ACTION_STATUS.LOADING;
 
   const showLogoutWarning = () => {
     setAlert(
-      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
+      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?"
     );
     setAlertOnPress(() => {
       return logOut;
@@ -44,7 +42,7 @@ export const Account = () => {
 
   const showRegisterInfo = () => {
     setAlert(
-      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
+      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password."
     );
     setAlertOnPress(() => {
       return () => openModal(AUTH_MODAL_TYPES.REGISTER);
@@ -66,7 +64,7 @@ export const Account = () => {
       appSliceActions.setAuthModal({
         isVisible: true,
         type: type,
-      }),
+      })
     );
   };
 
@@ -144,7 +142,7 @@ export const Account = () => {
       {logoutButtonElement}
     </>
   );
-  console.log({ password });
+
   return (
     <View style={styles.container}>
       <ThemedAlert

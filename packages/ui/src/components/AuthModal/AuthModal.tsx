@@ -18,8 +18,6 @@ import { validatePassword } from "../../utils/validatePassword";
 import { Loader } from "../Loader";
 import * as Linking from "expo-linking";
 import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
-import { appActions } from "../../redux/actions";
-import { Session } from "@supabase/supabase-js";
 
 const headerText = {
   [AUTH_MODAL_TYPES.LOGIN]: "Log in",
@@ -40,7 +38,7 @@ export const AuthModal = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>(
-    undefined,
+    undefined
   );
 
   const [email, setEmail] = useState("");
@@ -53,10 +51,6 @@ export const AuthModal = () => {
   const url = Linking.useURL();
   const isAnonymous = Boolean(me?.isAnonymous);
   const redirectUrl = Linking.createURL(isWeb ? "/settings" : "settings");
-  // console.log({ redirectUrl });
-  //forgot password redirect url is ok
-  //sign up redirect url is ok
-  //
 
   const validateInputs = (inputsToValidate: string[]) => {
     const emailErrorText = inputsToValidate.includes("email")
@@ -123,7 +117,7 @@ export const AuthModal = () => {
         return () => openModal(AUTH_MODAL_TYPES.LOGIN);
       });
       setAlert(
-        "We have sent you an email to verify your account" + redirectUrl,
+        "We have sent you an email to verify your account" + redirectUrl
       );
     }
     setLoading(false);
@@ -167,7 +161,7 @@ export const AuthModal = () => {
       },
       {
         emailRedirectTo: redirectUrl,
-      },
+      }
     );
 
     if (error) {
@@ -178,7 +172,7 @@ export const AuthModal = () => {
       });
       setAlert(
         "We have sent you an email to verify your account. Once you verify your email, please set a password." +
-          redirectUrl,
+          redirectUrl
       );
     }
 
@@ -202,7 +196,7 @@ export const AuthModal = () => {
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
-      }),
+      })
     );
   }, [dispatch]);
 
@@ -212,10 +206,10 @@ export const AuthModal = () => {
         appSliceActions.setAuthModal({
           isVisible: true,
           type: type,
-        }),
+        })
       );
     },
-    [dispatch],
+    [dispatch]
   );
 
   const handleForgotPassword = async () => {
@@ -235,7 +229,7 @@ export const AuthModal = () => {
     } else {
       setAlert(
         "We have sent you an email to reset your password. Please check your inbox." +
-          redirectUrl,
+          redirectUrl
       );
     }
 
