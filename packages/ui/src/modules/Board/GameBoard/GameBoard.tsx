@@ -11,16 +11,14 @@ import {
   SCORES_KEY,
 } from "./GameBoard.types";
 import { GameInfo } from "./../GameInfo";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { boardSliceActions } from "../slice";
-import { supabase } from "../../../utils/supabase";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
-import { DATABASE_TABLE } from "../../../constants/database";
 import { gamesActions } from "../../../redux/Games/actions";
 
-export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
+export const GameBoard = ({ mode }: GameBoardProps) => {
   const dispatch = useAppDispatch();
 
   const [cardWidth, setCardWidth] = useState(0);
@@ -28,6 +26,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
   const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
   const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
+
   // Timer and score state
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
@@ -39,10 +38,9 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const player2Name = useAppSelector((state) => state.board.playersNames[1]);
   const singlePlayerName = useAppSelector((state) => state.board.playerName);
   const loadedImages = cards.filter((card) => card.isLoaded);
-  console.log(cards.length, loadedImages.length);
 
   const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
-  const isEveryImageLoaded = loadedImages.length === cards.length;
+  const isEveryImageLoaded = percentageLoaded === 100;
 
   const images = useGetImages();
 
@@ -60,7 +58,6 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
 
     setCards(shuffleBoardImages());
   }, [images]);
-  console.log(cards);
 
   const me = useAppSelector((state) => state.app.me);
 
@@ -114,7 +111,6 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       singlePlayerName &&
       me?.id
     ) {
-      console.log("upadte");
       dispatch(
         gamesActions.updateOnePlayerGames(me.id, singlePlayerName, elapsedTime)
       );
@@ -228,16 +224,18 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   return (
     <View
       style={{
-        opacity: isEveryImageLoaded && isVisible ? 1 : 0,
+        opacity: isEveryImageLoaded ? 1 : 0,
       }}
     >
-      <GameInfo
-        mode={mode}
-        elapsedTime={elapsedTime}
-        scores={scores}
-        cards={cards}
-        playerTurn={playerTurn}
-      />
+      {isEveryImageLoaded && (
+        <GameInfo
+          mode={mode}
+          elapsedTime={elapsedTime}
+          scores={scores}
+          cards={cards}
+          playerTurn={playerTurn}
+        />
+      )}
       <ThemedView
         style={[
           styles.cardsContainer,

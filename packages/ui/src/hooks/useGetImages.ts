@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 
-export const useGetImages = () => {
-  const [images, setImages] = useState<{
-    board: string[];
-    view: Record<string, string>;
-  }>({
+type Images = {
+  board: string[];
+  view: {
+    logo: string;
+    sonHQ: string;
+    sonLQ: string;
+    cardBack: string;
+  };
+};
+
+export const useGetImages = (): Images => {
+  const [images, setImages] = useState<Images>({
     board: [],
-    view: {},
+    view: {
+      logo: "",
+      sonHQ: "",
+      sonLQ: "",
+      cardBack: "",
+    },
   });
 
   useEffect(() => {
@@ -16,7 +28,7 @@ export const useGetImages = () => {
         data: { publicUrl },
       } = supabase.storage.from("dbz-images").getPublicUrl("");
 
-      const { data: boardImages, error: errr } = await supabase.storage
+      const { data: boardImages } = await supabase.storage
         .from("dbz-images")
         .list("board");
 
@@ -27,7 +39,6 @@ export const useGetImages = () => {
         cardBack: publicUrl + "view/cardBack.jpg",
       };
 
-      //   console.log(view, boardImages, publicUrl);
       setImages({
         board:
           boardImages?.map((image) => publicUrl + "board/" + image.name) || [],

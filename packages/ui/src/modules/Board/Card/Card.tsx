@@ -23,7 +23,7 @@ export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
           source={{
             width: width,
             height: width,
-            uri: card.src,
+            uri: card.src || undefined,
           }}
         />
         {!card.isRevealed && (
@@ -32,7 +32,7 @@ export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
             source={{
               width: width,
               height: width,
-              uri: images.view.cardBackImage,
+              uri: images.view.cardBack || undefined,
             }}
             onLoadEnd={setIsLoaded}
           />

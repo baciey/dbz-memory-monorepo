@@ -1,6 +1,5 @@
 export type GameBoardProps = {
   mode: GAME_BOARD_MODE;
-  isVisible: boolean;
 };
 
 export enum SCORES_KEY {

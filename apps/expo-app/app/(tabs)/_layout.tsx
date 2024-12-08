@@ -2,16 +2,15 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { ROUTES, useTranslation } from "@repo/ui";
-import { BottomNavigation, useTheme } from "react-native-paper";
+import { BottomNavigation } from "react-native-paper";
 import { CommonActions } from "@react-navigation/native";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const homeIcon = "home";
-  const homeIconOutline = "home-outline";
-  const settingsIcon = "settings";
-  const settingsIconOutline = "settings-outline";
+  const homeIcon = "home" as const;
+  const homeIconOutline = "home-outline" as const;
+  const settingsIcon = "settings" as const;
+  const settingsIconOutline = "settings-outline" as const;
 
   const tabs = [
     {

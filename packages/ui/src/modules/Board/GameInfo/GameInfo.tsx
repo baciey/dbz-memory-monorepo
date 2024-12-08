@@ -24,8 +24,6 @@ export const GameInfo = ({
     useAppSelector((state) => state.board.playersNames[0]) || "Player 1";
   const player2Name =
     useAppSelector((state) => state.board.playersNames[1]) || "Player 2";
-  const singlePlayerName =
-    useAppSelector((state) => state.board.playerName) || "";
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (

@@ -17,6 +17,7 @@ export const NamesModal = ({
   isVisible,
   setIsVisible,
   mode,
+  setGameMode,
 }: NamesModalProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -38,7 +39,17 @@ export const NamesModal = ({
 
   const isPlayer2Mode = mode === GAME_BOARD_MODE.player2;
 
+  const validateNames = () => {
+    const names = isPlayer2Mode ? playersNames : [playerName];
+    const errors = names.map((name) => validateName(name));
+    setErrorText(errors);
+    return errors;
+  };
+
   const handleSaveName = () => {
+    const hasErrors = validateNames().some((error) => error !== "");
+    if (hasErrors) return;
+
     setIsVisible(false);
     if (isPlayer2Mode) {
       const names = playersNames.map((name) => name.trim());
@@ -53,12 +64,7 @@ export const NamesModal = ({
 
   const handleInputChange = (index: number, text: string) => {
     const trimmedText = text.trimStart();
-    const errorText = validateName(trimmedText);
-    setErrorText((prev) => {
-      const updatedErrors = [...prev];
-      updatedErrors[index] = errorText;
-      return updatedErrors;
-    });
+
     if (isPlayer2Mode) {
       setPlayersNames((prev) => {
         const updatedNames = [...prev];
@@ -70,19 +76,10 @@ export const NamesModal = ({
     }
   };
 
-  const isConfirmButtonDisabled = () => {
-    if (isPlayer2Mode) {
-      return (
-        playersNames.some((name) => validateName(name) !== "") ||
-        errorText.some((e) => e !== "")
-      );
-    }
-    return validateName(playerName) !== "";
-  };
-
   return (
     <Portal>
       <Modal
+        dismissable={false}
         visible={isVisible}
         onDismiss={() => setIsVisible(false)}
         contentContainerStyle={[
@@ -121,7 +118,14 @@ export const NamesModal = ({
             text="Confirm"
             type="primary"
             onPress={handleSaveName}
-            disabled={isConfirmButtonDisabled()}
+          />
+          <ThemedButton
+            text="Cancel"
+            type="primary"
+            onPress={() => {
+              setIsVisible(false);
+              setGameMode(null);
+            }}
           />
         </ThemedView>
       </Modal>

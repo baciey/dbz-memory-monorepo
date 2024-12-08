@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ThemedView } from "../../components/ThemedView";
 import { useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
@@ -24,28 +24,21 @@ export const HomePage = () => {
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
   const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [isNamesModalVisible, setIsNamesModalVisible] = useState(true);
+  const [isNamesModalVisible, setIsNamesModalVisible] = useState(false);
 
   const imagesPercentageLoaded = useAppSelector(
-    boardSelectors.getImagesPercentageLoaded,
+    boardSelectors.getImagesPercentageLoaded
   );
 
   const { width: backgroundImageWidth, isMobile } = useGetScreenDimensions();
 
   const handleSetGameMode = (mode: GAME_BOARD_MODE | null) => {
     setGameMode(mode);
+    if (mode !== null) setIsNamesModalVisible(true);
   };
-
+  console.log(gameMode, isNamesModalVisible);
   const handleShowModal = () => setIsAlertVisible(true);
   const images = useGetImages();
-
-  useEffect(() => {
-    if (gameMode !== null) {
-      setIsNamesModalVisible(true);
-    }
-  }, [gameMode]);
-
-  console.log({ imagesPercentageLoaded });
 
   return (
     <ThemedView style={styles.container}>
@@ -54,8 +47,15 @@ export const HomePage = () => {
         isVisible={isAlertVisible}
         setIsVisible={setIsAlertVisible}
         text="Do you want to return to main menu?"
+        withCancel
       />
-      <Loader isVisible={gameMode !== null && imagesPercentageLoaded !== 100} />
+      <Loader
+        isVisible={
+          gameMode !== null &&
+          imagesPercentageLoaded !== 100 &&
+          !isNamesModalVisible
+        }
+      />
       <View
         style={[
           styles.backgroundImageContainer,
@@ -78,7 +78,7 @@ export const HomePage = () => {
             },
           ]}
           source={{
-            uri: images.view.sonHQImage,
+            uri: images.view.sonHQ || undefined,
           }}
         />
       </View>
@@ -118,10 +118,11 @@ export const HomePage = () => {
           isVisible={isNamesModalVisible}
           setIsVisible={setIsNamesModalVisible}
           mode={gameMode}
+          setGameMode={setGameMode}
         />
       )}
-      {gameMode !== null && (
-        <GameBoard mode={gameMode} isVisible={!isNamesModalVisible} />
+      {gameMode !== null && !isNamesModalVisible && (
+        <GameBoard mode={gameMode} />
       )}
     </ThemedView>
   );
