@@ -4,5 +4,6 @@ export type ThemedTableProps = {
     columnWidth: number;
     rowId: string;
   }[];
+
   data: Record<string, string | number>[];
 };

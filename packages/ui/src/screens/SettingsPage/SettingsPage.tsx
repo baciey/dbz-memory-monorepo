@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Menu } from "react-native-paper";
-import { THEME_MODES } from "../../constants/theme";
-import { LANGUAGES } from "../../constants/lang";
+import { THEME_MODE } from "../../constants/theme";
+import { LANGUAGE } from "../../constants/lang";
 import { styles } from "./SettingsPage.styles";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { appSelectors } from "../../redux/selectors";
@@ -24,8 +24,8 @@ export const SettingsPage = () => {
 
   const changeThemeMode = (isDarkMode: boolean) => {
     const mode: AppState["themeMode"] = isDarkMode
-      ? THEME_MODES.light
-      : THEME_MODES.dark;
+      ? THEME_MODE.light
+      : THEME_MODE.dark;
     dispatch(appActions.changeThemeMode(mode));
   };
 
@@ -34,7 +34,7 @@ export const SettingsPage = () => {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  const handleChangeLanguage = (lang: LANGUAGES) => {
+  const handleChangeLanguage = (lang: LANGUAGE) => {
     dispatch(appActions.changeLanguage(lang));
     setVisible(false);
   };
@@ -65,12 +65,12 @@ export const SettingsPage = () => {
           }
         >
           <Menu.Item
-            onPress={() => handleChangeLanguage(LANGUAGES.pl)}
-            title={LANGUAGES.pl.toUpperCase()}
+            onPress={() => handleChangeLanguage(LANGUAGE.pl)}
+            title={LANGUAGE.pl.toUpperCase()}
           />
           <Menu.Item
-            onPress={() => handleChangeLanguage(LANGUAGES.en)}
-            title={LANGUAGES.en.toUpperCase()}
+            onPress={() => handleChangeLanguage(LANGUAGE.en)}
+            title={LANGUAGE.en.toUpperCase()}
           />
         </Menu>
       </ThemedView>

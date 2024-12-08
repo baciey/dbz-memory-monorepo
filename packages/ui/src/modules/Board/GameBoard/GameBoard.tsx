@@ -16,8 +16,8 @@ import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { boardSliceActions } from "../slice";
 import { supabase } from "../../../utils/supabase";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
-import { TABLES } from "../../../constants/database";
 import { useGetImages } from "../../../hooks/useGetImages";
+import { DATABASE_TABLE } from "../../../constants/database";
 
 export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
   const dispatch = useAppDispatch();
@@ -114,7 +114,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       me?.id
     ) {
       supabase
-        .from(TABLES.one_player_games)
+        .from(DATABASE_TABLE.one_player_games)
         .insert({
           name: singlePlayerName,
           time: elapsedTime,
@@ -136,7 +136,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
       me?.id
     ) {
       supabase
-        .from(TABLES.two_player_games)
+        .from(DATABASE_TABLE.two_player_games)
         .insert({
           player1_name: player1Name,
           player2_name: player2Name,
@@ -195,7 +195,7 @@ export const GameBoard = ({ mode, isVisible }: GameBoardProps) => {
             setPlayerTurn((prevTurn) =>
               prevTurn === PLAYER_TURN.player1
                 ? PLAYER_TURN.player2
-                : PLAYER_TURN.player1,
+                : PLAYER_TURN.player1
             );
           }
         }

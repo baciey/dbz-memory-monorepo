@@ -1,7 +1,7 @@
 import { gamesSliceActions } from "./slice";
 import { supabase } from "../../utils/supabase";
 import { PayloadThunkAction } from "./../store";
-import { TABLES } from "../../constants/database";
+import { DATABASE_TABLE } from "../../constants/database";
 
 const onePlayerGames = [
   {
@@ -205,7 +205,7 @@ const getOnePlayerGames = (userId: string): PayloadThunkAction => {
     dispatch(gamesSliceActions.onePlayerGamesLoading());
 
     supabase
-      .from(TABLES.one_player_games)
+      .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at`)
       .eq("user_id", userId)
       .then(({ data, error, status }) => {
@@ -232,9 +232,9 @@ const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
     dispatch(gamesSliceActions.twoPlayerGamesLoading());
 
     supabase
-      .from(TABLES.two_player_games)
+      .from(DATABASE_TABLE.two_player_games)
       .select(
-        `id, player1_name, player2_name, player1_score, player2_score, created_at`,
+        `id, player1_name, player2_name, player1_score, player2_score, created_at`
       )
       .eq("user_id", userId)
       .then(({ data, error, status }) => {

@@ -1,5 +1,5 @@
-import { LANGUAGES } from "../constants/lang";
-import { THEME_MODES } from "../constants/theme";
+import { LANGUAGE } from "../constants/lang";
+import { THEME_MODE } from "../constants/theme";
 import { Me } from "../models/user";
 
 export enum ACTION_STATUS {
@@ -21,8 +21,8 @@ export type AuthModalType = {
   type?: AUTH_MODAL_TYPES;
 };
 export interface AppState {
-  themeMode: THEME_MODES;
-  language: LANGUAGES;
+  themeMode: THEME_MODE;
+  language: LANGUAGE;
   authModal: AuthModalType;
   me: Me | null;
   meStatus: ACTION_STATUS;

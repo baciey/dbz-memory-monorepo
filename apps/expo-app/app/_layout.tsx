@@ -13,7 +13,7 @@ import {
   useSetLanguage,
   useSetTheme,
   PaperProviderWrapper,
-  THEME_MODES,
+  THEME_MODE,
   useGetIsAuthenticated,
   AuthModal,
 } from "@repo/ui";
@@ -28,7 +28,7 @@ export const AppWithStore = () => {
   });
 
   const isDarkMode =
-    useAppSelector(appSelectors.getThemeMode) === THEME_MODES.dark;
+    useAppSelector(appSelectors.getThemeMode) === THEME_MODE.dark;
 
   useSetLanguage();
   useSetTheme();

@@ -7,7 +7,7 @@ import { supabase } from "../utils/supabase";
 import { Session } from "@supabase/supabase-js";
 import { PayloadThunkAction } from "./store";
 import { Me } from "../models/user";
-import { TABLES } from "../constants/database";
+import { DATABASE_TABLE } from "../constants/database";
 
 const changeThemeMode = (themeMode: AppState["themeMode"]) => {
   AsyncStorage.setItem(STORAGE_KEYS.themeMode, themeMode).catch(() => {
@@ -33,7 +33,7 @@ const getMe = (session: Session): PayloadThunkAction => {
     dispatch(appSliceActions.meLoading());
 
     supabase
-      .from(TABLES.profiles)
+      .from(DATABASE_TABLE.profiles)
       .select(`username, avatar_url, password`)
       .eq("id", session.user.id)
       .single()
@@ -44,7 +44,7 @@ const getMe = (session: Session): PayloadThunkAction => {
             appSliceActions.setAuthModal({
               isVisible: true,
               type: AUTH_MODAL_TYPES.LOGIN,
-            }),
+            })
           );
         }
         if (data) {
@@ -71,7 +71,7 @@ const updateMe = (me: MeUpdate, session: Session): PayloadThunkAction => {
     dispatch(appSliceActions.meUpdateLoading());
 
     supabase
-      .from(TABLES.profiles)
+      .from(DATABASE_TABLE.profiles)
       .upsert(me)
       .then(({ error }) => {
         if (error) {

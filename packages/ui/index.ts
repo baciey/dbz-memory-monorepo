@@ -30,7 +30,7 @@ export { useGetIsAuthenticated } from "./src/hooks/useGetIsAuthenticated";
 
 //CONSTANTS
 export { STORAGE_KEYS } from "./src/constants/storage";
-export { THEME_MODES } from "./src/constants/theme";
+export { THEME_MODE } from "./src/constants/theme";
 export { ROUTES } from "./src/constants/routes";
 
 // STYLES

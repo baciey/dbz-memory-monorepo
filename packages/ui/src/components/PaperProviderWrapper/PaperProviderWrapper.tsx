@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { THEME_MODES } from "../../constants/theme";
+import { THEME_MODE } from "../../constants/theme";
 import { useAppSelector } from "../../redux/store";
 import { appSelectors } from "../../redux/selectors";
 import { CombinedDarkTheme, CombinedDefaultTheme } from "../../styles/theme";
@@ -11,7 +11,7 @@ export const PaperProviderWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <PaperProvider
       theme={
-        themeMode === THEME_MODES.light
+        themeMode === THEME_MODE.light
           ? CombinedDefaultTheme
           : CombinedDarkTheme
       }

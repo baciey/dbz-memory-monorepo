@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getLocales } from "expo-localization";
 import { useAppDispatch } from "../redux/store";
 import { appActions } from "../redux/actions";
-import { LANGUAGES } from "../constants/lang";
+import { LANGUAGE } from "../constants/lang";
 
 export const useSetLanguage = () => {
   const dispatch = useAppDispatch();
@@ -16,8 +16,8 @@ export const useSetLanguage = () => {
         const languageToSet = language || userLanguage;
         dispatch(
           appActions.changeLanguage(
-            languageToSet === LANGUAGES.pl ? LANGUAGES.pl : LANGUAGES.en,
-          ),
+            languageToSet === LANGUAGE.pl ? LANGUAGE.pl : LANGUAGE.en
+          )
         );
       } catch (error) {
         console.error("setLanguage error:", error);

@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ACTION_STATUS, AppState } from "./slice.types";
-import { THEME_MODES } from "../constants/theme";
-import { LANGUAGES } from "../constants/lang";
+import { THEME_MODE } from "../constants/theme";
+import { LANGUAGE } from "../constants/lang";
 
 const initialState: AppState = {
-  themeMode: THEME_MODES.light,
-  language: LANGUAGES.pl,
+  themeMode: THEME_MODE.light,
+  language: LANGUAGE.pl,
   authModal: {
     isVisible: false,
     type: undefined,
