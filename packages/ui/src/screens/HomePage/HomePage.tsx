@@ -20,6 +20,9 @@ import { useGetImages } from "../../hooks/useGetImages";
 export const HomePage = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const { images } = useGetImages();
+  const { width: backgroundImageWidth, isMobile } = useGetScreenDimensions();
+
   useGetPlayerName();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
@@ -30,15 +33,10 @@ export const HomePage = () => {
     boardSelectors.getImagesPercentageLoaded
   );
 
-  const { width: backgroundImageWidth, isMobile } = useGetScreenDimensions();
-
   const handleSetGameMode = (mode: GAME_BOARD_MODE | null) => {
     setGameMode(mode);
     if (mode !== null) setIsNamesModalVisible(true);
   };
-  console.log(gameMode, isNamesModalVisible);
-  const handleShowModal = () => setIsAlertVisible(true);
-  const images = useGetImages();
 
   return (
     <ThemedView style={styles.container}>
@@ -78,7 +76,7 @@ export const HomePage = () => {
             },
           ]}
           source={{
-            uri: images.view.sonHQ || undefined,
+            uri: images.main.sonHQ || undefined,
           }}
         />
       </View>
@@ -89,7 +87,7 @@ export const HomePage = () => {
           <ThemedButton
             text="Return"
             type="primary"
-            onPress={handleShowModal}
+            onPress={() => setIsAlertVisible(true)}
             style={[
               GLOBAL_STYLES.m.mt16,
               GLOBAL_STYLES.m.mb16,

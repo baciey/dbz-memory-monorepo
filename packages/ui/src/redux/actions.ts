@@ -8,8 +8,10 @@ import { Session } from "@supabase/supabase-js";
 import { PayloadThunkAction } from "./store";
 import { Me } from "../models/user";
 import { DATABASE_TABLE } from "../constants/database";
+import * as ImagePicker from "expo-image-picker";
+import { THEME_MODE } from "../constants/theme";
 
-const changeThemeMode = (themeMode: AppState["themeMode"]) => {
+const changeThemeMode = (themeMode: THEME_MODE) => {
   AsyncStorage.setItem(STORAGE_KEYS.themeMode, themeMode).catch(() => {
     console.error("Failed to save theme mode to storage");
   });
@@ -82,6 +84,7 @@ const updateMe = (me: MeUpdate, session: Session): PayloadThunkAction => {
           dispatch(getMe(session));
         }
       });
+    dispatch(getMe(session));
   };
 };
 
@@ -94,10 +97,53 @@ const logoutMe = (): PayloadThunkAction => {
   };
 };
 
+const uploadAvatar = (me: Me, isWeb: boolean): PayloadThunkAction => {
+  return async (dispatch) => {
+    dispatch(appSliceActions.meUpdateLoading());
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsMultipleSelection: false,
+      allowsEditing: true,
+      quality: 1,
+      exif: false,
+    });
+
+    if (result.canceled || !result.assets || result.assets.length === 0) {
+      console.log("User cancelled image picker.");
+      return dispatch(appSliceActions.meUpdateIdle());
+    }
+
+    const image = result.assets[0];
+    const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer());
+    const fileExt = isWeb
+      ? (image.uri.split(";")[0].split("/")[1] ?? "jpeg")
+      : (image.uri.split(".").pop()?.toLowerCase() ?? "jpeg");
+    const fileName = `${Date.now()}.${fileExt}`;
+
+    supabase.storage
+      .from("avatars")
+      .upload(fileName, arraybuffer, {
+        contentType: image.mimeType ?? "image/jpeg",
+      })
+      .then(({ data, error }) => {
+        if (error) {
+          dispatch(appSliceActions.meUpdateError());
+        } else {
+          const newMe = {
+            id: me.id,
+            avatar_url: data.fullPath,
+          };
+          dispatch(appActions.updateMe(newMe, me?.session));
+        }
+      });
+  };
+};
+
 export const appActions = {
   changeThemeMode,
   changeLanguage,
   getMe,
   updateMe,
   logoutMe,
+  uploadAvatar,
 };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
+import { STORAGE_BUCKET } from "../constants/database";
 
 type Images = {
   board: string[];
-  view: {
+  main: {
     logo: string;
     sonHQ: string;
     sonLQ: string;
@@ -11,10 +12,11 @@ type Images = {
   };
 };
 
-export const useGetImages = (): Images => {
+export const useGetImages = (): { images: Images; publicUrl: string } => {
+  const [publicUrl, setPublicUrl] = useState("");
   const [images, setImages] = useState<Images>({
     board: [],
-    view: {
+    main: {
       logo: "",
       sonHQ: "",
       sonLQ: "",
@@ -26,28 +28,29 @@ export const useGetImages = (): Images => {
     const fetchImages = async () => {
       const {
         data: { publicUrl },
-      } = supabase.storage.from("dbz-images").getPublicUrl("");
+      } = supabase.storage.from("").getPublicUrl("");
 
-      const { data: boardImages } = await supabase.storage
-        .from("dbz-images")
-        .list("board");
+      const { data: boardImages } = await supabase.storage.from("board").list();
 
-      const view = {
-        logo: publicUrl + "view/logo.png",
-        sonHQ: publicUrl + "view/sonHQ.png",
-        sonLQ: publicUrl + "view/sonLQ.png",
-        cardBack: publicUrl + "view/cardBack.jpg",
+      const main = {
+        logo: publicUrl + STORAGE_BUCKET.main + "logo.png",
+        sonHQ: publicUrl + STORAGE_BUCKET.main + "sonHQ.png",
+        sonLQ: publicUrl + STORAGE_BUCKET.main + "sonLQ.png",
+        cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.jpg",
       };
 
+      setPublicUrl(publicUrl);
       setImages({
         board:
-          boardImages?.map((image) => publicUrl + "board/" + image.name) || [],
-        view: view,
+          boardImages?.map(
+            (image) => publicUrl + STORAGE_BUCKET.board + image.name
+          ) || [],
+        main: main,
       });
     };
 
     fetchImages();
   }, []);
 
-  return images;
+  return { images, publicUrl };
 };

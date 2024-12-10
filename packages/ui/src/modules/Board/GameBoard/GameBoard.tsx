@@ -42,7 +42,7 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
   const isEveryImageLoaded = percentageLoaded === 100;
 
-  const images = useGetImages();
+  const { images } = useGetImages();
 
   useEffect(() => {
     const shuffleBoardImages = (): CardType[] =>

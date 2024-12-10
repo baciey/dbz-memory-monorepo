@@ -5,7 +5,7 @@ import { CardProps } from "./Card.types";
 import { useGetImages } from "../../../hooks/useGetImages";
 
 export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
-  const images = useGetImages();
+  const { images } = useGetImages();
   return (
     <Pressable onPress={onPress}>
       <View
@@ -32,7 +32,7 @@ export const Card = memo(({ width, card, onPress, setIsLoaded }: CardProps) => {
             source={{
               width: width,
               height: width,
-              uri: images.view.cardBack || undefined,
+              uri: images.main.cardBack || undefined,
             }}
             onLoadEnd={setIsLoaded}
           />
