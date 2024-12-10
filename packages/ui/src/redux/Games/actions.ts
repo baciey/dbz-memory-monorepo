@@ -128,86 +128,85 @@ const onePlayerGames = [
   },
 ];
 const twoPlayerGames = [
-  // {
-  //   id: 1,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 10,
-  //   player2Score: 20,
-  //   createdAt: "2021-10-10",
-  // },
-  // {
-  //   id: 2,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 30,
-  //   player2Score: 40,
-  //   createdAt: "2021-10-11",
-  // },
-  // {
-  //   id: 3,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 50,
-  //   player2Score: 60,
-  //   createdAt: "2021-10-12",
-  // },
-  // {
-  //   id: 4,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 70,
-  //   player2Score: 80,
-  //   createdAt: "2021-10-13",
-  // },
-  // {
-  //   id: 5,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 90,
-  //   player2Score: 100,
-  //   createdAt: "2021-10-14",
-  // },
-  // {
-  //   id: 6,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 110,
-  //   player2Score: 120,
-  //   createdAt: "2021-10-15",
-  // },
-  // {
-  //   id: 7,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 130,
-  //   player2Score: 140,
-  //   createdAt: "2021-10-16",
-  // },
-  // {
-  //   id: 8,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 150,
-  //   player2Score: 160,
-  //   createdAt: "2021-10-17",
-  // },
-  // {
-  //   id: 9,
-  //   player1Name: "Player 1",
-  //   player2Name: "Player 2",
-  //   player1Score: 170,
-  //   player2Score: 180,
-  //   createdAt: "2021-10-18",
-  // },
+  {
+    id: 1,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 10,
+    player2Score: 20,
+    createdAt: "2021-10-10",
+  },
+  {
+    id: 2,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 30,
+    player2Score: 40,
+    createdAt: "2021-10-11",
+  },
+  {
+    id: 3,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 50,
+    player2Score: 60,
+    createdAt: "2021-10-12",
+  },
+  {
+    id: 4,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 70,
+    player2Score: 80,
+    createdAt: "2021-10-13",
+  },
+  {
+    id: 5,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 90,
+    player2Score: 100,
+    createdAt: "2021-10-14",
+  },
+  {
+    id: 6,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 110,
+    player2Score: 120,
+    createdAt: "2021-10-15",
+  },
+  {
+    id: 7,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 130,
+    player2Score: 140,
+    createdAt: "2021-10-16",
+  },
+  {
+    id: 8,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 150,
+    player2Score: 160,
+    createdAt: "2021-10-17",
+  },
+  {
+    id: 9,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player1Score: 170,
+    player2Score: 180,
+    createdAt: "2021-10-18",
+  },
 ];
 
-const isMock = true;
+const isMock = false;
 
 const getOnePlayerGames = (userId: string): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(gamesSliceActions.onePlayerGamesLoading());
-    console.log("get games");
     supabase
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at`)
