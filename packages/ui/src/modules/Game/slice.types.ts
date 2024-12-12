@@ -1,4 +1,14 @@
-import { ACTION_STATUS } from "../slice.types";
+import { ACTION_STATUS } from "../User/slice.types";
+
+export interface GameState {
+  imagesPercentageLoaded: number;
+  playersNames: string[];
+  playerName: string;
+  onePlayerGames: SinglePlayerGame[];
+  twoPlayerGames: MultiPlayerGame[];
+  onePlayerGamesStatus: ACTION_STATUS;
+  twoPlayerGamesStatus: ACTION_STATUS;
+}
 
 export type SinglePlayerGameResponse = {
   time: number;
@@ -30,11 +40,4 @@ export type MultiPlayerGame = {
   player2Score: number;
   id: number;
   createdAt: string;
-};
-
-export type GamesState = {
-  onePlayerGames: SinglePlayerGame[];
-  twoPlayerGames: MultiPlayerGame[];
-  onePlayerGamesStatus: ACTION_STATUS;
-  twoPlayerGamesStatus: ACTION_STATUS;
 };

@@ -7,7 +7,7 @@ import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedView } from "../../../components/ThemedView";
 import { GAME_BOARD_MODE } from "../GameBoard";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { boardSliceActions } from "../slice";
+import { gameSliceActions } from "../slice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { validateName } from "../../../utils/validateName";
@@ -26,9 +26,9 @@ export const NamesModal = ({
   const [playersNames, setPlayersNames] = useState(["", ""]);
   const [errorText, setErrorText] = useState(["", ""]);
 
-  const player1Name = useAppSelector((state) => state.board.playersNames[0]);
-  const player2Name = useAppSelector((state) => state.board.playersNames[1]);
-  const singlePlayerName = useAppSelector((state) => state.board.playerName);
+  const player1Name = useAppSelector((state) => state.game.playersNames[0]);
+  const player2Name = useAppSelector((state) => state.game.playersNames[1]);
+  const singlePlayerName = useAppSelector((state) => state.game.playerName);
 
   const { isMobile } = useGetScreenDimensions();
 
@@ -53,11 +53,11 @@ export const NamesModal = ({
     setIsVisible(false);
     if (isPlayer2Mode) {
       const names = playersNames.map((name) => name.trim());
-      dispatch(boardSliceActions.setPlayersNames(names));
+      dispatch(gameSliceActions.setPlayersNames(names));
       AsyncStorage.setItem("playersNames", JSON.stringify(names));
     } else {
       const name = playerName.trim();
-      dispatch(boardSliceActions.setPlayerName(name));
+      dispatch(gameSliceActions.setPlayerName(name));
       AsyncStorage.setItem("playerName", JSON.stringify(name));
     }
   };

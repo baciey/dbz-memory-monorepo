@@ -9,15 +9,15 @@ import { Provider } from "react-redux";
 import {
   store,
   useAppSelector,
-  appSelectors,
   useSetLanguage,
   useSetTheme,
   PaperProviderWrapper,
   THEME_MODE,
-  useGetIsAuthenticated,
+  useHandleAuthState,
   AuthModal,
 } from "@repo/ui";
 import { StatusBar } from "expo-status-bar";
+import { appSelectors } from "@repo/ui/src/modules/App/selectors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,7 +32,7 @@ export const AppWithStore = () => {
 
   useSetLanguage();
   useSetTheme();
-  useGetIsAuthenticated();
+  useHandleAuthState();
 
   useEffect(() => {
     if (loaded) {

@@ -21,9 +21,9 @@ export const GameInfo = ({
   const theme = useTheme();
 
   const player1Name =
-    useAppSelector((state) => state.board.playersNames[0]) || "Player 1";
+    useAppSelector((state) => state.game.playersNames[0]) || "Player 1";
   const player2Name =
-    useAppSelector((state) => state.board.playersNames[1]) || "Player 2";
+    useAppSelector((state) => state.game.playersNames[1]) || "Player 2";
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (

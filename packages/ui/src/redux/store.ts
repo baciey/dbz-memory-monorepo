@@ -1,19 +1,15 @@
 import { PayloadAction, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { baseApi } from "./services/api";
-import { APP_REDUCER_NAME, appReducer } from "./slice";
-import { BOARD_REDUCER_NAME, boardReducer } from "../modules/Board/slice";
-import { GAMES_REDUCER_NAME, gamesReducer } from "./Games/slice";
+import { USER_REDUCER_NAME, userReducer } from "../modules/User/slice";
+import { GAME_REDUCER_NAME, gameReducer } from "../modules/Game/slice";
+import { APP_REDUCER_NAME, appReducer } from "../modules/App/slice";
 
 export const store = configureStore({
   reducer: {
     [APP_REDUCER_NAME]: appReducer,
-    [BOARD_REDUCER_NAME]: boardReducer,
-    [GAMES_REDUCER_NAME]: gamesReducer,
-    [baseApi.reducerPath]: baseApi.reducer,
+    [USER_REDUCER_NAME]: userReducer,
+    [GAME_REDUCER_NAME]: gameReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(baseApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

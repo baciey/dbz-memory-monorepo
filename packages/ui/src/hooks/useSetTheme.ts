@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "react-native";
 import { useAppDispatch } from "../redux/store";
-import { appActions } from "../redux/actions";
 import { THEME_MODE } from "../constants/theme";
+import { appActions } from "../modules/App/actions";
 
 export const useSetTheme = () => {
   const colorScheme = (useColorScheme() || THEME_MODE.light) as THEME_MODE;

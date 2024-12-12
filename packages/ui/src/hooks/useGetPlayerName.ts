@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "../redux/store";
-import { boardSliceActions } from "../modules/Board/slice";
+import { gameSliceActions } from "../modules/Game/slice";
 
 export const useGetPlayerName = () => {
   const dispatch = useAppDispatch();
@@ -11,9 +11,9 @@ export const useGetPlayerName = () => {
       const playerName = await AsyncStorage.getItem("playerName");
       const playersNames = await AsyncStorage.getItem("playersNames");
       if (playerName)
-        dispatch(boardSliceActions.setPlayerName(JSON.parse(playerName)));
+        dispatch(gameSliceActions.setPlayerName(JSON.parse(playerName)));
       if (playersNames)
-        dispatch(boardSliceActions.setPlayersNames(JSON.parse(playersNames)));
+        dispatch(gameSliceActions.setPlayersNames(JSON.parse(playersNames)));
     };
 
     getNames();

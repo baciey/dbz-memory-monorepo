@@ -1,9 +1,9 @@
-import { gamesSliceActions } from "./slice";
+import { gameSliceActions } from "./slice";
 import { supabase } from "../../utils/supabase";
-import { PayloadThunkAction } from "./../store";
 import { DATABASE_TABLE } from "../../constants/database";
 import { Platform } from "react-native";
 import { dateFormatter } from "../../utils/date";
+import { PayloadThunkAction } from "../../redux/store";
 
 const onePlayerGames = [
   {
@@ -206,12 +206,12 @@ const isMock = false;
 
 const getOnePlayerGames = (userId: string): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(gamesSliceActions.onePlayerGamesLoading());
+    dispatch(gameSliceActions.onePlayerGamesLoading());
     supabase
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at`)
       .eq("user_id", userId)
-      .then(({ data, error, status }) => {
+      .then(({ data }) => {
         if (data) {
           const processedData = data.map((game) => {
             return {
@@ -223,12 +223,12 @@ const getOnePlayerGames = (userId: string): PayloadThunkAction => {
           });
 
           dispatch(
-            gamesSliceActions.onePlayerGamesSuccess(
-              isMock ? onePlayerGames : processedData
-            )
+            gameSliceActions.onePlayerGamesSuccess(
+              isMock ? onePlayerGames : processedData,
+            ),
           );
         } else {
-          dispatch(gamesSliceActions.onePlayerGamesError());
+          dispatch(gameSliceActions.onePlayerGamesError());
         }
       });
   };
@@ -236,15 +236,15 @@ const getOnePlayerGames = (userId: string): PayloadThunkAction => {
 
 const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(gamesSliceActions.twoPlayerGamesLoading());
+    dispatch(gameSliceActions.twoPlayerGamesLoading());
 
     supabase
       .from(DATABASE_TABLE.two_player_games)
       .select(
-        `id, player1_name, player2_name, player1_score, player2_score, created_at`
+        `id, player1_name, player2_name, player1_score, player2_score, created_at`,
       )
       .eq("user_id", userId)
-      .then(({ data, error, status }) => {
+      .then(({ data }) => {
         if (data) {
           const processedData = data.map((game) => {
             return {
@@ -258,12 +258,12 @@ const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
           });
 
           dispatch(
-            gamesSliceActions.twoPlayerGamesSuccess(
-              isMock ? twoPlayerGames : processedData
-            )
+            gameSliceActions.twoPlayerGamesSuccess(
+              isMock ? twoPlayerGames : processedData,
+            ),
           );
         } else {
-          dispatch(gamesSliceActions.twoPlayerGamesError());
+          dispatch(gameSliceActions.twoPlayerGamesError());
         }
       });
   };
@@ -272,7 +272,7 @@ const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
 const updateOnePlayerGames = (
   userId: string,
   name: string,
-  time: number
+  time: number,
 ): PayloadThunkAction => {
   return async (dispatch) => {
     await supabase.from(DATABASE_TABLE.one_player_games).insert({
@@ -290,7 +290,7 @@ const updateTwoPlayerGames = (
   player2name: string,
   player1score: number,
   player2score: number,
-  userId: string
+  userId: string,
 ): PayloadThunkAction => {
   return async (dispatch) => {
     await supabase.from(DATABASE_TABLE.two_player_games).insert({
@@ -305,7 +305,7 @@ const updateTwoPlayerGames = (
   };
 };
 
-export const gamesActions = {
+export const gameActions = {
   getOnePlayerGames,
   getTwoPlayerGames,
   updateOnePlayerGames,

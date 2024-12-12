@@ -43,7 +43,7 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
       setImages({
         board:
           boardImages?.map(
-            (image) => publicUrl + STORAGE_BUCKET.board + image.name
+            (image) => publicUrl + STORAGE_BUCKET.board + image.name,
           ) || [],
         main: main,
       });

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "./../Card";
+import { Card } from "../Card";
 import { styles } from "./GameBoard.styles";
 import { ThemedView } from "../../../components/ThemedView";
-import { CardType, SelectedCardType } from "./../Card/Card.types";
+import { CardType, SelectedCardType } from "../Card/Card.types";
 import {
   GAME_BOARD_MODE,
   GameBoardProps,
@@ -10,13 +10,13 @@ import {
   Scores,
   SCORES_KEY,
 } from "./GameBoard.types";
-import { GameInfo } from "./../GameInfo";
+import { GameInfo } from "../GameInfo";
 import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { boardSliceActions } from "../slice";
+import { gameSliceActions } from "../slice";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
-import { gamesActions } from "../../../redux/Games/actions";
+import { gameActions } from "../actions";
 
 export const GameBoard = ({ mode }: GameBoardProps) => {
   const dispatch = useAppDispatch();
@@ -34,9 +34,9 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
 
-  const player1Name = useAppSelector((state) => state.board.playersNames[0]);
-  const player2Name = useAppSelector((state) => state.board.playersNames[1]);
-  const singlePlayerName = useAppSelector((state) => state.board.playerName);
+  const player1Name = useAppSelector((state) => state.game.playersNames[0]);
+  const player2Name = useAppSelector((state) => state.game.playersNames[1]);
+  const singlePlayerName = useAppSelector((state) => state.game.playerName);
   const loadedImages = cards.filter((card) => card.isLoaded);
 
   const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
@@ -59,7 +59,7 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
     setCards(shuffleBoardImages());
   }, [images]);
 
-  const me = useAppSelector((state) => state.app.me);
+  const me = useAppSelector((state) => state.user.me);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -112,7 +112,7 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
       me?.id
     ) {
       dispatch(
-        gamesActions.updateOnePlayerGames(me.id, singlePlayerName, elapsedTime)
+        gameActions.updateOnePlayerGames(me.id, singlePlayerName, elapsedTime),
       );
     }
   }, [endTime, elapsedTime, singlePlayerName, mode, me?.id, dispatch]);
@@ -128,13 +128,13 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
       me?.id
     ) {
       dispatch(
-        gamesActions.updateTwoPlayerGames(
+        gameActions.updateTwoPlayerGames(
           player1Name,
           player2Name,
           scores.player1,
           scores.player2,
-          me.id
-        )
+          me.id,
+        ),
       );
     }
   }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch]);
@@ -185,7 +185,7 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
             setPlayerTurn((prevTurn) =>
               prevTurn === PLAYER_TURN.player1
                 ? PLAYER_TURN.player2
-                : PLAYER_TURN.player1
+                : PLAYER_TURN.player1,
             );
           }
         }
@@ -212,12 +212,12 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   };
 
   useEffect(() => {
-    dispatch(boardSliceActions.setImagesPercentageLoaded(percentageLoaded));
+    dispatch(gameSliceActions.setImagesPercentageLoaded(percentageLoaded));
   }, [isEveryImageLoaded, percentageLoaded, dispatch]);
 
   useEffect(() => {
     return () => {
-      dispatch(boardSliceActions.setImagesPercentageLoaded(0));
+      dispatch(gameSliceActions.setImagesPercentageLoaded(0));
     };
   }, [dispatch]);
 

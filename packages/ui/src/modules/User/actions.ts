@@ -1,52 +1,31 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import i18next from "i18next";
-import { STORAGE_KEYS } from "../constants/storage";
-import { appSliceActions } from "./slice";
-import { AppState, AUTH_MODAL_TYPES, MeUpdate } from "./slice.types";
-import { supabase } from "../utils/supabase";
+import { userSliceActions } from "./slice";
+import { MeUpdate } from "./slice.types";
 import { Session } from "@supabase/supabase-js";
-import { PayloadThunkAction } from "./store";
-import { Me } from "../models/user";
-import { DATABASE_TABLE } from "../constants/database";
 import * as ImagePicker from "expo-image-picker";
-import { THEME_MODE } from "../constants/theme";
-
-const changeThemeMode = (themeMode: THEME_MODE) => {
-  AsyncStorage.setItem(STORAGE_KEYS.themeMode, themeMode).catch(() => {
-    console.error("Failed to save theme mode to storage");
-  });
-  return appSliceActions.setThemeMode(themeMode);
-};
-
-const changeLanguage = (language: AppState["language"]) => {
-  AsyncStorage.setItem(STORAGE_KEYS.language, language)
-    .then(() => {
-      i18next.changeLanguage(language);
-    })
-    .catch(() => {
-      console.error("Failed to save language to i18next");
-    });
-
-  return appSliceActions.setLanguage(language);
-};
+import { Dispatch, SetStateAction } from "react";
+import { PayloadThunkAction } from "../../redux/store";
+import { DATABASE_TABLE } from "../../constants/database";
+import { supabase } from "../../utils/supabase";
+import { Me } from "../../models/user";
+import { AUTH_MODAL_TYPES } from "../App/slice.types";
+import { appSliceActions } from "../App/slice";
 
 const getMe = (session: Session): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(appSliceActions.meLoading());
-
+    dispatch(userSliceActions.meLoading());
+    console.log("getMe");
     supabase
       .from(DATABASE_TABLE.profiles)
       .select(`username, avatar_url, password`)
       .eq("id", session.user.id)
       .single()
-      .then(({ data, error, status }) => {
-        // console.log(error, status);
+      .then(({ data, error }) => {
         if (error) {
           dispatch(
             appSliceActions.setAuthModal({
               isVisible: true,
               type: AUTH_MODAL_TYPES.LOGIN,
-            })
+            }),
           );
         }
         if (data) {
@@ -60,9 +39,10 @@ const getMe = (session: Session): PayloadThunkAction => {
             isAnonymous: Boolean(session.user.is_anonymous),
           };
 
-          dispatch(appSliceActions.meSuccess(me));
+          dispatch(userSliceActions.meSuccess(me));
+          dispatch(userSliceActions.meUpdateSuccess());
         } else {
-          dispatch(appSliceActions.meError());
+          dispatch(userSliceActions.meError());
         }
       });
   };
@@ -70,37 +50,38 @@ const getMe = (session: Session): PayloadThunkAction => {
 
 const updateMe = (me: MeUpdate, session: Session): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(appSliceActions.meUpdateLoading());
-
+    dispatch(userSliceActions.meUpdateLoading());
+    console.log("updateMe");
     supabase
       .from(DATABASE_TABLE.profiles)
       .upsert(me)
       .then(({ error }) => {
         if (error) {
           console.log({ error });
-          dispatch(appSliceActions.meUpdateError());
+          dispatch(userSliceActions.meUpdateError());
         } else {
-          dispatch(appSliceActions.meUpdateSuccess());
           dispatch(getMe(session));
         }
       });
-    dispatch(getMe(session));
   };
 };
 
 const logoutMe = (): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(appSliceActions.meLoading());
+    dispatch(userSliceActions.meLoading());
     const { error } = await supabase.auth.signOut();
-    console.log({ error });
-    dispatch(appSliceActions.meIdle());
+    if (!error) {
+      dispatch(userSliceActions.meIdle());
+    }
   };
 };
 
-const uploadAvatar = (me: Me, isWeb: boolean): PayloadThunkAction => {
+const uploadAvatar = (
+  me: Me,
+  isWeb: boolean,
+  setIsAvatarLoaded: Dispatch<SetStateAction<boolean>>,
+): PayloadThunkAction => {
   return async (dispatch) => {
-    dispatch(appSliceActions.meUpdateLoading());
-
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: false,
       allowsEditing: true,
@@ -109,9 +90,12 @@ const uploadAvatar = (me: Me, isWeb: boolean): PayloadThunkAction => {
     });
 
     if (result.canceled || !result.assets || result.assets.length === 0) {
-      console.log("User cancelled image picker.");
-      return dispatch(appSliceActions.meUpdateIdle());
+      console.log("User cancelled image picker.", result);
+      setIsAvatarLoaded(true);
+      return;
     }
+
+    dispatch(userSliceActions.meUpdateLoading());
 
     const image = result.assets[0];
     const arraybuffer = await fetch(image.uri).then((res) => res.arrayBuffer());
@@ -127,21 +111,20 @@ const uploadAvatar = (me: Me, isWeb: boolean): PayloadThunkAction => {
       })
       .then(({ data, error }) => {
         if (error) {
-          dispatch(appSliceActions.meUpdateError());
+          dispatch(userSliceActions.meUpdateError());
+          setIsAvatarLoaded(true);
         } else {
           const newMe = {
             id: me.id,
             avatar_url: data.fullPath,
           };
-          dispatch(appActions.updateMe(newMe, me?.session));
+          dispatch(userActions.updateMe(newMe, me?.session));
         }
       });
   };
 };
 
-export const appActions = {
-  changeThemeMode,
-  changeLanguage,
+export const userActions = {
   getMe,
   updateMe,
   logoutMe,

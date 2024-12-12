@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ThemedView } from "../ThemedView";
 import { Pressable, View } from "react-native";
-import { ThemedText } from "../ThemedText";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { appSelectors } from "../../redux/selectors";
 import { styles } from "./AuthModal.styles";
 import { Button, Modal, Portal, useTheme } from "react-native-paper";
-import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
-import { ThemedButton } from "../ThemedButton";
-import { supabase } from "../../utils/supabase";
-import { ThemedAlert } from "../ThemedAlert";
-import { ThemedTextInput } from "../ThemedTextInput";
-import { AUTH_MODAL_TYPES } from "../../redux/slice.types";
-import { appSliceActions } from "../../redux/slice";
-import { validateEmail } from "../../utils/validateEmail";
-import { validatePassword } from "../../utils/validatePassword";
-import { Loader } from "../Loader";
 import * as Linking from "expo-linking";
-import { useGetIsAuthenticated } from "../../hooks/useGetIsAuthenticated";
+import { AUTH_MODAL_TYPES } from "../slice.types";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
+import { userSelectors } from "../../User/selectors";
+import { appSelectors } from "../selectors";
+import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
+import { validateEmail } from "../../../utils/validateEmail";
+import { validatePassword } from "../../../utils/validatePassword";
+import { supabase } from "../../../utils/supabase";
+import { userActions } from "../../User/actions";
+import { appSliceActions } from "../slice";
+import { ThemedTextInput } from "../../../components/ThemedTextInput";
+import { ThemedButton } from "../../../components/ThemedButton";
+import { ThemedText } from "../../../components/ThemedText";
+import { ThemedView } from "../../../components/ThemedView";
+import { ThemedAlert } from "../../../components/ThemedAlert";
+import { Loader } from "../../../components/Loader";
 
 const headerText = {
   [AUTH_MODAL_TYPES.LOGIN]: "Log in",
@@ -29,16 +30,16 @@ const headerText = {
 export const AuthModal = () => {
   const dispatch = useAppDispatch();
 
-  const me = useAppSelector(appSelectors.getMe);
+  const me = useAppSelector(userSelectors.getMe);
   const authModal = useAppSelector(appSelectors.getAuthModal);
-  const isAuthenticated = useGetIsAuthenticated();
+  const isAuthenticated = Boolean(me?.session);
   const theme = useTheme();
   const { isMobile, isWeb } = useGetScreenDimensions();
 
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>(
-    undefined
+    undefined,
   );
 
   const [email, setEmail] = useState("");
@@ -94,6 +95,17 @@ export const AuthModal = () => {
     setLoading(false);
   };
 
+  const signInAnonymously = async () => {
+    console.log("signInAnonymously");
+    const { data, error } = await supabase.auth.signInAnonymously();
+    if (error) {
+      setAlert(error.message);
+    } else {
+      if (data.session) dispatch(userActions.getMe(data.session));
+      closeModal();
+    }
+  };
+
   const signUp = async () => {
     console.log("signUp");
 
@@ -117,7 +129,7 @@ export const AuthModal = () => {
         return () => openModal(AUTH_MODAL_TYPES.LOGIN);
       });
       setAlert(
-        "We have sent you an email to verify your account" + redirectUrl
+        "We have sent you an email to verify your account" + redirectUrl,
       );
     }
     setLoading(false);
@@ -161,7 +173,7 @@ export const AuthModal = () => {
       },
       {
         emailRedirectTo: redirectUrl,
-      }
+      },
     );
 
     if (error) {
@@ -172,7 +184,7 @@ export const AuthModal = () => {
       });
       setAlert(
         "We have sent you an email to verify your account. Once you verify your email, please set a password." +
-          redirectUrl
+          redirectUrl,
       );
     }
 
@@ -196,7 +208,7 @@ export const AuthModal = () => {
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
-      })
+      }),
     );
   }, [dispatch]);
 
@@ -206,10 +218,10 @@ export const AuthModal = () => {
         appSliceActions.setAuthModal({
           isVisible: true,
           type: type,
-        })
+        }),
       );
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleForgotPassword = async () => {
@@ -229,7 +241,7 @@ export const AuthModal = () => {
     } else {
       setAlert(
         "We have sent you an email to reset your password. Please check your inbox." +
-          redirectUrl
+          redirectUrl,
       );
     }
 
@@ -238,7 +250,6 @@ export const AuthModal = () => {
 
   useEffect(() => {
     clearModal();
-    if (!isAuthenticated) openModal(AUTH_MODAL_TYPES.LOGIN);
   }, [authModal.isVisible, isAuthenticated, openModal]);
 
   useEffect(() => {
@@ -324,13 +335,7 @@ export const AuthModal = () => {
   );
 
   const continueAsGuestButtonElement = (
-    <ThemedButton
-      text="Continue as a guest"
-      onPress={async () => {
-        await supabase.auth.signInAnonymously();
-        closeModal();
-      }}
-    />
+    <ThemedButton text="Continue as a guest" onPress={signInAnonymously} />
   );
 
   const confirmButtonElement = (

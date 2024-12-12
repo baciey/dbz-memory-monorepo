@@ -6,17 +6,15 @@ import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedAlert } from "../../../components/ThemedAlert";
 import { ThemedText } from "../../../components/ThemedText";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { appSelectors } from "../../../redux/selectors";
-import { ACTION_STATUS, AUTH_MODAL_TYPES } from "../../../redux/slice.types";
-import { appSliceActions } from "../../../redux/slice";
 import { styles } from "./Account.styles";
+import { userSelectors } from "../../../modules/User/selectors";
+import { AUTH_MODAL_TYPES } from "../../../modules/App/slice.types";
+import { userSliceActions } from "../../../modules/User/slice";
+import { appSliceActions } from "../../../modules/App/slice";
 
 export const Account = () => {
   const dispatch = useAppDispatch();
-  const me = useAppSelector(appSelectors.getMe);
-  const meStatus = useAppSelector(appSelectors.getMeStatus);
-  const meUpdateStatus = useAppSelector(appSelectors.getMeUpdateStatus);
-
+  const me = useAppSelector(userSelectors.getMe);
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
 
@@ -24,16 +22,13 @@ export const Account = () => {
   const isAnonymousWithEmailNotConfirmed =
     isAnonymous && Boolean(me?.session?.user?.new_email) && !me?.email;
   const isAnonymousWithEmailConfirmed = Boolean(
-    !isAnonymous && me?.email && !password
+    !isAnonymous && me?.email && !password,
   );
   const isLoggedIn = Boolean(me?.email && me?.password);
-  const loading =
-    meUpdateStatus === ACTION_STATUS.LOADING ||
-    meStatus === ACTION_STATUS.LOADING;
 
   const showLogoutWarning = () => {
     setAlert(
-      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?"
+      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
     );
     setAlertOnPress(() => {
       return logOut;
@@ -42,7 +37,7 @@ export const Account = () => {
 
   const showRegisterInfo = () => {
     setAlert(
-      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password."
+      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
     );
     setAlertOnPress(() => {
       return () => openModal(AUTH_MODAL_TYPES.REGISTER);
@@ -54,7 +49,7 @@ export const Account = () => {
     if (error) {
       setAlert("Log out failed");
     } else {
-      dispatch(appSliceActions.meIdle());
+      dispatch(userSliceActions.meIdle());
       openModal(AUTH_MODAL_TYPES.LOGIN);
     }
   };
@@ -64,7 +59,7 @@ export const Account = () => {
       appSliceActions.setAuthModal({
         isVisible: true,
         type: type,
-      })
+      }),
     );
   };
 
@@ -89,7 +84,6 @@ export const Account = () => {
     <ThemedButton
       text="Log Out"
       onPress={isLoggedIn && password ? logOut : showLogoutWarning}
-      disabled={meStatus === ACTION_STATUS.LOADING}
     />
   );
 
@@ -97,16 +91,11 @@ export const Account = () => {
     <ThemedButton
       text={isLoggedIn ? "Change Password" : "Set Password"}
       onPress={() => openModal(AUTH_MODAL_TYPES.SET_PASSWORD)}
-      disabled={meStatus === ACTION_STATUS.LOADING}
     />
   );
 
   const registerButtonElement = (
-    <ThemedButton
-      text="Register"
-      onPress={showRegisterInfo}
-      disabled={loading}
-    />
+    <ThemedButton text="Register" onPress={showRegisterInfo} />
   );
 
   const loggedInContent = (

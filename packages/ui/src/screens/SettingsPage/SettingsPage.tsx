@@ -1,37 +1,50 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Avatar, Button, IconButton, Menu } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  IconButton,
+  Menu,
+  useTheme,
+} from "react-native-paper";
 import { THEME_MODE } from "../../constants/theme";
 import { LANGUAGE } from "../../constants/lang";
 import { styles } from "./SettingsPage.styles";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { appSelectors } from "../../redux/selectors";
-import { ACTION_STATUS } from "../../redux/slice.types";
-import { appActions } from "../../redux/actions";
 import { ThemedView } from "../../components/ThemedView";
 import { CustomSwitch } from "../../components/CustomSwitch";
 import { ThemedText } from "../../components/ThemedText";
 import { Account } from "./Account";
-import { GLOBAL_STYLES, globalStyles } from "../../styles/globalStyles";
+import { globalStyles } from "../../styles/globalStyles";
 import { useGetImages } from "../../hooks/useGetImages";
-import { Loader } from "../../components/Loader";
 import { ThemedAlert } from "../../components/ThemedAlert";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
+import { View } from "react-native";
+import { userSelectors } from "../../modules/User/selectors";
+import { userActions } from "../../modules/User/actions";
+import { appActions } from "../../modules/App/actions";
+import { appSelectors } from "../../modules/App/selectors";
+import { ACTION_STATUS } from "../../modules/App/slice.types";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
 
   const themeMode = useAppSelector(appSelectors.getThemeMode);
   const language = useAppSelector(appSelectors.getLanguage);
-  const me = useAppSelector(appSelectors.getMe);
-  const meUpdateStatus = useAppSelector(appSelectors.getMeUpdateStatus);
+  const me = useAppSelector(userSelectors.getMe);
+  const meStatus = useAppSelector(userSelectors.getMeStatus);
+  const meUpdateStatus = useAppSelector(userSelectors.getMeUpdateStatus);
+  const isAuthenticated = Boolean(me?.session);
 
   const { publicUrl } = useGetImages();
   const { t } = useTranslation();
   const { isWeb } = useGetScreenDimensions();
+  const theme = useTheme();
 
   const [alert, setAlert] = useState<string>("");
   const [isLanguageMenuVisible, setIsLanguageMenuVisible] = useState(false);
+  const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const changeThemeMode = () => {
     const newThemeMode =
@@ -45,15 +58,34 @@ export const SettingsPage = () => {
   };
 
   const uploadAvatar = () => {
-    if (me) dispatch(appActions.uploadAvatar(me, isWeb));
+    if (me) {
+      if (!isWeb) setIsAvatarLoaded(false);
+      dispatch(userActions.uploadAvatar(me, isWeb, setIsAvatarLoaded));
+    }
   };
+
+  const avatar = useMemo(() => {
+    if (!publicUrl) return null;
+    const isReady =
+      me?.avatarUrl &&
+      meUpdateStatus !== ACTION_STATUS.LOADING &&
+      meStatus !== ACTION_STATUS.LOADING;
+    return (
+      <Avatar.Image
+        size={150}
+        source={{ uri: publicUrl + me?.avatarUrl }}
+        onLoadEnd={() => {
+          if (isReady) setIsAvatarLoaded(true);
+        }}
+        onLoadStart={() => {
+          if (isReady) setIsAvatarLoaded(false);
+        }}
+      />
+    );
+  }, [publicUrl, me?.avatarUrl, meUpdateStatus, meStatus]);
 
   return (
     <ThemedView style={styles.container}>
-      <Loader
-        isVisible={meUpdateStatus === ACTION_STATUS.LOADING}
-        withBackground
-      />
       <ThemedAlert
         isVisible={Boolean(alert)}
         setIsVisible={() => setAlert("")}
@@ -92,12 +124,26 @@ export const SettingsPage = () => {
           />
         </Menu>
       </ThemedView>
-      <ThemedView style={styles.row}>
-        <Avatar.Image
-          size={150}
-          source={{ uri: publicUrl + me?.avatarUrl }}
-          style={GLOBAL_STYLES.m.mt16}
-        />
+      <ThemedView style={[styles.row, styles.avatarRow]}>
+        {avatar}
+
+        {(!isAvatarLoaded ||
+          meUpdateStatus === ACTION_STATUS.LOADING ||
+          meStatus === ACTION_STATUS.LOADING) && (
+          <View
+            style={[
+              styles.avatarPlaceholder,
+              { backgroundColor: theme.colors.primary },
+            ]}
+          >
+            {isAuthenticated && (
+              <ActivityIndicator
+                size="large"
+                color={theme.colors.onBackground}
+              />
+            )}
+          </View>
+        )}
         <IconButton
           icon="upload"
           size={32}

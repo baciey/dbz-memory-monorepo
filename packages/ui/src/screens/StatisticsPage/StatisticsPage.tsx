@@ -3,35 +3,35 @@ import { ThemedView } from "../../components/ThemedView";
 import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { gamesActions } from "../../redux/Games/actions";
-import { appSelectors } from "../../redux/selectors";
 import { ThemedTable } from "../../components/ThemedTable";
 import { SegmentedButtons } from "react-native-paper";
 import { STATISTICS_PAGE_TABS } from "./StatisticsPage.types";
 import { ThemedText } from "../../components/ThemedText";
 import { useTranslation } from "react-i18next";
 import { globalStyles } from "../../styles/globalStyles";
-import { gamesSelectors } from "../../redux/Games/selectors";
 import {
   onePlayerTableConfig,
   twoPlayerTableConfig,
 } from "./StatisticsPage.const";
+import { userSelectors } from "../../modules/User/selectors";
+import { gameSelectors } from "../../modules/Game/selectors";
+import { gameActions } from "../../modules/Game/actions";
 
 export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
-  const me = useAppSelector(appSelectors.getMe);
-  const onePlayerGames = useAppSelector(gamesSelectors.getOnePlayerGames);
-  const twoPlayerGames = useAppSelector(gamesSelectors.getTwoPlayerGames);
+  const me = useAppSelector(userSelectors.getMe);
+  const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
+  const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
 
   useEffect(() => {
     if (me?.id) {
-      dispatch(gamesActions.getOnePlayerGames(me.id));
-      dispatch(gamesActions.getTwoPlayerGames(me.id));
+      dispatch(gameActions.getOnePlayerGames(me.id));
+      dispatch(gameActions.getTwoPlayerGames(me.id));
     }
   }, [me, dispatch]);
 

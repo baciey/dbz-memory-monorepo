@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import { ThemedView } from "../../components/ThemedView";
 import { useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
-import { GameBoard } from "../../modules/Board/GameBoard/";
-import { GAME_BOARD_MODE } from "../../modules/Board/GameBoard/GameBoard.types";
+import { GameBoard } from "../../modules/Game/GameBoard";
+import { GAME_BOARD_MODE } from "../../modules/Game/GameBoard/GameBoard.types";
 import { ThemedButton } from "../../components/ThemedButton";
 import { GLOBAL_STYLES } from "../../styles/globalStyles";
 import { Image, View } from "react-native";
 import { useAppSelector } from "../../redux/store";
-import { boardSelectors } from "../../modules/Board/selectors";
+import { gameSelectors } from "../../modules/Game/selectors";
 import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
 import { Loader } from "../../components/Loader/";
-import { NamesModal } from "../../modules/Board/NamesModal";
+import { NamesModal } from "../../modules/Game/NamesModal";
 import { useGetPlayerName } from "../../hooks/useGetPlayerName";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../hooks/useGetImages";
@@ -30,7 +30,7 @@ export const HomePage = () => {
   const [isNamesModalVisible, setIsNamesModalVisible] = useState(false);
 
   const imagesPercentageLoaded = useAppSelector(
-    boardSelectors.getImagesPercentageLoaded
+    gameSelectors.getImagesPercentageLoaded,
   );
 
   const handleSetGameMode = (mode: GAME_BOARD_MODE | null) => {

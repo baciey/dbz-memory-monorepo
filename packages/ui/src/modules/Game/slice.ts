@@ -1,26 +1,44 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { GamesState } from "./slice.types";
-import { ACTION_STATUS } from "../slice.types";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { GameState } from "./slice.types";
+import { ACTION_STATUS } from "../App/slice.types";
 
-const initialState: GamesState = {
+const initialState: GameState = {
+  imagesPercentageLoaded: 0,
+  playersNames: [],
+  playerName: "",
   onePlayerGames: [],
   twoPlayerGames: [],
   onePlayerGamesStatus: ACTION_STATUS.IDLE,
   twoPlayerGamesStatus: ACTION_STATUS.IDLE,
 };
 
-export const GAMES_REDUCER_NAME = "games";
+export const GAME_REDUCER_NAME = "game";
 
-const gamesSlice = createSlice({
-  name: GAMES_REDUCER_NAME,
+const gameSlice = createSlice({
+  name: GAME_REDUCER_NAME,
   initialState,
   reducers: {
+    setImagesPercentageLoaded: (
+      state,
+      action: PayloadAction<GameState["imagesPercentageLoaded"]>,
+    ) => {
+      state.imagesPercentageLoaded = action.payload;
+    },
+    setPlayersNames: (
+      state,
+      action: PayloadAction<GameState["playersNames"]>,
+    ) => {
+      state.playersNames = action.payload;
+    },
+    setPlayerName: (state, action: PayloadAction<GameState["playerName"]>) => {
+      state.playerName = action.payload;
+    },
     onePlayerGamesLoading(state) {
       state.onePlayerGamesStatus = ACTION_STATUS.LOADING;
     },
     onePlayerGamesSuccess(
       state,
-      action: PayloadAction<GamesState["onePlayerGames"]>,
+      action: PayloadAction<GameState["onePlayerGames"]>,
     ) {
       state.onePlayerGames = action.payload;
       state.onePlayerGamesStatus = ACTION_STATUS.SUCCESS;
@@ -36,7 +54,7 @@ const gamesSlice = createSlice({
     },
     twoPlayerGamesSuccess(
       state,
-      action: PayloadAction<GamesState["twoPlayerGames"]>,
+      action: PayloadAction<GameState["twoPlayerGames"]>,
     ) {
       state.twoPlayerGames = action.payload;
       state.twoPlayerGamesStatus = ACTION_STATUS.SUCCESS;
@@ -50,5 +68,5 @@ const gamesSlice = createSlice({
   },
 });
 
-export const gamesReducer = gamesSlice.reducer;
-export const gamesSliceActions = gamesSlice.actions;
+export const gameReducer = gameSlice.reducer;
+export const gameSliceActions = gameSlice.actions;

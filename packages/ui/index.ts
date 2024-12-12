@@ -2,14 +2,16 @@
 export { ThemedButton } from "./src/components/ThemedButton";
 export { ThemedView } from "./src/components/ThemedView";
 export { ThemedText } from "./src/components/ThemedText";
-export { PaperProviderWrapper } from "./src/components/PaperProviderWrapper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
+
+//MODULES
+export { PaperProviderWrapper } from "./src/modules/App/PaperProviderWrapper";
+export { AuthModal } from "./src/modules/App/AuthModal";
 export {
   GameBoard,
   PLAYER_TURN,
   GAME_BOARD_MODE,
-} from "./src/modules/Board/GameBoard";
-export { AuthModal } from "./src/components/AuthModal";
+} from "./src/modules/Game/GameBoard";
 
 //PAGES
 export { SettingsPage } from "./src/screens/SettingsPage";
@@ -18,15 +20,13 @@ export { StatisticsPage } from "./src/screens/StatisticsPage";
 
 //REDUX
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";
-export { appActions } from "./src/redux/actions";
-export { appSelectors } from "./src/redux/selectors";
-export { boardSelectors } from "./src/modules/Board/selectors";
-export { type AppState } from "./src/redux/slice.types";
+export { userSelectors } from "./src/modules/User/selectors";
+export { gameSelectors } from "./src/modules/Game/selectors";
 
 //HOOKS
 export { useSetLanguage } from "./src/hooks/useSetLanguage";
 export { useSetTheme } from "./src/hooks/useSetTheme";
-export { useGetIsAuthenticated } from "./src/hooks/useGetIsAuthenticated";
+export { useHandleAuthState } from "./src/hooks/useHandleAuthState";
 
 //CONSTANTS
 export { STORAGE_KEYS } from "./src/constants/storage";
