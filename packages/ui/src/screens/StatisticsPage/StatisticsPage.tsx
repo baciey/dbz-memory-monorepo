@@ -4,7 +4,13 @@ import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { ThemedTable } from "../../components/ThemedTable";
-import { SegmentedButtons, Switch, Text } from "react-native-paper";
+import {
+  Searchbar,
+  SegmentedButtons,
+  Switch,
+  Text,
+  useTheme,
+} from "react-native-paper";
 import { STATISTICS_PAGE_TABS } from "./StatisticsPage.types";
 import { useTranslation } from "react-i18next";
 import { globalStyles } from "../../styles/globalStyles";
@@ -23,7 +29,7 @@ export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
-
+  const theme = useTheme();
   const me = useAppSelector(userSelectors.getMe);
   const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
@@ -32,6 +38,9 @@ export const StatisticsPage = () => {
   );
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
+  const [searchQuery, setSearchQuery] = React.useState("");
+
+  const isTwoPlayerTab = tab === STATISTICS_PAGE_TABS.player2;
 
   useEffect(() => {
     if (me?.id) {
@@ -41,10 +50,10 @@ export const StatisticsPage = () => {
   }, [me, dispatch, showPersonalGames]);
 
   useEffect(() => {
-    if (tab === STATISTICS_PAGE_TABS.player2) {
+    if (isTwoPlayerTab) {
       dispatch(gameSliceActions.setShowPersonalGames(true));
     }
-  }, [tab, dispatch]);
+  }, [isTwoPlayerTab, dispatch]);
 
   return (
     <ThemedView style={styles.container}>
@@ -68,21 +77,48 @@ export const StatisticsPage = () => {
           },
         ]}
       />
-      <View style={styles.switchContainer}>
-        <Text>Show only your games</Text>
-        <CustomSwitch
-          value={showPersonalGames}
-          onValueChange={() => {
-            dispatch(gameSliceActions.setShowPersonalGames(!showPersonalGames));
-          }}
-          disabled={tab === STATISTICS_PAGE_TABS.player2}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          maxWidth: 500,
+          width: "100%",
+        }}
+      >
+        <View style={styles.switchContainer}>
+          <Text
+            style={{
+              color: isTwoPlayerTab
+                ? theme.colors.onSurfaceDisabled
+                : theme.colors.onBackground,
+            }}
+          >
+            Show only your games
+          </Text>
+          <CustomSwitch
+            value={showPersonalGames}
+            onValueChange={() => {
+              dispatch(
+                gameSliceActions.setShowPersonalGames(!showPersonalGames),
+              );
+            }}
+            disabled={isTwoPlayerTab}
+          />
+        </View>
+        <Searchbar
+          placeholder="Search"
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          style={{ height: 40, maxWidth: 200 }}
+          inputStyle={{ height: 40, minHeight: 40, maxWidth: 200 }}
+          mode="view"
         />
       </View>
 
-      {tab === STATISTICS_PAGE_TABS.player1 ? (
-        <ThemedTable config={onePlayerTableConfig} data={onePlayerGames} />
-      ) : (
+      {isTwoPlayerTab ? (
         <ThemedTable config={twoPlayerTableConfig} data={twoPlayerGames} />
+      ) : (
+        <ThemedTable config={onePlayerTableConfig} data={onePlayerGames} />
       )}
     </ThemedView>
   );

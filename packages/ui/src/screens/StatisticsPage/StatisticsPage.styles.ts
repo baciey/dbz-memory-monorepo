@@ -17,6 +17,8 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    alignSelf: "flex-start",
+    // alignSelf: "flex-start",
+    // maxWidth: 500,
+    // width: "100%",
   },
 });

@@ -39,7 +39,7 @@ export const HomePage = () => {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView type="surface" style={styles.container}>
       <ThemedAlert
         actionButtonOnPress={() => setGameMode(null)}
         isVisible={isAlertVisible}
