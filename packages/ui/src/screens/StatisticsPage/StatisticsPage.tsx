@@ -17,6 +17,7 @@ import { gameSelectors } from "../../modules/Game/selectors";
 import { gameActions } from "../../modules/Game/actions";
 import { View } from "react-native";
 import { gameSliceActions } from "../../modules/Game/slice";
+import { CustomSwitch } from "../../components/CustomSwitch";
 
 export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
@@ -69,7 +70,7 @@ export const StatisticsPage = () => {
       />
       <View style={styles.switchContainer}>
         <Text>Show only your games</Text>
-        <Switch
+        <CustomSwitch
           value={showPersonalGames}
           onValueChange={() => {
             dispatch(gameSliceActions.setShowPersonalGames(!showPersonalGames));
