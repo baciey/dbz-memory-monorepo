@@ -4,7 +4,7 @@ import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { ThemedTable } from "../../components/ThemedTable";
-import { SegmentedButtons } from "react-native-paper";
+import { SegmentedButtons, Switch } from "react-native-paper";
 import { STATISTICS_PAGE_TABS } from "./StatisticsPage.types";
 import { ThemedText } from "../../components/ThemedText";
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,8 @@ import {
 import { userSelectors } from "../../modules/User/selectors";
 import { gameSelectors } from "../../modules/Game/selectors";
 import { gameActions } from "../../modules/Game/actions";
+import { View } from "react-native";
+import { gameSliceActions } from "../../modules/Game/slice";
 
 export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
@@ -25,15 +27,24 @@ export const StatisticsPage = () => {
   const me = useAppSelector(userSelectors.getMe);
   const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
+  const showPersonalGames = useAppSelector(
+    (state) => state.game.showPersonalGames,
+  );
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
 
   useEffect(() => {
     if (me?.id) {
-      dispatch(gameActions.getOnePlayerGames(me.id));
+      dispatch(gameActions.getOnePlayerGames(me.id, showPersonalGames));
       dispatch(gameActions.getTwoPlayerGames(me.id));
     }
-  }, [me, dispatch]);
+  }, [me, dispatch, showPersonalGames]);
+
+  useEffect(() => {
+    if (tab === STATISTICS_PAGE_TABS.player2) {
+      dispatch(gameSliceActions.setShowPersonalGames(true));
+    }
+  }, [tab, dispatch]);
 
   return (
     <ThemedView style={styles.container}>
@@ -59,6 +70,16 @@ export const StatisticsPage = () => {
           },
         ]}
       />
+      <View style={styles.switchContainer}>
+        <ThemedText text={"Show only your games"} />
+        <Switch
+          value={showPersonalGames}
+          onValueChange={() => {
+            dispatch(gameSliceActions.setShowPersonalGames(!showPersonalGames));
+          }}
+          disabled={tab === STATISTICS_PAGE_TABS.player2}
+        />
+      </View>
 
       {tab === STATISTICS_PAGE_TABS.player1 ? (
         <ThemedTable config={onePlayerTableConfig} data={onePlayerGames} />

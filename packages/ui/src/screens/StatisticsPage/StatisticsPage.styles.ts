@@ -13,4 +13,10 @@ export const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
   },
+  switchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    alignSelf: "flex-start",
+  },
 });

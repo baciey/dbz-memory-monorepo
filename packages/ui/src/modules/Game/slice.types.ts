@@ -1,4 +1,4 @@
-import { ACTION_STATUS } from "../User/slice.types";
+import { ACTION_STATUS } from "../App/slice.types";
 
 export interface GameState {
   imagesPercentageLoaded: number;
@@ -8,6 +8,7 @@ export interface GameState {
   twoPlayerGames: MultiPlayerGame[];
   onePlayerGamesStatus: ACTION_STATUS;
   twoPlayerGamesStatus: ACTION_STATUS;
+  showPersonalGames: boolean;
 }
 
 export type SinglePlayerGameResponse = {

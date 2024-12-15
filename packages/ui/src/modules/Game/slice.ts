@@ -10,6 +10,7 @@ const initialState: GameState = {
   twoPlayerGames: [],
   onePlayerGamesStatus: ACTION_STATUS.IDLE,
   twoPlayerGamesStatus: ACTION_STATUS.IDLE,
+  showPersonalGames: false,
 };
 
 export const GAME_REDUCER_NAME = "game";
@@ -64,6 +65,12 @@ const gameSlice = createSlice({
     },
     twoPlayerGamesIdle(state) {
       state.twoPlayerGamesStatus = ACTION_STATUS.IDLE;
+    },
+    setShowPersonalGames: (
+      state,
+      action: PayloadAction<GameState["showPersonalGames"]>,
+    ) => {
+      state.showPersonalGames = action.payload;
     },
   },
 });

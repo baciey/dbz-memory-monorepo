@@ -204,15 +204,26 @@ const twoPlayerGames = [
 
 const isMock = false;
 
-const getOnePlayerGames = (userId: string): PayloadThunkAction => {
+const getOnePlayerGames = (
+  userId: string,
+  showPersonal?: boolean,
+): PayloadThunkAction => {
+  console.log("getOnePlayerGames");
   return async (dispatch) => {
     dispatch(gameSliceActions.onePlayerGamesLoading());
     supabase
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at`)
-      .eq("user_id", userId)
+      .eq(showPersonal ? "user_id" : "", userId)
       .then(({ data }) => {
         if (data) {
+          //order by date
+          data.sort((a, b) => {
+            return (
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+            );
+          });
           const processedData = data.map((game) => {
             return {
               name: game.name,
@@ -273,6 +284,7 @@ const updateOnePlayerGames = (
   userId: string,
   name: string,
   time: number,
+  showPersonalGames: boolean,
 ): PayloadThunkAction => {
   return async (dispatch) => {
     await supabase.from(DATABASE_TABLE.one_player_games).insert({
@@ -281,7 +293,7 @@ const updateOnePlayerGames = (
       platform: Platform.OS,
       user_id: userId,
     });
-    dispatch(getOnePlayerGames(userId));
+    dispatch(getOnePlayerGames(userId, showPersonalGames));
   };
 };
 

@@ -11,6 +11,7 @@ const getOnePlayerGamesStatus = (state: RootState) =>
 const getTwoPlayerGames = (state: RootState) => state.game.twoPlayerGames;
 const getTwoPlayerGamesStatus = (state: RootState) =>
   state.game.twoPlayerGamesStatus;
+const getShowPersonalGames = (state: RootState) => state.game.showPersonalGames;
 
 export const gameSelectors = {
   getImagesPercentageLoaded,
@@ -20,4 +21,5 @@ export const gameSelectors = {
   getOnePlayerGamesStatus,
   getTwoPlayerGames,
   getTwoPlayerGamesStatus,
+  getShowPersonalGames,
 };

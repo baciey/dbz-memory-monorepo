@@ -39,12 +39,15 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.jpg",
       };
 
+      const boardImagesMapped =
+        boardImages?.map(
+          (image) => publicUrl + STORAGE_BUCKET.board + image.name,
+        ) || [];
+
       setPublicUrl(publicUrl);
       setImages({
-        board:
-          boardImages?.map(
-            (image) => publicUrl + STORAGE_BUCKET.board + image.name,
-          ) || [],
+        board: [boardImagesMapped[0]],
+        // board: boardImagesMapped,
         main: main,
       });
     };

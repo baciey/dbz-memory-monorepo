@@ -37,6 +37,9 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   const player1Name = useAppSelector((state) => state.game.playersNames[0]);
   const player2Name = useAppSelector((state) => state.game.playersNames[1]);
   const singlePlayerName = useAppSelector((state) => state.game.playerName);
+  const showPersonalGames = useAppSelector(
+    (state) => state.game.showPersonalGames,
+  );
   const loadedImages = cards.filter((card) => card.isLoaded);
 
   const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
@@ -112,10 +115,23 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
       me?.id
     ) {
       dispatch(
-        gameActions.updateOnePlayerGames(me.id, singlePlayerName, elapsedTime),
+        gameActions.updateOnePlayerGames(
+          me.id,
+          singlePlayerName,
+          elapsedTime,
+          showPersonalGames,
+        ),
       );
     }
-  }, [endTime, elapsedTime, singlePlayerName, mode, me?.id, dispatch]);
+  }, [
+    endTime,
+    elapsedTime,
+    singlePlayerName,
+    mode,
+    me?.id,
+    dispatch,
+    showPersonalGames,
+  ]);
 
   // Save 2-players scores to the database
   useEffect(() => {
