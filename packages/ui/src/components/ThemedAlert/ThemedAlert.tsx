@@ -1,6 +1,5 @@
 import React from "react";
-import { Modal, Portal, useTheme } from "react-native-paper";
-import { ThemedText } from "../ThemedText";
+import { Modal, Portal, Text, useTheme } from "react-native-paper";
 import { ThemedView } from "../ThemedView";
 import { ThemedButton } from "../ThemedButton";
 import { ThemedAlertProps } from "./ThemedAlert.types";
@@ -26,7 +25,9 @@ export const ThemedAlert = ({
           { backgroundColor: theme.colors.surface },
         ]}
       >
-        <ThemedText variant="bodyMedium" text={text} type="onSurface" />
+        <Text variant="bodyMedium" style={{ color: theme.colors.onSurface }}>
+          {text}
+        </Text>
         <ThemedView type="surface" style={styles.buttonsContainer}>
           <ThemedButton
             text={actionButtonText}

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
 import { supabase } from "../../../utils/supabase";
-import { TextInput } from "react-native-paper";
+import { Text, TextInput } from "react-native-paper";
 import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedAlert } from "../../../components/ThemedAlert";
-import { ThemedText } from "../../../components/ThemedText";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { styles } from "./Account.styles";
 import { userSelectors } from "../../../modules/User/selectors";
@@ -63,13 +62,13 @@ export const Account = () => {
     );
   };
 
-  const loggedinTextElement = <ThemedText text="You are logged in" />;
-  const anonymousTextElement = <ThemedText text="You are a guest" />;
+  const loggedinTextElement = <Text>You are logged in</Text>;
+  const anonymousTextElement = <Text>You are a guest</Text>;
   const anonymousWithEmailNotConfirmedTextElement = (
-    <ThemedText text="You are still a guest. Confirm your email." />
+    <Text>You are still a guest. Confirm your email.</Text>
   );
   const anonymousWithEmailConfirmedTextElement = (
-    <ThemedText text="You are still a guest. Set a password." />
+    <Text>You are still a guest. Set a password.</Text>
   );
 
   const emailElement = (

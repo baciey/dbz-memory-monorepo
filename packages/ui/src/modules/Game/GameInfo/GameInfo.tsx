@@ -1,5 +1,4 @@
 import React from "react";
-import { ThemedText } from "../../../components/ThemedText";
 import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard/GameBoard.types";
 import { ThemedView } from "../../../components/ThemedView";
 import { View } from "react-native";
@@ -8,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { styles } from "./GameInfo.styles";
 import { GLOBAL_STYLES } from "../../../styles/globalStyles";
 import { useAppSelector } from "../../../redux/store";
-import { useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 
 export const GameInfo = ({
   mode,
@@ -27,15 +26,11 @@ export const GameInfo = ({
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (
-      <ThemedText
-        variant="titleLarge"
-        style={GLOBAL_STYLES.m.mb16}
-        text={
-          elapsedTime === 0
-            ? t("board.start-timer")
-            : `${t("board.time")}: ${elapsedTime} ${t("board.seconds")}`
-        }
-      />
+      <Text variant="titleLarge" style={GLOBAL_STYLES.m.mb16}>
+        {elapsedTime === 0
+          ? t("board.start-timer")
+          : `${t("board.time")}: ${elapsedTime} ${t("board.seconds")}`}
+      </Text>
     );
   }
 
@@ -58,24 +53,17 @@ export const GameInfo = ({
     return (
       <ThemedView style={styles.player2Container}>
         <View style={{ flexDirection: "row" }}>
-          <ThemedText
-            variant="titleLarge"
-            style={player1Style}
-            text={`${player1Name}: ${scores.player1}`}
-          />
-
-          <ThemedText
-            variant="titleLarge"
-            style={[player2Style, styles.player2text]}
-            text={`${player2Name}: ${scores.player2}`}
-          />
+          <Text variant="titleLarge" style={player1Style}>
+            {`${player1Name}: ${scores.player1}`}
+          </Text>
+          <Text variant="titleLarge" style={[player2Style, styles.player2text]}>
+            {`${player2Name}: ${scores.player2}`}
+          </Text>
         </View>
         {winner && (
-          <ThemedText
-            variant="titleLarge"
-            style={{ color: "green" }}
-            text={`${t("board.winner")}: ${winner}!`}
-          />
+          <Text variant="titleLarge" style={{ color: "green" }}>
+            {`${t("board.winner")}: ${winner}!`}
+          </Text>
         )}
         <View style={GLOBAL_STYLES.m.mt16} />
       </ThemedView>

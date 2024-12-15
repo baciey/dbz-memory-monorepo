@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { DataTable, Icon, useTheme } from "react-native-paper";
+import { DataTable, Icon, Text, useTheme } from "react-native-paper";
 import { ThemedTableProps } from "./ThemedTable.types";
 import { ScrollView, View } from "react-native";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { styles } from "./ThemedTable.styles";
-import { ThemedText } from "../ThemedText";
 
 const numberOfItemsPerPageList = [5, 10, 20];
 
@@ -128,16 +127,13 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
         </ScrollView>
       </View>
       {!data.length && (
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <ThemedText
-            text="No data"
+        <View style={styles.noDataContainer}>
+          <Text
             variant="headlineSmall"
-            style={{
-              padding: 16,
-              textAlign: "center",
-              color: theme.colors.onSurfaceDisabled,
-            }}
-          />
+            style={{ padding: 16, color: theme.colors.onSurfaceDisabled }}
+          >
+            No data
+          </Text>
           <Icon
             source="file-alert-outline"
             size={32}

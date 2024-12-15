@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Portal, useTheme } from "react-native-paper";
+import { Modal, Portal, Text, useTheme } from "react-native-paper";
 import { NamesModalProps } from "./NamesModal.types";
 import { styles } from "./NamesModal.styles";
-import { ThemedText } from "../../../components/ThemedText";
 import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedView } from "../../../components/ThemedView";
 import { GAME_BOARD_MODE } from "../GameBoard";
@@ -91,12 +90,9 @@ export const NamesModal = ({
           },
         ]}
       >
-        <ThemedText
-          variant="titleMedium"
-          text={`Enter your ${isPlayer2Mode ? "names" : "name"}`}
-          type="onSurface"
-        />
-
+        <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+          Enter your {isPlayer2Mode ? "names" : "name"}
+        </Text>
         <ThemedView type="surface" style={styles.inputsContainer}>
           <ThemedTextInput
             label={isPlayer2Mode ? "Player 1 name" : "Name"}

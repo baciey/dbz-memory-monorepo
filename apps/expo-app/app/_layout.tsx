@@ -53,7 +53,6 @@ export const AppWithStore = () => {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
-          <Stack.Screen name="test" />
         </Stack>
       </PaperProviderWrapper>
     </Provider>

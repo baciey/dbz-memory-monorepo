@@ -6,6 +6,7 @@ import {
   Button,
   IconButton,
   Menu,
+  Text,
   useTheme,
 } from "react-native-paper";
 import { THEME_MODE } from "../../constants/theme";
@@ -14,7 +15,6 @@ import { styles } from "./SettingsPage.styles";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { ThemedView } from "../../components/ThemedView";
 import { CustomSwitch } from "../../components/CustomSwitch";
-import { ThemedText } from "../../components/ThemedText";
 import { Account } from "./Account";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetImages } from "../../hooks/useGetImages";
@@ -91,26 +91,24 @@ export const SettingsPage = () => {
         setIsVisible={() => setAlert("")}
         text={alert}
       />
-      <ThemedText
-        variant="headlineSmall"
-        style={globalStyles.heading}
-        text={t("settings.settings")}
-      />
+      <Text variant="headlineSmall" style={globalStyles.heading}>
+        {t("settings.settings")}
+      </Text>
       <ThemedView style={styles.row}>
-        <ThemedText style={styles.mr10} text={t("settings.dark-mode")} />
+        <Text style={styles.mr10}>{t("settings.dark-mode")}</Text>
         <CustomSwitch
           value={themeMode === THEME_MODE.dark}
           onValueChange={changeThemeMode}
         />
       </ThemedView>
       <ThemedView style={styles.row}>
-        <ThemedText style={styles.mr10} text={t("settings.select-language")} />
+        <Text style={styles.mr10}>{t("settings.select-language")}</Text>
         <Menu
           visible={isLanguageMenuVisible}
           onDismiss={() => setIsLanguageMenuVisible(false)}
           anchor={
             <Button onPress={() => setIsLanguageMenuVisible(true)}>
-              <ThemedText variant="bodyLarge" text={language.toUpperCase()} />
+              <Text variant="bodyLarge">{language.toUpperCase()}</Text>
             </Button>
           }
         >

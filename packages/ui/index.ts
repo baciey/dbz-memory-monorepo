@@ -1,7 +1,7 @@
 //COMPONENTS
 export { ThemedButton } from "./src/components/ThemedButton";
 export { ThemedView } from "./src/components/ThemedView";
-export { ThemedText } from "./src/components/ThemedText";
+export { Text } from "react-native-paper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
 
 //MODULES

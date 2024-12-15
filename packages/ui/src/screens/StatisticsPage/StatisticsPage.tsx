@@ -4,9 +4,8 @@ import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { ThemedTable } from "../../components/ThemedTable";
-import { SegmentedButtons, Switch } from "react-native-paper";
+import { SegmentedButtons, Switch, Text } from "react-native-paper";
 import { STATISTICS_PAGE_TABS } from "./StatisticsPage.types";
-import { ThemedText } from "../../components/ThemedText";
 import { useTranslation } from "react-i18next";
 import { globalStyles } from "../../styles/globalStyles";
 import {
@@ -48,11 +47,9 @@ export const StatisticsPage = () => {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText
-        variant="headlineSmall"
-        style={globalStyles.heading}
-        text={t("statistics.statistics")}
-      />
+      <Text variant="headlineSmall" style={globalStyles.heading}>
+        {t("statistics.statistics")}
+      </Text>
 
       <Loader isVisible={false} />
       <SegmentedButtons
@@ -71,7 +68,7 @@ export const StatisticsPage = () => {
         ]}
       />
       <View style={styles.switchContainer}>
-        <ThemedText text={"Show only your games"} />
+        <Text>Show only your games</Text>
         <Switch
           value={showPersonalGames}
           onValueChange={() => {

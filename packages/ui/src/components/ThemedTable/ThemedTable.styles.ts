@@ -8,4 +8,8 @@ export const styles = StyleSheet.create({
   scrollview: {
     flexGrow: 0,
   },
+  noDataContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });

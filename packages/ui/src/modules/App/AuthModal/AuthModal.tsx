@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import { styles } from "./AuthModal.styles";
-import { Button, Modal, Portal, useTheme } from "react-native-paper";
+import { Button, Modal, Portal, Text, useTheme } from "react-native-paper";
 import * as Linking from "expo-linking";
 import { AUTH_MODAL_TYPES } from "../slice.types";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
@@ -15,7 +15,6 @@ import { userActions } from "../../User/actions";
 import { appSliceActions } from "../slice";
 import { ThemedTextInput } from "../../../components/ThemedTextInput";
 import { ThemedButton } from "../../../components/ThemedButton";
-import { ThemedText } from "../../../components/ThemedText";
 import { ThemedView } from "../../../components/ThemedView";
 import { ThemedAlert } from "../../../components/ThemedAlert";
 import { Loader } from "../../../components/Loader";
@@ -358,19 +357,19 @@ export const AuthModal = () => {
 
   const loginLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.LOGIN)}>
-      <ThemedText text="Log in" />
+      <Text>Log in</Text>
     </Pressable>
   );
 
   const registerLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.REGISTER)}>
-      <ThemedText text="Register" />
+      <Text>Register</Text>
     </Pressable>
   );
 
   const forgotPasswordLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.FORGOT_PASSWORD)}>
-      <ThemedText text="Forgot password?" />
+      <Text>Forgot password?</Text>
     </Pressable>
   );
 
@@ -459,9 +458,7 @@ export const AuthModal = () => {
               actionButtonOnPress={alertOnPress}
             />
             <Loader isVisible={loading} />
-            <ThemedText
-              text={authModal.type ? headerText[authModal.type] : ""}
-            />
+            <Text>{authModal.type ? headerText[authModal.type] : ""}</Text>
             {authModal.type ? content[authModal.type] : null}
           </View>
         </ThemedView>
