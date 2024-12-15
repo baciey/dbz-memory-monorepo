@@ -15,6 +15,10 @@
 .listItem.active .anchor {
   text-decoration: underline;
 }
+.listItem:hover .anchor {
+  opacity: 0.8;
+  cursor: pointer;
+}
 .anchor {
   text-decoration: none;
 }

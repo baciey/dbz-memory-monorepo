@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import styles from "./style.module.css";
 import { ROUTES, useTheme, useTranslation } from "@repo/ui";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export const Navbar = () => {
   const path = usePathname();
   const theme = useTheme();
   const { t } = useTranslation();
+  const router = useRouter();
 
   const bgColor = theme.colors.surfaceVariant;
   const textColor = theme.colors.onSurface;
@@ -32,6 +32,11 @@ export const Navbar = () => {
     },
   ];
 
+  const handleClick = (e, href) => {
+    e.preventDefault();
+    router.push(href);
+  };
+
   return (
     <nav className={styles.container} style={{ backgroundColor: bgColor }}>
       <ul className={styles.list}>
@@ -42,13 +47,13 @@ export const Navbar = () => {
               path === page.path ? styles.active : ""
             }`}
           >
-            <Link
+            <a
               className={styles.anchor}
-              href={page.path}
+              onClick={(e) => handleClick(e, page.path)}
               style={{ color: textColor }}
             >
               {page.name}
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
