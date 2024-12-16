@@ -37,7 +37,7 @@ export const StatisticsPage = () => {
   const showPersonalGames = useAppSelector(
     (state) => state.game.showPersonalGames,
   );
-
+  console.log(onePlayerGames);
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
   const [searchQuery, setSearchQuery] = useState("");
 
