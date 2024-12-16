@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DataTable, Icon, Text, useTheme } from "react-native-paper";
+import { Avatar, DataTable, Icon, Text, useTheme } from "react-native-paper";
 import { ThemedTableProps } from "./ThemedTable.types";
 import { ScrollView, View } from "react-native";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { styles } from "./ThemedTable.styles";
+import { useGetImages } from "../../hooks/useGetImages";
 
 const numberOfItemsPerPageList = [5, 10, 20];
 
@@ -12,6 +13,7 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
   const [itemsPerPage, setItemsPerPage] = useState(numberOfItemsPerPageList[0]);
 
   const theme = useTheme();
+  const { publicUrl } = useGetImages();
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, data.length);
@@ -61,6 +63,11 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                           ? index + 1
                           : item[column.rowId];
 
+                      const avatarUrl =
+                        column.rowId === "avatarUrl"
+                          ? publicUrl + item[column.rowId]
+                          : null;
+
                       let textColor = theme.colors.onBackground;
                       if (
                         (column.rowId === "player1Name" ||
@@ -94,7 +101,14 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                           style={{ minWidth: cellWidth }}
                           textStyle={{ color: textColor }}
                         >
-                          {value}
+                          {avatarUrl ? (
+                            <Avatar.Image
+                              size={35}
+                              source={{ uri: avatarUrl }}
+                            />
+                          ) : (
+                            value
+                          )}
                         </DataTable.Cell>
                       );
                     })}

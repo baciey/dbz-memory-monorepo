@@ -4,6 +4,7 @@ import { DATABASE_TABLE } from "../../constants/database";
 import { Platform } from "react-native";
 import { dateFormatter } from "../../utils/date";
 import { PayloadThunkAction } from "../../redux/store";
+import { QueryData } from "@supabase/supabase-js";
 
 const onePlayerGames = [
   {
@@ -212,38 +213,45 @@ const getOnePlayerGames = (
   console.log("getOnePlayerGames");
   return async (dispatch) => {
     dispatch(gameSliceActions.onePlayerGamesLoading());
-    supabase
-      .from(DATABASE_TABLE.one_player_games)
-      .select(`id, name, time, created_at`)
-      .eq(showPersonal ? "user_id" : "", userId)
-      .ilike("name", `%${searchQuery}%`)
-      .then(({ data }) => {
-        if (data) {
-          //order by date
-          data.sort((a, b) => {
-            return (
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-            );
-          });
-          const processedData = data.map((game) => {
-            return {
-              name: game.name,
-              time: game.time,
-              id: game.id,
-              createdAt: dateFormatter(game.created_at),
-            };
-          });
 
-          dispatch(
-            gameSliceActions.onePlayerGamesSuccess(
-              isMock ? onePlayerGames : processedData,
-            ),
-          );
-        } else {
-          dispatch(gameSliceActions.onePlayerGamesError());
-        }
+    const query = supabase
+      .from(DATABASE_TABLE.one_player_games)
+      .select(`id, name, time, created_at, profiles ( avatar_url )`)
+      .eq(showPersonal ? "user_id" : "", userId)
+      .ilike("name", `%${searchQuery}%`);
+
+    type Query = QueryData<typeof query>;
+    const { data: dataFromQuery, error } = await query;
+
+    if (error) {
+      dispatch(gameSliceActions.onePlayerGamesError());
+    } else {
+      const data: Query = dataFromQuery;
+
+      // Order by date
+      data.sort((a, b) => {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
       });
+
+      const processedData = data.map((game) => {
+        return {
+          name: game.name,
+          time: game.time,
+          id: game.id,
+          // @ts-ignore
+          avatarUrl: game.profiles.avatar_url || null,
+          createdAt: dateFormatter(game.created_at),
+        };
+      });
+
+      dispatch(
+        gameSliceActions.onePlayerGamesSuccess(
+          isMock ? onePlayerGames : processedData,
+        ),
+      );
+    }
   };
 };
 

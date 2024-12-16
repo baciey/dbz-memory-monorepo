@@ -37,7 +37,7 @@ export const StatisticsPage = () => {
   const showPersonalGames = useAppSelector(
     (state) => state.game.showPersonalGames,
   );
-  console.log(onePlayerGames);
+
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -51,13 +51,6 @@ export const StatisticsPage = () => {
       dispatch(gameActions.getTwoPlayerGames(me.id, searchQuery));
     }
   }, [me, dispatch, showPersonalGames, searchQuery]);
-
-  useEffect(() => {
-    if (isTwoPlayerTab) {
-      dispatch(gameSliceActions.setShowPersonalGames(true));
-    }
-  }, [isTwoPlayerTab, dispatch]);
-
   return (
     <ThemedView style={styles.container}>
       <Text variant="headlineSmall" style={globalStyles.heading}>

@@ -1,6 +1,6 @@
 export const onePlayerTableConfig = [
   { header: "#", columnWidth: 30, rowId: "index" },
-  { header: "Avatar", columnWidth: 70, rowId: "avatar" },
+  { header: "Avatar", columnWidth: 70, rowId: "avatarUrl" },
   { header: "Name", columnWidth: 130, rowId: "name" },
   { header: "Time", columnWidth: 70, rowId: "time" },
   { header: "Date", columnWidth: 100, rowId: "createdAt" },
