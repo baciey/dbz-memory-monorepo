@@ -7,20 +7,24 @@ GITHUB: https://github.com/baciey/dbz-memory-monorepo/
 ## How to run project
 
 1. yarn
-2. yarn start-ui
-3. yarn start-mobile
-4. yarn start-web
+2. yarn start-mobile
+3. yarn start-web
 
 or
 
 In Terminal:
 
 ```bash
-osascript -e 'tell application "Terminal" to do script "cd ~/private/dbz-memory-monorepo && yarn start-ui"' \
--e 'tell application "Terminal" to do script "cd ~/private/dbz-memory-monorepo && yarn start-mobile"' \
+osascript -e 'tell application "Terminal" to do script "cd ~/private/dbz-memory-monorepo && yarn start-mobile"' \
 -e 'tell application "Terminal" to do script "cd ~/private/dbz-memory-monorepo && yarn start-web"'
 
 ```
+
+Expo icons:
+`https://ionic.io/ionicons`
+
+UI icons (material design icons)
+`https://pictogrammers.com/library/mdi/`
 
 ## WEB DEPLOYMENT
 
@@ -43,5 +47,3 @@ For ios, the developer account is needed, so we only generate apk for android. I
 ```bash
 Expo SDK 50 and higher has improved support for more complete node_modules patterns, such as isolated modules. Unfortunately, React Native can still cause issues when installing multiple versions inside a single monorepo. Because of that, it's recommended to only use a single version of React Native.
 ```
-
-TODO: apk się nie odpala na emulatorze

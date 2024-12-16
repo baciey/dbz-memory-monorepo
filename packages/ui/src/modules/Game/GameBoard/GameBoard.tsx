@@ -137,6 +137,7 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
   useEffect(() => {
     const is2PlayerGameEnd = cards.every((card) => card.isPaired);
     if (
+      cards.length &&
       mode === GAME_BOARD_MODE.player2 &&
       is2PlayerGameEnd &&
       player1Name &&

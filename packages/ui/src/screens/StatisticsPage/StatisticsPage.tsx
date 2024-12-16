@@ -7,7 +7,6 @@ import { ThemedTable } from "../../components/ThemedTable";
 import {
   Searchbar,
   SegmentedButtons,
-  Switch,
   Text,
   useTheme,
 } from "react-native-paper";
@@ -24,12 +23,14 @@ import { gameActions } from "../../modules/Game/actions";
 import { View } from "react-native";
 import { gameSliceActions } from "../../modules/Game/slice";
 import { CustomSwitch } from "../../components/CustomSwitch";
+import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 
 export const StatisticsPage = () => {
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
   const theme = useTheme();
+  const { isMobile } = useGetScreenDimensions();
   const me = useAppSelector(userSelectors.getMe);
   const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
@@ -38,16 +39,18 @@ export const StatisticsPage = () => {
   );
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const isTwoPlayerTab = tab === STATISTICS_PAGE_TABS.player2;
 
   useEffect(() => {
     if (me?.id) {
-      dispatch(gameActions.getOnePlayerGames(me.id, showPersonalGames));
-      dispatch(gameActions.getTwoPlayerGames(me.id));
+      dispatch(
+        gameActions.getOnePlayerGames(me.id, showPersonalGames, searchQuery),
+      );
+      dispatch(gameActions.getTwoPlayerGames(me.id, searchQuery));
     }
-  }, [me, dispatch, showPersonalGames]);
+  }, [me, dispatch, showPersonalGames, searchQuery]);
 
   useEffect(() => {
     if (isTwoPlayerTab) {
@@ -78,13 +81,28 @@ export const StatisticsPage = () => {
         ]}
       />
       <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          maxWidth: 500,
-          width: "100%",
-        }}
+        style={[
+          styles.switchSearchContainer,
+          {
+            flexDirection: isMobile ? "column" : "row",
+          },
+        ]}
       >
+        <View
+          style={[
+            isMobile
+              ? { marginBottom: 16, maxWidth: "100%" }
+              : { maxWidth: 200 },
+          ]}
+        >
+          <Searchbar
+            placeholder="Search (by name)"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            style={styles.search}
+            inputStyle={styles.searchInput}
+          />
+        </View>
         <View style={styles.switchContainer}>
           <Text
             style={{
@@ -105,14 +123,6 @@ export const StatisticsPage = () => {
             disabled={isTwoPlayerTab}
           />
         </View>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          style={{ height: 40, maxWidth: 200 }}
-          inputStyle={{ height: 40, minHeight: 40, maxWidth: 200 }}
-          mode="view"
-        />
       </View>
 
       {isTwoPlayerTab ? (

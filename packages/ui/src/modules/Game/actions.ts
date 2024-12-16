@@ -207,6 +207,7 @@ const isMock = false;
 const getOnePlayerGames = (
   userId: string,
   showPersonal?: boolean,
+  searchQuery: string = "",
 ): PayloadThunkAction => {
   console.log("getOnePlayerGames");
   return async (dispatch) => {
@@ -215,6 +216,7 @@ const getOnePlayerGames = (
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at`)
       .eq(showPersonal ? "user_id" : "", userId)
+      .ilike("name", `%${searchQuery}%`)
       .then(({ data }) => {
         if (data) {
           //order by date
@@ -245,9 +247,13 @@ const getOnePlayerGames = (
   };
 };
 
-const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
+const getTwoPlayerGames = (
+  userId: string,
+  searchQuery: string = "",
+): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(gameSliceActions.twoPlayerGamesLoading());
+    console.log("getTwoPlayerGames");
 
     supabase
       .from(DATABASE_TABLE.two_player_games)
@@ -255,6 +261,9 @@ const getTwoPlayerGames = (userId: string): PayloadThunkAction => {
         `id, player1_name, player2_name, player1_score, player2_score, created_at`,
       )
       .eq("user_id", userId)
+      .or(
+        `player1_name.ilike.%${searchQuery}%,player2_name.ilike.%${searchQuery}%`,
+      )
       .then(({ data }) => {
         if (data) {
           const processedData = data.map((game) => {

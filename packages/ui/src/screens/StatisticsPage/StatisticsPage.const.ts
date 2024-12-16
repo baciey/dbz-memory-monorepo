@@ -7,8 +7,8 @@ export const onePlayerTableConfig = [
 
 export const twoPlayerTableConfig = [
   { header: "#", columnWidth: 30, rowId: "index" },
-  { header: "Player 1", columnWidth: 100, rowId: "player1Name" },
-  { header: "Player 2", columnWidth: 100, rowId: "player2Name" },
+  { header: "P1 Name", columnWidth: 100, rowId: "player1Name" },
+  { header: "P2 Name", columnWidth: 100, rowId: "player2Name" },
   { header: "P1 Score", columnWidth: 70, rowId: "player1Score" },
   { header: "P2 Score", columnWidth: 70, rowId: "player2Score" },
   { header: "Date", columnWidth: 100, rowId: "createdAt" },

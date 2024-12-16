@@ -11,6 +11,8 @@ export default function TabLayout() {
   const homeIconOutline = "home-outline" as const;
   const settingsIcon = "settings" as const;
   const settingsIconOutline = "settings-outline" as const;
+  const statisticsIcon = "bar-chart" as const;
+  const statisticsIconOutline = "bar-chart-outline" as const;
 
   const tabs = [
     {
@@ -28,8 +30,8 @@ export default function TabLayout() {
     {
       name: ROUTES.statistics,
       title: t("statistics.statistics"),
-      icon: settingsIcon,
-      iconOutline: settingsIconOutline,
+      icon: statisticsIcon,
+      iconOutline: statisticsIconOutline,
     },
   ];
   return (
