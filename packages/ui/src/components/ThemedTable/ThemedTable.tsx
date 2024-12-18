@@ -118,25 +118,24 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
             ) : null}
 
             {/* Pagination */}
-            {data.length > 4 ? (
-              <DataTable.Pagination
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  width: isMobile ? 320 : "100%",
-                }}
-                page={page}
-                numberOfPages={Math.ceil(data.length / itemsPerPage)}
-                onPageChange={(page) => setPage(page)}
-                label={`${from + 1}-${to} of ${data.length}`}
-                numberOfItemsPerPageList={numberOfItemsPerPageList}
-                numberOfItemsPerPage={itemsPerPage}
-                onItemsPerPageChange={setItemsPerPage}
-                showFastPaginationControls
-                selectPageDropdownLabel={"Rows per page"}
-              />
-            ) : null}
+            <DataTable.Pagination
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                width: isMobile ? 320 : 500,
+                opacity: data.length > 4 ? 1 : 0,
+              }}
+              page={page}
+              numberOfPages={Math.ceil(data.length / itemsPerPage)}
+              onPageChange={(page) => setPage(page)}
+              label={`${from + 1}-${to} of ${data.length}`}
+              numberOfItemsPerPageList={numberOfItemsPerPageList}
+              numberOfItemsPerPage={itemsPerPage}
+              onItemsPerPageChange={setItemsPerPage}
+              showFastPaginationControls
+              selectPageDropdownLabel={"Rows per page"}
+            />
           </DataTable>
         </ScrollView>
       </View>

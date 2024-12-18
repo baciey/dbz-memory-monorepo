@@ -15,6 +15,9 @@ export const ThemedAlert = ({
   dismissable = false,
 }: ThemedAlertProps) => {
   const theme = useTheme();
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <Portal>
