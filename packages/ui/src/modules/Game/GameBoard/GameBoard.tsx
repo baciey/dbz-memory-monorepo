@@ -17,15 +17,17 @@ import { gameSliceActions } from "../slice";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { gameActions } from "../actions";
+import { ThemedAlert } from "../../../components/ThemedAlert";
 
-export const GameBoard = ({ mode }: GameBoardProps) => {
+export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
   const dispatch = useAppDispatch();
 
-  const [cardWidth, setCardWidth] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [cardWidth, setCardWidth] = useState<number>(0);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
   const [cards, setCards] = useState<CardType[]>([]);
   const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
   const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
+  const [alert, setAlert] = useState<string>("");
 
   // Timer and score state
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -122,6 +124,9 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
           showPersonalGames,
         ),
       );
+      setAlert(
+        `Congratulations! You've finished the game in ${elapsedTime} seconds!`,
+      );
     }
   }, [
     endTime,
@@ -153,6 +158,15 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
           me.id,
         ),
       );
+      const isTie = scores.player1 === scores.player2;
+      const winnerName =
+        scores.player1 > scores.player2 ? player1Name : player2Name;
+
+      const alertMessage = isTie
+        ? `It's a tie! The game has ended! ${player1Name} and ${player2Name} both have ${scores.player1} points!`
+        : `Congratulations ${winnerName}! You have won the game! \nFinal score: ${scores.player1} : ${scores.player2}`;
+
+      setAlert(alertMessage);
     }
   }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch]);
 
@@ -244,12 +258,17 @@ export const GameBoard = ({ mode }: GameBoardProps) => {
         opacity: isEveryImageLoaded ? 1 : 0,
       }}
     >
+      <ThemedAlert
+        text={alert}
+        onDismiss={() => setAlert("")}
+        isVisible={Boolean(alert)}
+        actionButtonOnPress={() => handleSetGameMode(null)}
+      />
       {isEveryImageLoaded && (
         <GameInfo
           mode={mode}
           elapsedTime={elapsedTime}
           scores={scores}
-          cards={cards}
           playerTurn={playerTurn}
         />
       )}

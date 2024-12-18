@@ -13,7 +13,6 @@ export const GameInfo = ({
   mode,
   elapsedTime,
   scores,
-  cards,
   playerTurn,
 }: GameInfoProps) => {
   const { t } = useTranslation();
@@ -26,23 +25,13 @@ export const GameInfo = ({
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (
-      <Text variant="titleLarge" style={GLOBAL_STYLES.m.mb16}>
+      <Text variant="titleMedium" style={GLOBAL_STYLES.m.mb16}>
         {elapsedTime === 0
           ? t("board.start-timer")
           : `${t("board.time")}: ${elapsedTime} ${t("board.seconds")}`}
       </Text>
     );
-  }
-
-  if (mode === GAME_BOARD_MODE.player2) {
-    const winner =
-      cards.every((card) => card.isPaired) &&
-      (scores.player1 > scores.player2
-        ? player1Name
-        : scores.player2 > scores.player1
-          ? player2Name
-          : null);
-
+  } else if (mode === GAME_BOARD_MODE.player2) {
     const activeStyle = { color: theme.colors.primary };
     const inactiveStyle = { color: theme.colors.secondary };
     const player1Style =
@@ -60,15 +49,8 @@ export const GameInfo = ({
             {`${player2Name}: ${scores.player2}`}
           </Text>
         </View>
-        {winner && (
-          <Text variant="titleLarge" style={{ color: "green" }}>
-            {`${t("board.winner")}: ${winner}!`}
-          </Text>
-        )}
         <View style={GLOBAL_STYLES.m.mt16} />
       </ThemedView>
     );
-  }
-
-  return null;
+  } else return null;
 };

@@ -64,7 +64,7 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                           : item[column.rowId];
 
                       const avatarUrl =
-                        column.rowId === "avatarUrl"
+                        column.rowId === "avatarUrl" && publicUrl
                           ? publicUrl + item[column.rowId]
                           : null;
 

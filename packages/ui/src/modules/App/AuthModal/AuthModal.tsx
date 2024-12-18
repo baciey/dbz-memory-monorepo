@@ -433,7 +433,7 @@ export const AuthModal = () => {
   return (
     <Portal>
       <Modal
-        visible={!isAuthenticated || authModal.isVisible}
+        visible={authModal.isVisible}
         dismissable={false}
         contentContainerStyle={[
           styles.modalContainer,
@@ -453,7 +453,7 @@ export const AuthModal = () => {
           >
             <ThemedAlert
               isVisible={Boolean(alert)}
-              setIsVisible={() => setAlert("")}
+              onDismiss={() => setAlert("")}
               text={alert}
               actionButtonOnPress={alertOnPress}
             />

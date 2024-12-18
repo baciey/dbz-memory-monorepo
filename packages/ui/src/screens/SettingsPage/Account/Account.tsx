@@ -135,7 +135,7 @@ export const Account = () => {
     <View style={styles.container}>
       <ThemedAlert
         isVisible={Boolean(alert)}
-        setIsVisible={() => setAlert("")}
+        onDismiss={() => setAlert("")}
         text={alert}
         actionButtonOnPress={alertOnPress}
         withCancel={Boolean(alertOnPress)}

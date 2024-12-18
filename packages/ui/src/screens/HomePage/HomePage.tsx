@@ -26,7 +26,8 @@ export const HomePage = () => {
   useGetPlayerName();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alert, setAlert] = useState<string>("");
+
   const [isNamesModalVisible, setIsNamesModalVisible] = useState(false);
 
   const imagesPercentageLoaded = useAppSelector(
@@ -42,9 +43,9 @@ export const HomePage = () => {
     <ThemedView type="surface" style={styles.container}>
       <ThemedAlert
         actionButtonOnPress={() => setGameMode(null)}
-        isVisible={isAlertVisible}
-        setIsVisible={setIsAlertVisible}
-        text="Do you want to return to main menu?"
+        isVisible={Boolean(alert)}
+        onDismiss={() => setAlert("")}
+        text={alert}
         withCancel
       />
       <Loader
@@ -85,9 +86,9 @@ export const HomePage = () => {
         imagesPercentageLoaded === 100 &&
         !isNamesModalVisible && (
           <ThemedButton
-            text="Return"
+            text="Go back"
             type="primary"
-            onPress={() => setIsAlertVisible(true)}
+            onPress={() => setAlert("Do you want to return to main menu?")}
             style={[
               GLOBAL_STYLES.m.mt16,
               GLOBAL_STYLES.m.mb16,
@@ -120,7 +121,7 @@ export const HomePage = () => {
         />
       )}
       {gameMode !== null && !isNamesModalVisible && (
-        <GameBoard mode={gameMode} />
+        <GameBoard mode={gameMode} handleSetGameMode={handleSetGameMode} />
       )}
     </ThemedView>
   );

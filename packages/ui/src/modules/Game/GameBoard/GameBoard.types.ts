@@ -1,5 +1,6 @@
 export type GameBoardProps = {
   mode: GAME_BOARD_MODE;
+  handleSetGameMode: (mode: GAME_BOARD_MODE | null) => void;
 };
 
 export enum SCORES_KEY {

@@ -4,7 +4,8 @@ export type ThemedAlertProps = {
   actionButtonText?: string;
   actionButtonOnPress?: () => void;
   isVisible: boolean;
-  setIsVisible: Dispatch<SetStateAction<boolean>>;
+  onDismiss?: () => void;
+  dismissable?: boolean;
   text: string;
   withCancel?: boolean;
 };

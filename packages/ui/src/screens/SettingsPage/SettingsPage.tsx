@@ -88,7 +88,7 @@ export const SettingsPage = () => {
     <ThemedView style={styles.container}>
       <ThemedAlert
         isVisible={Boolean(alert)}
-        setIsVisible={() => setAlert("")}
+        onDismiss={() => setAlert("")}
         text={alert}
       />
       <Text variant="headlineSmall" style={globalStyles.heading}>

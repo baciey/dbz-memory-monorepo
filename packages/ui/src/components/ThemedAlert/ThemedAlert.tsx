@@ -7,19 +7,21 @@ import { styles } from "./ThemedAlert.styles";
 
 export const ThemedAlert = ({
   isVisible,
-  setIsVisible,
   actionButtonText = "OK",
   actionButtonOnPress,
   text,
   withCancel = false,
+  onDismiss,
+  dismissable = false,
 }: ThemedAlertProps) => {
   const theme = useTheme();
 
   return (
     <Portal>
       <Modal
+        dismissable={dismissable}
         visible={isVisible}
-        onDismiss={() => setIsVisible(false)}
+        onDismiss={onDismiss}
         contentContainerStyle={[
           styles.contentContainer,
           { backgroundColor: theme.colors.surface },
@@ -33,16 +35,15 @@ export const ThemedAlert = ({
             text={actionButtonText}
             type="primary"
             onPress={() => {
-              setIsVisible(false);
-              if (!actionButtonOnPress) return;
-              actionButtonOnPress();
+              onDismiss?.();
+              actionButtonOnPress?.();
             }}
           />
           {withCancel && (
             <ThemedButton
               text="Cancel"
               type="primary"
-              onPress={() => setIsVisible(false)}
+              onPress={() => onDismiss?.()}
             />
           )}
         </ThemedView>
