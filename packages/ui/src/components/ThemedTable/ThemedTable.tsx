@@ -5,12 +5,20 @@ import { ScrollView, View } from "react-native";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { styles } from "./ThemedTable.styles";
 import { useGetImages } from "../../hooks/useGetImages";
-
-const numberOfItemsPerPageList = [5, 10, 20];
+import { getTextColor } from "./ThemedTable.utils";
+import {
+  DEFAULT_ITEMS_PER_PAGE,
+  DESKTOP_TABLE_HEIGHT_DIVIDER,
+  ITEMS_PER_PAGE_OPTIONS,
+  MOBILE_TABLE_HEIGHT_DIVIDER,
+  PAGINATION_DESKTOP_WIDTH,
+  PAGINATION_MOBILE_WIDTH,
+  PAGINATION_OPACITY_THRESHOLD,
+} from "./ThemedTable.const";
 
 export const ThemedTable = ({ config, data }: ThemedTableProps) => {
   const [page, setPage] = useState<number>(0);
-  const [itemsPerPage, setItemsPerPage] = useState(numberOfItemsPerPageList[0]);
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
   const theme = useTheme();
   const { publicUrl } = useGetImages();
@@ -23,7 +31,10 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
   }, [itemsPerPage, data]);
 
   const { height: screenHeight, isMobile } = useGetScreenDimensions();
-  const tableHeightDivider = isMobile ? 3 : 2.5;
+  const tableHeightDivider = isMobile
+    ? MOBILE_TABLE_HEIGHT_DIVIDER
+    : DESKTOP_TABLE_HEIGHT_DIVIDER;
+
   return (
     <>
       <View
@@ -55,7 +66,10 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                 style={{ height: screenHeight / tableHeightDivider }}
               >
                 {data.slice(from, to).map((item, index) => (
-                  <DataTable.Row key={item.id || index}>
+                  <DataTable.Row
+                    key={item.id || index}
+                    style={styles.cursorAuto}
+                  >
                     {config.map((column) => {
                       const cellWidth = column.columnWidth;
                       const value =
@@ -65,41 +79,21 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
 
                       const avatarUrl =
                         column.rowId === "avatarUrl" && publicUrl
-                          ? publicUrl + item[column.rowId]
+                          ? publicUrl + item["avatarUrl"]
                           : null;
 
-                      let textColor = theme.colors.onBackground;
-                      if (
-                        (column.rowId === "player1Name" ||
-                          column.rowId === "player1Score") &&
-                        item.player1Score > item.player2Score
-                      ) {
-                        textColor = "green";
-                      } else if (
-                        (column.rowId === "player2Name" ||
-                          column.rowId === "player2Score") &&
-                        item.player2Score > item.player1Score
-                      ) {
-                        textColor = "green";
-                      } else if (
-                        (column.rowId === "player1Name" ||
-                          column.rowId === "player1Score") &&
-                        item.player1Score < item.player2Score
-                      ) {
-                        textColor = theme.colors.error;
-                      } else if (
-                        (column.rowId === "player2Name" ||
-                          column.rowId === "player2Score") &&
-                        item.player2Score < item.player1Score
-                      ) {
-                        textColor = theme.colors.error;
-                      }
+                      const textColor = getTextColor(
+                        theme,
+                        column.rowId,
+                        Number(item.player1Score),
+                        Number(item.player2Score),
+                      );
 
                       return (
                         <DataTable.Cell
                           key={column.rowId}
-                          style={{ minWidth: cellWidth }}
-                          textStyle={{ color: textColor }}
+                          style={[{ minWidth: cellWidth }, styles.cursorAuto]}
+                          textStyle={[{ color: textColor }]}
                         >
                           {avatarUrl ? (
                             <Avatar.Image
@@ -119,18 +113,20 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
 
             {/* Pagination */}
             <DataTable.Pagination
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                width: isMobile ? 320 : 500,
-                opacity: data.length > 4 ? 1 : 0,
-              }}
+              style={[
+                styles.pagination,
+                {
+                  width: isMobile
+                    ? PAGINATION_MOBILE_WIDTH
+                    : PAGINATION_DESKTOP_WIDTH,
+                  opacity: data.length > PAGINATION_OPACITY_THRESHOLD ? 1 : 0,
+                },
+              ]}
               page={page}
               numberOfPages={Math.ceil(data.length / itemsPerPage)}
               onPageChange={(page) => setPage(page)}
               label={`${from + 1}-${to} of ${data.length}`}
-              numberOfItemsPerPageList={numberOfItemsPerPageList}
+              numberOfItemsPerPageList={ITEMS_PER_PAGE_OPTIONS}
               numberOfItemsPerPage={itemsPerPage}
               onItemsPerPageChange={setItemsPerPage}
               showFastPaginationControls
@@ -143,7 +139,12 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
         <View style={styles.noDataContainer}>
           <Text
             variant="headlineSmall"
-            style={{ padding: 16, color: theme.colors.onSurfaceDisabled }}
+            style={[
+              styles.noDataText,
+              {
+                color: theme.colors.onSurfaceDisabled,
+              },
+            ]}
           >
             No data
           </Text>

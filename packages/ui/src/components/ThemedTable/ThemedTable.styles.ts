@@ -12,4 +12,15 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  cursorAuto: {
+    cursor: "auto",
+  },
+  pagination: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  noDataText: {
+    padding: 16,
+  },
 });

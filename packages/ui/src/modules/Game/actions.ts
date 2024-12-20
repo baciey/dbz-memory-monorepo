@@ -214,44 +214,41 @@ const getOnePlayerGames = (
   return async (dispatch) => {
     dispatch(gameSliceActions.onePlayerGamesLoading());
 
-    const query = supabase
+    supabase
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at, profiles ( avatar_url )`)
       .eq(showPersonal ? "user_id" : "", userId)
-      .ilike("name", `%${searchQuery}%`);
+      .ilike("name", `%${searchQuery}%`)
+      .then(({ data, error }) => {
+        if (error) {
+          dispatch(gameSliceActions.onePlayerGamesError());
+        } else {
+          // Order by date
+          data.sort((a, b) => {
+            return (
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+            );
+          });
 
-    type Query = QueryData<typeof query>;
-    const { data: dataFromQuery, error } = await query;
+          const processedData = data.map((game) => {
+            return {
+              name: game.name,
+              time: game.time,
+              id: game.id,
+              // @ts-ignore supabase typing issue, avatar_url is not recognized
+              avatarUrl: game.profiles.avatar_url || null,
+              createdAt: dateFormatter(game.created_at),
+            };
+          });
 
-    if (error) {
-      dispatch(gameSliceActions.onePlayerGamesError());
-    } else {
-      const data: Query = dataFromQuery;
-
-      // Order by date
-      data.sort((a, b) => {
-        return (
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
+          dispatch(
+            gameSliceActions.onePlayerGamesSuccess(
+              isMock ? onePlayerGames : processedData,
+            ),
+          );
+        }
       });
-
-      const processedData = data.map((game) => {
-        return {
-          name: game.name,
-          time: game.time,
-          id: game.id,
-          // @ts-ignore
-          avatarUrl: game.profiles.avatar_url || null,
-          createdAt: dateFormatter(game.created_at),
-        };
-      });
-
-      dispatch(
-        gameSliceActions.onePlayerGamesSuccess(
-          isMock ? onePlayerGames : processedData,
-        ),
-      );
-    }
   };
 };
 
