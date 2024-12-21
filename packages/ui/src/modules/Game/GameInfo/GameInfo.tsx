@@ -19,16 +19,16 @@ export const GameInfo = ({
   const theme = useTheme();
 
   const player1Name =
-    useAppSelector((state) => state.game.playersNames[0]) || "Player 1";
+    useAppSelector((state) => state.game.playersNames[0]) || t("game.player1");
   const player2Name =
-    useAppSelector((state) => state.game.playersNames[1]) || "Player 2";
+    useAppSelector((state) => state.game.playersNames[1]) || t("game.player2");
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (
       <Text variant="titleMedium" style={GLOBAL_STYLES.m.mb16}>
         {elapsedTime === 0
-          ? t("board.start-timer")
-          : `${t("board.time")}: ${elapsedTime} ${t("board.seconds")}`}
+          ? t("game.startTimer")
+          : `${t("game.time")}: ${elapsedTime} ${t("game.sec")}`}
       </Text>
     );
   } else if (mode === GAME_BOARD_MODE.player2) {
@@ -41,15 +41,12 @@ export const GameInfo = ({
 
     return (
       <ThemedView style={styles.player2Container}>
-        <View style={{ flexDirection: "row" }}>
-          <Text variant="titleLarge" style={player1Style}>
-            {`${player1Name}: ${scores.player1}`}
-          </Text>
-          <Text variant="titleLarge" style={[player2Style, styles.player2text]}>
-            {`${player2Name}: ${scores.player2}`}
-          </Text>
-        </View>
-        <View style={GLOBAL_STYLES.m.mt16} />
+        <Text variant="titleLarge" style={player1Style}>
+          {`${player1Name}: ${scores.player1}`}
+        </Text>
+        <Text variant="titleLarge" style={[player2Style, styles.player2text]}>
+          {`${player2Name}: ${scores.player2}`}
+        </Text>
       </ThemedView>
     );
   } else return null;

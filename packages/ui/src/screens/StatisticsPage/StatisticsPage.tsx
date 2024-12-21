@@ -65,11 +65,11 @@ export const StatisticsPage = () => {
         buttons={[
           {
             value: STATISTICS_PAGE_TABS.player1,
-            label: "1 player",
+            label: t("statistics.player1"),
           },
           {
             value: STATISTICS_PAGE_TABS.player2,
-            label: "2 players",
+            label: t("statistics.player2"),
           },
         ]}
       />
@@ -89,7 +89,7 @@ export const StatisticsPage = () => {
           ]}
         >
           <Searchbar
-            placeholder="Search (by name)"
+            placeholder={t("statistics.search")}
             onChangeText={setSearchQuery}
             value={searchQuery}
             style={styles.search}
@@ -104,7 +104,7 @@ export const StatisticsPage = () => {
                 : theme.colors.onBackground,
             }}
           >
-            Show only your games
+            {t("statistics.showOnlyYourGames")}
           </Text>
           <CustomSwitch
             value={showPersonalGames}
@@ -119,9 +119,9 @@ export const StatisticsPage = () => {
       </View>
 
       {isTwoPlayerTab ? (
-        <ThemedTable config={twoPlayerTableConfig} data={twoPlayerGames} />
+        <ThemedTable config={twoPlayerTableConfig(t)} data={twoPlayerGames} />
       ) : (
-        <ThemedTable config={onePlayerTableConfig} data={onePlayerGames} />
+        <ThemedTable config={onePlayerTableConfig(t)} data={onePlayerGames} />
       )}
     </ThemedView>
   );

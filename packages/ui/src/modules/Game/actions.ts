@@ -4,8 +4,8 @@ import { DATABASE_TABLE } from "../../constants/database";
 import { Platform } from "react-native";
 import { dateFormatter } from "../../utils/date";
 import { PayloadThunkAction } from "../../redux/store";
-import { QueryData } from "@supabase/supabase-js";
 
+// for testing purposes
 const onePlayerGames = [
   {
     id: 1,
@@ -202,7 +202,6 @@ const twoPlayerGames = [
     createdAt: "2021-10-18",
   },
 ];
-
 const isMock = false;
 
 const getOnePlayerGames = (
@@ -223,12 +222,15 @@ const getOnePlayerGames = (
         if (error) {
           dispatch(gameSliceActions.onePlayerGamesError());
         } else {
-          // Order by date
+          // Order by time, if time is the same, order by date
           data.sort((a, b) => {
-            return (
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime()
-            );
+            if (a.time === b.time) {
+              return (
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+              );
+            }
+            return a.time - b.time;
           });
 
           const processedData = data.map((game) => {
@@ -269,8 +271,17 @@ const getTwoPlayerGames = (
       .or(
         `player1_name.ilike.%${searchQuery}%,player2_name.ilike.%${searchQuery}%`,
       )
-      .then(({ data }) => {
-        if (data) {
+      .then(({ data, error }) => {
+        if (error) {
+          dispatch(gameSliceActions.twoPlayerGamesError());
+        } else {
+          // Order by date
+          data.sort((a, b) => {
+            return (
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+            );
+          });
           const processedData = data.map((game) => {
             return {
               id: game.id,
@@ -287,8 +298,6 @@ const getTwoPlayerGames = (
               isMock ? twoPlayerGames : processedData,
             ),
           );
-        } else {
-          dispatch(gameSliceActions.twoPlayerGamesError());
         }
       });
   };

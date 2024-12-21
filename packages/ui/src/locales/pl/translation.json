@@ -2,19 +2,92 @@
   "settings": {
     "settings": "Ustawienia",
     "language": "Język",
-    "select-language": "Wybierz język aplikacji",
-    "dark-mode": "Ciemny motyw"
+    "selectLanguage": "Wybierz język aplikacji",
+    "darkTheme": "Ciemny motyw",
+    "register": "Zarejestruj się",
+    "changePassword": "Zmień hasło",
+    "setPassword": "Ustaw hasło",
+    "logout": "Wyloguj się",
+    "email": "E-mail",
+    "stillGuest": "Nadal jesteś gościem.",
+    "confirmYourEmail": "Potwierdź swój e-mail",
+    "youAreGuest": "Jesteś gościem.",
+    "youAreLoggedIn": "Jesteś zalogowany.",
+    "logoutFailed": "Wylogowanie nie powiodło się.",
+    "registerInfo": "Jesteś użytkownikiem gościnnym. Możesz stać się stałym użytkownikiem i zapisać wszystkie swoje dane. Czy chcesz kontynuować? W pierwszym kroku będziesz musiał potwierdzić swój e-mail. W drugim kroku ustawisz hasło.",
+    "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?"
   },
   "home": {
-    "home": "Strona główna"
+    "home": "Strona główna",
+    "returnAlert": "Czy chcesz wrócić do menu głównego?",
+    "goBack": "Wróć"
   },
   "statistics": {
-    "statistics": "Statystyki"
-  },
-  "board": {
-    "start-timer": "Kliknij dowolną kartę aby uruchomić czas",
-    "seconds": "sek",
+    "statistics": "Statystyki",
+    "showOnlyYourGames": "Pokaż tylko twoje gry",
+    "search": "Szukaj (po nazwie)",
+    "player1": "1 gracz",
+    "player2": "2 graczy",
+    "name": "Nazwa",
     "time": "Czas",
-    "winner": "Winner"
+    "date": "Data",
+    "p1Name": "G1 imię",
+    "p2Name": "G2 imię",
+    "p1Score": "G1 wynik",
+    "p2Score": "G2 wynik"
+  },
+  "game": {
+    "startTimer": "Naciśnij dowolną kartę, aby uruchomić stoper",
+    "sec": "sek",
+    "seconds": "sekundy",
+    "time": "Czas",
+    "winner": "Zwycięzca",
+    "enterYour": "Podaj",
+    "name": "imię",
+    "names": "imiona",
+    "player1Name": "Imię gracza 1",
+    "player2Name": "Imię gracza 2",
+    "player1": "Gracz 1",
+    "player2": "Gracz 2",
+    "itsATie": "Remis! Gra zakończona!",
+    "congratulations": "Gratulacje",
+    "youHaveWonTheGame": "Wygrałeś grę",
+    "finalScore": "Ostateczny wynik",
+    "youHaveFinishedGameIn": "Ukończyłeś grę w czasie"
+  },
+  "buttons": {
+    "confirm": "Potwierdź",
+    "cancel": "Anuluj"
+  },
+  "auth": {
+    "passwordsDoNotMatch": "Hasła nie pasują do siebie",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "setPassword": "Ustaw hasło",
+    "forgotPassword": "Zapomniałeś hasła",
+    "typeEmail": "Wpisz swój e-mail",
+    "passwordUpdated": "Hasło zostało zaktualizowane",
+    "verifyEmailThenSetPassword": "Wysłaliśmy Ci e-mail w celu weryfikacji konta. Po potwierdzeniu e-maila ustaw hasło.",
+    "weSentVerificationEmail": "Wysłaliśmy Ci e-mail w celu weryfikacji konta",
+    "weSentResetPasswordEmail": "Wysłaliśmy Ci e-mail z instrukcją resetu hasła. Sprawdź swoją skrzynkę odbiorczą.",
+    "continueAsGuest": "Kontynuuj jako gość",
+    "email": "E-mail",
+    "password": "Hasło",
+    "repeatPassword": "Powtórz hasło"
+  },
+  "validation": {
+    "email": {
+      "invalidFormat": "Nieprawidłowy format adresu e-mail.",
+      "tooLong": "Adres e-mail jest zbyt długi."
+    },
+    "name": {
+      "onlyLettersNumbersSpaces": "Dozwolone są tylko litery, cyfry i spacje.",
+      "max20Characters": "Maksymalna długość to 20 znaków.",
+      "min3Characters": "Minimalna długość to 3 znaki.",
+      "noConsecutiveSpaces": "Nie są dozwolone kolejne spacje."
+    },
+    "password": {
+      "min6Characters": "Hasło jest zbyt krótkie (minimum to 6 znaków)."
+    }
   }
 }

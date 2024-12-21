@@ -95,14 +95,14 @@ export const SettingsPage = () => {
         {t("settings.settings")}
       </Text>
       <ThemedView style={styles.row}>
-        <Text style={styles.mr10}>{t("settings.dark-mode")}</Text>
+        <Text style={styles.mr10}>{t("settings.darkTheme")}</Text>
         <CustomSwitch
           value={themeMode === THEME_MODE.dark}
           onValueChange={changeThemeMode}
         />
       </ThemedView>
       <ThemedView style={styles.row}>
-        <Text style={styles.mr10}>{t("settings.select-language")}</Text>
+        <Text style={styles.mr10}>{t("settings.selectLanguage")}</Text>
         <Menu
           visible={isLanguageMenuVisible}
           onDismiss={() => setIsLanguageMenuVisible(false)}

@@ -8,8 +8,6 @@ import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { userSelectors } from "../../User/selectors";
 import { appSelectors } from "../selectors";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
-import { validateEmail } from "../../../utils/validateEmail";
-import { validatePassword } from "../../../utils/validatePassword";
 import { supabase } from "../../../utils/supabase";
 import { userActions } from "../../User/actions";
 import { appSliceActions } from "../slice";
@@ -18,16 +16,20 @@ import { ThemedButton } from "../../../components/ThemedButton";
 import { ThemedView } from "../../../components/ThemedView";
 import { ThemedAlert } from "../../../components/ThemedAlert";
 import { Loader } from "../../../components/Loader";
-
-const headerText = {
-  [AUTH_MODAL_TYPES.LOGIN]: "Log in",
-  [AUTH_MODAL_TYPES.REGISTER]: "Register",
-  [AUTH_MODAL_TYPES.SET_PASSWORD]: "Set password",
-  [AUTH_MODAL_TYPES.FORGOT_PASSWORD]: "Forgot password",
-};
+import { useTranslation } from "react-i18next";
+import { useValidation } from "../../../hooks/useValidation";
 
 export const AuthModal = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const { validateEmail, validatePassword } = useValidation();
+
+  const headerText = {
+    [AUTH_MODAL_TYPES.LOGIN]: t("auth.login"),
+    [AUTH_MODAL_TYPES.REGISTER]: t("auth.register"),
+    [AUTH_MODAL_TYPES.SET_PASSWORD]: t("auth.setPassword"),
+    [AUTH_MODAL_TYPES.FORGOT_PASSWORD]: t("auth.typeEmail"),
+  };
 
   const me = useAppSelector(userSelectors.getMe);
   const authModal = useAppSelector(appSelectors.getAuthModal);
@@ -61,7 +63,7 @@ export const AuthModal = () => {
       : "";
 
     const isPasswordSameText =
-      password === repeatPassword ? "" : "Passwords do not match";
+      password === repeatPassword ? "" : t("auth.passwordsDoNotMatch");
     const repeatPasswordErrorText = inputsToValidate.includes("repeatPassword")
       ? isPasswordSameText
       : "";
@@ -127,9 +129,7 @@ export const AuthModal = () => {
       setAlertOnPress(() => {
         return () => openModal(AUTH_MODAL_TYPES.LOGIN);
       });
-      setAlert(
-        "We have sent you an email to verify your account" + redirectUrl,
-      );
+      setAlert(t("auth.weSentVerificationEmail"));
     }
     setLoading(false);
   };
@@ -152,7 +152,7 @@ export const AuthModal = () => {
       setAlertOnPress(() => {
         return closeModal;
       });
-      setAlert("Password updated");
+      setAlert(t("auth.passwordUpdated"));
     }
 
     setLoading(false);
@@ -181,10 +181,7 @@ export const AuthModal = () => {
       setAlertOnPress(() => {
         return closeModal;
       });
-      setAlert(
-        "We have sent you an email to verify your account. Once you verify your email, please set a password." +
-          redirectUrl,
-      );
+      setAlert(t("auth.verifyEmailThenSetPassword"));
     }
 
     setLoading(false);
@@ -203,7 +200,7 @@ export const AuthModal = () => {
   };
 
   const closeModal = useCallback(() => {
-    console.log("slose modal");
+    console.log("close modal");
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
@@ -238,10 +235,7 @@ export const AuthModal = () => {
     if (error) {
       setAlert(error.message);
     } else {
-      setAlert(
-        "We have sent you an email to reset your password. Please check your inbox." +
-          redirectUrl,
-      );
+      setAlert(t("auth.weSentResetPasswordEmail"));
     }
 
     setLoading(false);
@@ -286,7 +280,7 @@ export const AuthModal = () => {
 
   const emailInputElement = (
     <ThemedTextInput
-      label="Email"
+      label={t("auth.email")}
       value={email}
       onChangeText={setEmail}
       errorText={emailError}
@@ -295,7 +289,7 @@ export const AuthModal = () => {
 
   const passwordInputElement = (
     <ThemedTextInput
-      label="Password"
+      label={t("auth.password")}
       value={password}
       onChangeText={setPassword}
       secureTextEntry={true}
@@ -305,7 +299,7 @@ export const AuthModal = () => {
 
   const repeatPasswordInputElement = (
     <ThemedTextInput
-      label="Repeat password"
+      label={t("auth.repeatPassword")}
       value={repeatPassword}
       onChangeText={setRepeatPassword}
       secureTextEntry={true}
@@ -315,31 +309,34 @@ export const AuthModal = () => {
 
   const registerButtonElement = (
     <ThemedButton
-      text="Register"
+      text={t("auth.register")}
       disabled={loading}
       onPress={isAnonymous ? updateEmail : signUp}
     />
   );
 
   const loginButtonElement = (
-    <ThemedButton text="Log in" disabled={loading} onPress={signIn} />
+    <ThemedButton text={t("auth.login")} disabled={loading} onPress={signIn} />
   );
 
   const setPasswordButtonElement = (
     <ThemedButton
-      text="Set password"
+      text={t("auth.setPassword")}
       disabled={loading}
       onPress={updatePassword}
     />
   );
 
   const continueAsGuestButtonElement = (
-    <ThemedButton text="Continue as a guest" onPress={signInAnonymously} />
+    <ThemedButton
+      text={t("auth.continueAsGuest")}
+      onPress={signInAnonymously}
+    />
   );
 
   const confirmButtonElement = (
     <ThemedButton
-      text="Confirm"
+      text={t("buttons.confirm")}
       disabled={loading}
       onPress={handleForgotPassword}
     />
@@ -351,25 +348,25 @@ export const AuthModal = () => {
       mode="outlined"
       onPress={closeModal}
     >
-      Cancel
+      {t("buttons.cancel")}
     </Button>
   );
 
   const loginLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.LOGIN)}>
-      <Text>Log in</Text>
+      <Text>{t("auth.login")}</Text>
     </Pressable>
   );
 
   const registerLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.REGISTER)}>
-      <Text>Register</Text>
+      <Text>{t("auth.register")}</Text>
     </Pressable>
   );
 
   const forgotPasswordLinkElement = (
     <Pressable onPress={() => openModal(AUTH_MODAL_TYPES.FORGOT_PASSWORD)}>
-      <Text>Forgot password?</Text>
+      <Text>{t("auth.forgotPassword")}?</Text>
     </Pressable>
   );
 

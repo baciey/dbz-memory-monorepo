@@ -9,8 +9,11 @@ import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { gameSliceActions } from "../slice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
-import { validateName } from "../../../utils/validateName";
 import { ThemedTextInput } from "../../../components/ThemedTextInput";
+import { useTranslation } from "react-i18next";
+import { STORAGE_KEYS } from "../../../constants/storage";
+import { capitalizeFirst } from "../../../utils/capitalizeFirst";
+import { useValidation } from "../../../hooks/useValidation";
 
 export const NamesModal = ({
   isVisible,
@@ -18,8 +21,10 @@ export const NamesModal = ({
   mode,
   setGameMode,
 }: NamesModalProps) => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const { validateName } = useValidation();
 
   const [playerName, setPlayerName] = useState("");
   const [playersNames, setPlayersNames] = useState(["", ""]);
@@ -53,11 +58,11 @@ export const NamesModal = ({
     if (isPlayer2Mode) {
       const names = playersNames.map((name) => name.trim());
       dispatch(gameSliceActions.setPlayersNames(names));
-      AsyncStorage.setItem("playersNames", JSON.stringify(names));
+      AsyncStorage.setItem(STORAGE_KEYS.playersNames, JSON.stringify(names));
     } else {
       const name = playerName.trim();
       dispatch(gameSliceActions.setPlayerName(name));
-      AsyncStorage.setItem("playerName", JSON.stringify(name));
+      AsyncStorage.setItem(STORAGE_KEYS.playerName, JSON.stringify(name));
     }
   };
 
@@ -91,18 +96,23 @@ export const NamesModal = ({
         ]}
       >
         <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
-          Enter your {isPlayer2Mode ? "names" : "name"}
+          {t("game.enterYour")}{" "}
+          {isPlayer2Mode ? t("game.names") : t("game.name")}
         </Text>
         <ThemedView type="surface" style={styles.inputsContainer}>
           <ThemedTextInput
-            label={isPlayer2Mode ? "Player 1 name" : "Name"}
+            label={
+              isPlayer2Mode
+                ? t("game.player1Name")
+                : capitalizeFirst(t("game.name"))
+            }
             value={isPlayer2Mode ? playersNames[0] : playerName}
             onChangeText={(text) => handleInputChange(0, text)}
             errorText={errorText[0]}
           />
           {isPlayer2Mode ? (
             <ThemedTextInput
-              label="Player 2 name"
+              label={t("game.player2Name")}
               value={playersNames[1]}
               onChangeText={(text) => handleInputChange(1, text)}
               errorText={errorText[1]}
@@ -111,12 +121,12 @@ export const NamesModal = ({
         </ThemedView>
         <ThemedView type="surface" style={styles.buttonsContainer}>
           <ThemedButton
-            text="Confirm"
+            text={t("buttons.confirm")}
             type="primary"
             onPress={handleSaveName}
           />
           <ThemedButton
-            text="Cancel"
+            text={t("buttons.cancel")}
             type="primary"
             onPress={() => {
               setIsVisible(false);

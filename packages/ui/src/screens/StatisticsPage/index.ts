@@ -1,1 +1,3 @@
-export { StatisticsPage } from "./StatisticsPage";
+import { StatisticsPage } from "./StatisticsPage";
+
+export { StatisticsPage };

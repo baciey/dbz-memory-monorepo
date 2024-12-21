@@ -10,9 +10,11 @@ import { userSelectors } from "../../../modules/User/selectors";
 import { AUTH_MODAL_TYPES } from "../../../modules/App/slice.types";
 import { userSliceActions } from "../../../modules/User/slice";
 import { appSliceActions } from "../../../modules/App/slice";
+import { useTranslation } from "react-i18next";
 
 export const Account = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const me = useAppSelector(userSelectors.getMe);
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
@@ -26,18 +28,14 @@ export const Account = () => {
   const isLoggedIn = Boolean(me?.email && me?.password);
 
   const showLogoutWarning = () => {
-    setAlert(
-      "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
-    );
+    setAlert(t("settings.logoutWarning"));
     setAlertOnPress(() => {
       return logOut;
     });
   };
 
   const showRegisterInfo = () => {
-    setAlert(
-      "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
-    );
+    setAlert(t("settings.registerInfo"));
     setAlertOnPress(() => {
       return () => openModal(AUTH_MODAL_TYPES.REGISTER);
     });
@@ -46,7 +44,7 @@ export const Account = () => {
   const logOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      setAlert("Log out failed");
+      setAlert(t("settings.logoutFailed"));
     } else {
       dispatch(userSliceActions.meIdle());
       openModal(AUTH_MODAL_TYPES.LOGIN);
@@ -62,18 +60,22 @@ export const Account = () => {
     );
   };
 
-  const loggedinTextElement = <Text>You are logged in</Text>;
-  const anonymousTextElement = <Text>You are a guest</Text>;
+  const loggedinTextElement = <Text>{t("settings.loggedIn")}</Text>;
+  const anonymousTextElement = <Text>{t("settings.youAreGuest")}</Text>;
   const anonymousWithEmailNotConfirmedTextElement = (
-    <Text>You are still a guest. Confirm your email.</Text>
+    <Text>
+      {t("settings.stillGuest")} {t("settings.confirmEmail")}
+    </Text>
   );
   const anonymousWithEmailConfirmedTextElement = (
-    <Text>You are still a guest. Set a password.</Text>
+    <Text>
+      {t("settings.stillGuest")} {t("settings.setPassword")}
+    </Text>
   );
 
   const emailElement = (
     <TextInput
-      label="Email"
+      label={t("settings.email")}
       value={me?.email || me?.session.user.new_email}
       disabled
     />
@@ -81,20 +83,22 @@ export const Account = () => {
 
   const logoutButtonElement = (
     <ThemedButton
-      text="Log Out"
+      text={t("settings.logout")}
       onPress={isLoggedIn && password ? logOut : showLogoutWarning}
     />
   );
 
   const setPasswordButtonElement = (
     <ThemedButton
-      text={isLoggedIn ? "Change Password" : "Set Password"}
+      text={
+        isLoggedIn ? t("settings.changePassword") : t("settings.setPassword")
+      }
       onPress={() => openModal(AUTH_MODAL_TYPES.SET_PASSWORD)}
     />
   );
 
   const registerButtonElement = (
-    <ThemedButton text="Register" onPress={showRegisterInfo} />
+    <ThemedButton text={t("settings.register")} onPress={showRegisterInfo} />
   );
 
   const loggedInContent = (

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ThemedView } from "../../components/ThemedView";
-import { useTheme } from "react-native-paper";
 import { useTranslation } from "react-i18next";
 import { GameBoard } from "../../modules/Game/GameBoard";
 import { GAME_BOARD_MODE } from "../../modules/Game/GameBoard/GameBoard.types";
@@ -19,7 +18,6 @@ import { useGetImages } from "../../hooks/useGetImages";
 
 export const HomePage = () => {
   const { t } = useTranslation();
-  const theme = useTheme();
   const { images } = useGetImages();
   const { width: backgroundImageWidth, isMobile } = useGetScreenDimensions();
 
@@ -86,9 +84,9 @@ export const HomePage = () => {
         imagesPercentageLoaded === 100 &&
         !isNamesModalVisible && (
           <ThemedButton
-            text="Go back"
+            text={t("home.goBack")}
             type="primary"
-            onPress={() => setAlert("Do you want to return to main menu?")}
+            onPress={() => setAlert(t("home.returnAlert"))}
             style={[
               GLOBAL_STYLES.m.mt16,
               GLOBAL_STYLES.m.mb16,
@@ -100,12 +98,12 @@ export const HomePage = () => {
       {gameMode === null && (
         <View>
           <ThemedButton
-            text="1 player"
+            text={t("statistics.player1")}
             onPress={() => handleSetGameMode(GAME_BOARD_MODE.player1)}
             style={GLOBAL_STYLES.m.mb8}
           />
           <ThemedButton
-            text="2 players"
+            text={t("statistics.player2")}
             type="primary"
             onPress={() => handleSetGameMode(GAME_BOARD_MODE.player2)}
           />

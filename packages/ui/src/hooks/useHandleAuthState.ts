@@ -19,7 +19,6 @@ export const useHandleAuthState = () => {
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "INITIAL_SESSION") {
-        console.log("INITIAL_SESSION");
         if (!session) {
           dispatch(
             appSliceActions.setAuthModal({
@@ -29,7 +28,6 @@ export const useHandleAuthState = () => {
           );
         }
       } else if (event === "SIGNED_IN") {
-        console.log("SIGNED_IN");
         dispatch(
           appSliceActions.setAuthModal({
             isVisible: false,
@@ -38,7 +36,6 @@ export const useHandleAuthState = () => {
         );
         if (!me && session) dispatch(userActions.getMe(session));
       } else if (event === "SIGNED_OUT") {
-        console.log("SIGNED_OUT");
         dispatch(userSliceActions.meIdle());
         dispatch(
           appSliceActions.setAuthModal({
@@ -51,7 +48,6 @@ export const useHandleAuthState = () => {
       } else if (event === "TOKEN_REFRESHED") {
         console.log("TOKEN_REFRESHED");
       } else if (event === "USER_UPDATED") {
-        console.log("USER_UPDATED");
         if (session) dispatch(userActions.getMe(session));
       }
     });

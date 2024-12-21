@@ -18,9 +18,11 @@ import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { gameActions } from "../actions";
 import { ThemedAlert } from "../../../components/ThemedAlert";
+import { useTranslation } from "react-i18next";
 
 export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const [cardWidth, setCardWidth] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState<number>(0);
@@ -125,7 +127,7 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
         ),
       );
       setAlert(
-        `Congratulations! You've finished the game in ${elapsedTime} seconds!`,
+        `${t("game.congratulations")}! ${t("game.youHaveFinishedGameIn")} ${elapsedTime} ${t("game.seconds")}!`,
       );
     }
   }, [
@@ -136,6 +138,7 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
     me?.id,
     dispatch,
     showPersonalGames,
+    t,
   ]);
 
   // Save 2-players scores to the database
@@ -163,12 +166,12 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
         scores.player1 > scores.player2 ? player1Name : player2Name;
 
       const alertMessage = isTie
-        ? `It's a tie! The game has ended! ${player1Name} and ${player2Name} both have ${scores.player1} points!`
-        : `Congratulations ${winnerName}! You have won the game! \nFinal score: ${scores.player1} : ${scores.player2}`;
+        ? `${t("game.itsATie")}`
+        : `${t("game.congratulations")} ${winnerName}! ${t("game.youHaveWonTheGame")}! \n${t("game.finalScore")}: ${scores.player1} : ${scores.player2}`;
 
       setAlert(alertMessage);
     }
-  }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch]);
+  }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch, t]);
 
   const handleCardPress = (index: number) => {
     if (firstCard && secondCard) return; // Prevent further clicks
