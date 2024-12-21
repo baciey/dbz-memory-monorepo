@@ -13,3 +13,4 @@ node_modules
 .temp
 .branches
 .expo
+coverage
