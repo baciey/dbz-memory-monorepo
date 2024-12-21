@@ -1,19 +1,33 @@
-import { PayloadAction, ThunkAction, configureStore } from "@reduxjs/toolkit";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import {
+  PayloadAction,
+  ThunkAction,
+  configureStore,
+  combineReducers,
+} from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
 import { USER_REDUCER_NAME, userReducer } from "../modules/User/slice";
 import { GAME_REDUCER_NAME, gameReducer } from "../modules/Game/slice";
 import { APP_REDUCER_NAME, appReducer } from "../modules/App/slice";
 
-export const store = configureStore({
-  reducer: {
-    [APP_REDUCER_NAME]: appReducer,
-    [USER_REDUCER_NAME]: userReducer,
-    [GAME_REDUCER_NAME]: gameReducer,
-  },
+const rootReducer = combineReducers({
+  [APP_REDUCER_NAME]: appReducer,
+  [USER_REDUCER_NAME]: userReducer,
+  [GAME_REDUCER_NAME]: gameReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const setupStore = (preloadedState?: Partial<RootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+};
+
+export const store = setupStore();
+
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore["dispatch"];
+
 export type PayloadThunkAction = ThunkAction<
   void,
   RootState,
@@ -21,6 +35,5 @@ export type PayloadThunkAction = ThunkAction<
   PayloadAction<unknown>
 >;
 
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
