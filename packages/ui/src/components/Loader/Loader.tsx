@@ -20,7 +20,7 @@ export const Loader = ({ isVisible, withBackground }: LoaderProps) => {
         { minHeight: height, minWidth: width },
       ]}
     >
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large" testID="loader" />
     </View>
   );
 };
