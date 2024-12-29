@@ -1,5 +1,5 @@
 import React from "react";
-import { HelperText, TextInput, useTheme } from "react-native-paper";
+import { HelperText, TextInput } from "react-native-paper";
 import { ThemedTextInputProps } from "./ThemedTextInput.types";
 import { styles } from "./ThemedTextInput.styles";
 import { View } from "react-native";
@@ -12,8 +12,6 @@ export const ThemedTextInput = ({
   containerStyle,
   ...textInputProps
 }: ThemedTextInputProps) => {
-  const theme = useTheme();
-
   return (
     <View style={containerStyle}>
       <TextInput

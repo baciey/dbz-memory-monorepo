@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, StrictMode } from "react";
+import React, { PropsWithChildren } from "react";
 import { type RenderOptions, render } from "@testing-library/react-native";
 import { Provider } from "react-redux";
 import { AppStore, RootState, setupStore } from "../redux/store";

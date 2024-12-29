@@ -285,6 +285,7 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
       >
         {cards.map((card, index) => (
           <Card
+            index={index}
             key={index}
             width={cardWidth}
             card={card}

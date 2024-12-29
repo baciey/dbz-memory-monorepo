@@ -46,8 +46,8 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
 
       setPublicUrl(publicUrl);
       setImages({
-        board: [boardImagesMapped[0]],
-        // board: boardImagesMapped,
+        // board: [boardImagesMapped[0]],
+        board: boardImagesMapped,
         main: main,
       });
     };
