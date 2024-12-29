@@ -10,5 +10,12 @@ const config: Config = {
     "/node_modules/(?!(@react-native|react-native|react-native-url-polyfill)/).*/",
   ],
   setupFilesAfterEnv: ["./jest-setup.ts"],
+  coveragePathIgnorePatterns: [
+    ".*(slice|actions|selectors|styles|types|index)\\.ts$",
+    "/redux/",
+    "/styles/",
+    "/locales/",
+    "/constants/",
+  ],
 };
 export default config;

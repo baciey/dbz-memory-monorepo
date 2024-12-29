@@ -1,7 +1,6 @@
 import React from "react";
 import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard/GameBoard.types";
 import { ThemedView } from "../../../components/ThemedView";
-import { View } from "react-native";
 import { GameInfoProps } from "./GameInfo.types";
 import { useTranslation } from "react-i18next";
 import { styles } from "./GameInfo.styles";

@@ -14,4 +14,5 @@ export type CardProps = {
   card: CardType;
   onPress: () => void;
   setIsLoaded: () => void;
+  index: number;
 };
