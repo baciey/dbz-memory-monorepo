@@ -38,7 +38,7 @@ export { ROUTES } from "./src/constants/routes";
 export { GLOBAL_STYLES } from "./src/styles/globalStyles";
 
 //LOCALES
-export { i18nInit } from "./src/locales";
+export { i18n } from "./src/locales";
 
 //UTILS
 export { useTheme } from "react-native-paper";

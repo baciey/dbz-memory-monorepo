@@ -109,6 +109,7 @@ export const NamesModal = ({
             value={isPlayer2Mode ? playersNames[0] : playerName}
             onChangeText={(text) => handleInputChange(0, text)}
             errorText={errorText[0]}
+            testID="player1Name"
           />
           {isPlayer2Mode ? (
             <ThemedTextInput
@@ -116,6 +117,7 @@ export const NamesModal = ({
               value={playersNames[1]}
               onChangeText={(text) => handleInputChange(1, text)}
               errorText={errorText[1]}
+              testID="player2Name"
             />
           ) : null}
         </ThemedView>
