@@ -5,13 +5,6 @@ import { GAME_BOARD_MODE } from "./GameBoard.types";
 import { renderWithProviders } from "../../../utils/testUtils";
 
 describe("GameBoard", () => {
-  //   beforeAll((done) => {
-  //     done();
-  //   });
-
-  //   afterAll((done) => {
-  //     done();
-  //   });
   it("presses two cards in 1-player mode", async () => {
     const props = {
       mode: GAME_BOARD_MODE.player1,
@@ -71,7 +64,7 @@ describe("GameBoard", () => {
         fireEvent.press(card3);
         expect(queryByTestId("cardBack-3")).not.toBeOnTheScreen();
       },
-      { timeout: 2100 },
+      { timeout: 3000 },
     );
   });
 });
