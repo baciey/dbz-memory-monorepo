@@ -3,6 +3,7 @@ import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";
 import react from "eslint-plugin-react";
 import globals from "globals";
+import testingLibrary from "eslint-plugin-testing-library";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -11,6 +12,7 @@ export default tseslint.config(
     plugins: {
       "react-hooks": reactHooks,
       react,
+      "testing-library": testingLibrary,
     },
     languageOptions: {
       parserOptions: {
@@ -27,6 +29,10 @@ export default tseslint.config(
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/ban-ts-comment": "off",
+      "testing-library/await-async-queries": "error",
+      "testing-library/no-await-sync-queries": "error",
+      "testing-library/no-debugging-utils": "warn",
+      "testing-library/no-dom-import": "off",
     },
   },
   {

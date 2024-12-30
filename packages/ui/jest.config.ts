@@ -7,7 +7,7 @@ const config: Config = {
     "^.+\\.(ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@react-native|react-native|react-native-url-polyfill)/).*/",
+    "/node_modules/(?!(@react-native|react-native|react-native-url-polyfill|react-native-vector-icons)/).*/",
   ],
   setupFilesAfterEnv: ["./jest-setup.ts"],
   coveragePathIgnorePatterns: [
