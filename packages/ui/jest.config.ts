@@ -11,7 +11,7 @@ const config: Config = {
   ],
   setupFilesAfterEnv: ["./jest-setup.ts"],
   coveragePathIgnorePatterns: [
-    ".*(slice|actions|selectors|styles|types|index)\\.ts$",
+    ".*(slice|actions|selectors|styles|types|index|const)\\.ts$",
     "/redux/",
     "/styles/",
     "/locales/",
