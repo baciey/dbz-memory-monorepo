@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { GameState } from "./slice.types";
 import { ACTION_STATUS } from "../App/slice.types";
 
-const initialState: GameState = {
+const initialGameState: GameState = {
   imagesPercentageLoaded: 0,
   playersNames: [],
   playerName: "",
@@ -17,7 +17,7 @@ export const GAME_REDUCER_NAME = "game";
 
 const gameSlice = createSlice({
   name: GAME_REDUCER_NAME,
-  initialState,
+  initialState: initialGameState,
   reducers: {
     setImagesPercentageLoaded: (
       state,

@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserState } from "./slice.types";
 import { ACTION_STATUS } from "../App/slice.types";
 
-const initialState: UserState = {
+const initialUserState: UserState = {
   me: null,
   meStatus: ACTION_STATUS.IDLE,
   meUpdateStatus: ACTION_STATUS.IDLE,
@@ -12,7 +12,7 @@ export const USER_REDUCER_NAME = "user";
 
 const userSlice = createSlice({
   name: USER_REDUCER_NAME,
-  initialState,
+  initialState: initialUserState,
   reducers: {
     meLoading: (state) => {
       state.meStatus = ACTION_STATUS.LOADING;

@@ -3,7 +3,7 @@ import { AppState } from "./slice.types";
 import { LANGUAGE } from "../../constants/lang";
 import { THEME_MODE } from "../../constants/theme";
 
-const initialState: AppState = {
+const initialAppState: AppState = {
   themeMode: THEME_MODE.light,
   language: LANGUAGE.pl,
   authModal: {
@@ -16,7 +16,7 @@ export const APP_REDUCER_NAME = "app";
 
 const appSlice = createSlice({
   name: APP_REDUCER_NAME,
-  initialState,
+  initialState: initialAppState,
   reducers: {
     setThemeMode: (state, action: PayloadAction<AppState["themeMode"]>) => {
       state.themeMode = action.payload;
