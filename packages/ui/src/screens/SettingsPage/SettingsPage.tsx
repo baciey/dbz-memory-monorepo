@@ -36,7 +36,6 @@ export const SettingsPage = () => {
   const meStatus = useAppSelector(userSelectors.getMeStatus);
   const meUpdateStatus = useAppSelector(userSelectors.getMeUpdateStatus);
   const isAuthenticated = Boolean(me?.session);
-
   const { publicUrl } = useGetImages();
   const { t } = useTranslation();
   const { isWeb } = useGetScreenDimensions();
@@ -85,7 +84,7 @@ export const SettingsPage = () => {
   }, [publicUrl, me?.avatarUrl, meUpdateStatus, meStatus]);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} testID="settings-container">
       <ThemedAlert
         isVisible={Boolean(alert)}
         onDismiss={() => setAlert("")}
@@ -99,6 +98,7 @@ export const SettingsPage = () => {
         <CustomSwitch
           value={themeMode === THEME_MODE.dark}
           onValueChange={changeThemeMode}
+          testID="theme-switch"
         />
       </ThemedView>
       <ThemedView style={styles.row}>
@@ -107,7 +107,10 @@ export const SettingsPage = () => {
           visible={isLanguageMenuVisible}
           onDismiss={() => setIsLanguageMenuVisible(false)}
           anchor={
-            <Button onPress={() => setIsLanguageMenuVisible(true)}>
+            <Button
+              onPress={() => setIsLanguageMenuVisible(true)}
+              testID="lang-menu-button"
+            >
               <Text variant="bodyLarge">{language.toUpperCase()}</Text>
             </Button>
           }
@@ -115,10 +118,12 @@ export const SettingsPage = () => {
           <Menu.Item
             onPress={() => changeLanguage(LANGUAGE.pl)}
             title={LANGUAGE.pl.toUpperCase()}
+            testID="lang-pl"
           />
           <Menu.Item
             onPress={() => changeLanguage(LANGUAGE.en)}
             title={LANGUAGE.en.toUpperCase()}
+            testID="lang-en"
           />
         </Menu>
       </ThemedView>

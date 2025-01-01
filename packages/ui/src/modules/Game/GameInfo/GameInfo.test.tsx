@@ -4,7 +4,7 @@ import { renderWithProviders } from "../../../utils/testUtils";
 import { GameInfo } from "./GameInfo";
 import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard";
 
-describe("GameBoard", () => {
+describe("GameInfo", () => {
   const defaultProps = {
     mode: GAME_BOARD_MODE.player1,
     elapsedTime: 5,
