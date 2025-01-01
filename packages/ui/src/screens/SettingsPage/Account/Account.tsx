@@ -52,6 +52,7 @@ export const Account = () => {
   };
 
   const openModal = (type: AUTH_MODAL_TYPES) => {
+    console.log("HERE");
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: true,
@@ -60,7 +61,7 @@ export const Account = () => {
     );
   };
 
-  const loggedinTextElement = <Text>{t("settings.loggedIn")}</Text>;
+  const loggedinTextElement = <Text>{t("settings.youAreLoggedIn")}</Text>;
   const anonymousTextElement = <Text>{t("settings.youAreGuest")}</Text>;
   const anonymousWithEmailNotConfirmedTextElement = (
     <Text>

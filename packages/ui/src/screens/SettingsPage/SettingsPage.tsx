@@ -41,7 +41,6 @@ export const SettingsPage = () => {
   const { isWeb } = useGetScreenDimensions();
   const theme = useTheme();
 
-  const [alert, setAlert] = useState<string>("");
   const [isLanguageMenuVisible, setIsLanguageMenuVisible] = useState(false);
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
@@ -85,11 +84,6 @@ export const SettingsPage = () => {
 
   return (
     <ThemedView style={styles.container} testID="settings-container">
-      <ThemedAlert
-        isVisible={Boolean(alert)}
-        onDismiss={() => setAlert("")}
-        text={alert}
-      />
       <Text variant="headlineSmall" style={globalStyles.heading}>
         {t("settings.settings")}
       </Text>

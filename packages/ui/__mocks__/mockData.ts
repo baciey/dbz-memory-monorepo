@@ -83,6 +83,7 @@ export const MOCK_USER_STATE: UserState = {
     avatarUrl: "mock avatar",
     username: "mock username",
     isAnonymous: false,
+    password: "mock password",
   },
   meStatus: ACTION_STATUS.SUCCESS,
   meUpdateStatus: ACTION_STATUS.IDLE,
