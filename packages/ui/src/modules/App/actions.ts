@@ -4,24 +4,28 @@ import { AppState } from "./slice.types";
 import { THEME_MODE } from "../../constants/theme";
 import { STORAGE_KEYS } from "../../constants/storage";
 import { appSliceActions } from "./slice";
+import { PayloadThunkAction } from "../../redux/store";
 
-const changeThemeMode = (themeMode: THEME_MODE) => {
-  AsyncStorage.setItem(STORAGE_KEYS.themeMode, themeMode).catch(() => {
-    console.error("Failed to save theme mode to storage");
-  });
-  return appSliceActions.setThemeMode(themeMode);
+const changeThemeMode = (themeMode: THEME_MODE): PayloadThunkAction => {
+  return async (dispatch) => {
+    AsyncStorage.setItem(STORAGE_KEYS.themeMode, themeMode).catch(() => {
+      console.error("Failed to save theme mode to storage");
+    });
+    dispatch(appSliceActions.setThemeMode(themeMode));
+  };
 };
 
-const changeLanguage = (language: AppState["language"]) => {
-  AsyncStorage.setItem(STORAGE_KEYS.language, language)
-    .then(() => {
-      i18next.changeLanguage(language);
-    })
-    .catch(() => {
-      console.error("Failed to save language to i18next");
-    });
-
-  return appSliceActions.setLanguage(language);
+const changeLanguage = (language: AppState["language"]): PayloadThunkAction => {
+  return async (dispatch) => {
+    AsyncStorage.setItem(STORAGE_KEYS.language, language)
+      .then(() => {
+        i18next.changeLanguage(language);
+      })
+      .catch(() => {
+        console.error("Failed to save language to i18next");
+      });
+    dispatch(appSliceActions.setLanguage(language));
+  };
 };
 
 export const appActions = {
