@@ -53,8 +53,8 @@ it("presses 2 players button then confirm", async () => {
   expect(queryByTestId("cardContainer-0")).not.toBeOnTheScreen();
   fireEvent.press(getByText("2 players"));
 
-  const input1 = screen.getByTestId("player1Name");
-  const input2 = screen.getByTestId("player2Name");
+  const input1 = getByTestId("player1Name");
+  const input2 = getByTestId("player2Name");
 
   fireEvent.changeText(input1, "test name 1");
   fireEvent.changeText(input2, "test name 2");

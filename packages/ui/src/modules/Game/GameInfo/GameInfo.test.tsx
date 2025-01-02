@@ -1,8 +1,10 @@
 import React from "react";
-import { fireEvent, screen, waitFor } from "@testing-library/react-native";
+import { screen, waitFor } from "@testing-library/react-native";
 import { renderWithProviders } from "../../../utils/testUtils";
 import { GameInfo } from "./GameInfo";
 import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard";
+
+jest.useFakeTimers();
 
 describe("GameInfo", () => {
   const defaultProps = {
@@ -15,10 +17,12 @@ describe("GameInfo", () => {
     renderWithProviders(<GameInfo {...defaultProps} />);
     const { getByText, queryByText } = screen;
 
-    expect(getByText("Time: 5 sec")).toBeOnTheScreen();
+    await waitFor(() => {
+      expect(getByText("Time: 5 sec")).toBeOnTheScreen();
 
-    expect(queryByText("Player 1: 4")).not.toBeOnTheScreen();
-    expect(queryByText("Player 2: 5")).not.toBeOnTheScreen();
+      expect(queryByText("Player 1: 4")).not.toBeOnTheScreen();
+      expect(queryByText("Player 2: 5")).not.toBeOnTheScreen();
+    });
   });
 
   it("displays correct info for 2-player mode", async () => {
@@ -29,9 +33,11 @@ describe("GameInfo", () => {
     renderWithProviders(<GameInfo {...props} />);
     const { getByText, queryByText } = screen;
 
-    expect(getByText("Player 1: 4")).toBeOnTheScreen();
-    expect(getByText("Player 2: 5")).toBeOnTheScreen();
+    await waitFor(() => {
+      expect(getByText("Player 1: 4")).toBeOnTheScreen();
+      expect(getByText("Player 2: 5")).toBeOnTheScreen();
 
-    expect(queryByText("Time: 5 sec")).not.toBeOnTheScreen();
+      expect(queryByText("Time: 5 sec")).not.toBeOnTheScreen();
+    });
   });
 });

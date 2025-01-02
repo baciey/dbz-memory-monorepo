@@ -13,6 +13,7 @@ import { i18n } from "../locales";
 import { THEME_MODE } from "../constants/theme";
 import { CombinedDarkTheme, CombinedDefaultTheme } from "../styles/theme";
 import { appSelectors } from "../modules/App/selectors";
+import { AuthModal } from "../modules/App/AuthModal";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: Partial<RootState>;
@@ -35,6 +36,7 @@ export const TestPaperProvider = ({
       }
     >
       {children}
+      <AuthModal />
     </PaperProvider>
   );
 };
