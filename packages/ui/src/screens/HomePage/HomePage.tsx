@@ -12,7 +12,7 @@ import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
 import { Loader } from "../../components/Loader/";
 import { NamesModal } from "../../modules/Game/NamesModal";
-import { useGetPlayerName } from "../../hooks/useGetPlayerName";
+import { useGetPlayerNameFromAsyncStorage } from "../../hooks/useGetPlayerNameFromAsyncStorage";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../hooks/useGetImages";
 
@@ -21,7 +21,7 @@ export const HomePage = () => {
   const { images } = useGetImages();
   const { width: backgroundImageWidth, isMobile } = useGetScreenDimensions();
 
-  useGetPlayerName();
+  useGetPlayerNameFromAsyncStorage();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
   const [alert, setAlert] = useState<string>("");

@@ -25,8 +25,8 @@ export { userSelectors } from "./src/modules/User/selectors";
 export { gameSelectors } from "./src/modules/Game/selectors";
 
 //HOOKS
-export { useSetLanguage } from "./src/hooks/useSetLanguage";
-export { useSetTheme } from "./src/hooks/useSetTheme";
+export { useGetLanguageFromAsyncStorage } from "./src/hooks/useGetLanguageFromAsyncStorage";
+export { useGetThemeFromAsyncStorage } from "./src/hooks/useGetThemeFromAsyncStorage";
 export { useHandleAuthState } from "./src/hooks/useHandleAuthState";
 
 //CONSTANTS

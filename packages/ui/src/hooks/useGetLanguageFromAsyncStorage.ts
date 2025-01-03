@@ -5,7 +5,7 @@ import { useAppDispatch } from "../redux/store";
 import { LANGUAGE } from "../constants/lang";
 import { appActions } from "../modules/App/actions";
 
-export const useSetLanguage = () => {
+export const useGetLanguageFromAsyncStorage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {

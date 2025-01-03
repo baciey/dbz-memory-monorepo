@@ -5,7 +5,7 @@ import { useAppDispatch } from "../redux/store";
 import { THEME_MODE } from "../constants/theme";
 import { appActions } from "../modules/App/actions";
 
-export const useSetTheme = () => {
+export const useGetThemeFromAsyncStorage = () => {
   const colorScheme = (useColorScheme() || THEME_MODE.light) as THEME_MODE;
   const dispatch = useAppDispatch();
 
