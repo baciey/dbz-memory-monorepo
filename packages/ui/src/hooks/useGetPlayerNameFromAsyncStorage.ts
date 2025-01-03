@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "../redux/store";
 import { gameSliceActions } from "../modules/Game/slice";
 
-export const useGetPlayerName = () => {
+export const useGetPlayerNameFromAsyncStorage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {

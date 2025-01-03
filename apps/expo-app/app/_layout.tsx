@@ -9,8 +9,8 @@ import { Provider } from "react-redux";
 import {
   store,
   useAppSelector,
-  useSetLanguage,
-  useSetTheme,
+  useGetLanguageFromAsyncStorage,
+  useGetThemeFromAsyncStorage,
   PaperProviderWrapper,
   THEME_MODE,
   useHandleAuthState,
@@ -30,8 +30,8 @@ export const AppWithStore = () => {
   const isDarkMode =
     useAppSelector(appSelectors.getThemeMode) === THEME_MODE.dark;
 
-  useSetLanguage();
-  useSetTheme();
+  useGetLanguageFromAsyncStorage();
+  useGetThemeFromAsyncStorage();
   useHandleAuthState();
 
   useEffect(() => {
