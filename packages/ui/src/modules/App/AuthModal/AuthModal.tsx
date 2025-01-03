@@ -235,6 +235,9 @@ export const AuthModal = () => {
     if (error) {
       setAlert(error.message);
     } else {
+      setAlertOnPress(() => {
+        return () => openModal(AUTH_MODAL_TYPES.LOGIN);
+      });
       setAlert(t("auth.weSentResetPasswordEmail"));
     }
 
@@ -312,11 +315,17 @@ export const AuthModal = () => {
       text={t("auth.register")}
       disabled={loading}
       onPress={isAnonymous ? updateEmail : signUp}
+      testID="register-button"
     />
   );
 
   const loginButtonElement = (
-    <ThemedButton text={t("auth.login")} disabled={loading} onPress={signIn} />
+    <ThemedButton
+      text={t("auth.login")}
+      disabled={loading}
+      onPress={signIn}
+      testID="login-button"
+    />
   );
 
   const setPasswordButtonElement = (
@@ -324,6 +333,7 @@ export const AuthModal = () => {
       text={t("auth.setPassword")}
       disabled={loading}
       onPress={updatePassword}
+      testID="set-password-button"
     />
   );
 
@@ -331,6 +341,7 @@ export const AuthModal = () => {
     <ThemedButton
       text={t("auth.continueAsGuest")}
       onPress={signInAnonymously}
+      testID="continue-as-guest-button"
     />
   );
 
@@ -339,6 +350,7 @@ export const AuthModal = () => {
       text={t("buttons.confirm")}
       disabled={loading}
       onPress={handleForgotPassword}
+      testID="confirm-button"
     />
   );
 

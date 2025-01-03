@@ -18,7 +18,6 @@ import { CustomSwitch } from "../../components/CustomSwitch";
 import { Account } from "./Account";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetImages } from "../../hooks/useGetImages";
-import { ThemedAlert } from "../../components/ThemedAlert";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { View } from "react-native";
 import { userSelectors } from "../../modules/User/selectors";

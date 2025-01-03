@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-native";
 import { useValidation } from "./useValidation";
-import { TestWrapper } from "../utils/testUtils";
+import { TestHooksWrapper } from "../utils/testUtils";
 
 describe("useValidation", () => {
   it("validateName", () => {
@@ -8,7 +8,7 @@ describe("useValidation", () => {
       result: {
         current: { validateName },
       },
-    } = renderHook(() => useValidation(), { wrapper: TestWrapper });
+    } = renderHook(() => useValidation(), { wrapper: TestHooksWrapper });
 
     expect(validateName("test 1234")).toBe("");
     expect(validateName("  test")).toBe("");
@@ -76,7 +76,7 @@ describe("useValidation", () => {
 
   it("validateEmail", () => {
     const { result } = renderHook(() => useValidation(), {
-      wrapper: TestWrapper,
+      wrapper: TestHooksWrapper,
     });
 
     const { validateEmail } = result.current;
@@ -96,7 +96,7 @@ describe("useValidation", () => {
 
   it("validatePassword", () => {
     const { result } = renderHook(() => useValidation(), {
-      wrapper: TestWrapper,
+      wrapper: TestHooksWrapper,
     });
 
     const { validatePassword } = result.current;

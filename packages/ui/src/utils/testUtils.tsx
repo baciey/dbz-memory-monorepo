@@ -22,9 +22,10 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
 
 export const TestPaperProvider = ({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
+  withAuthModal,
+}: PropsWithChildren<{
+  withAuthModal?: boolean;
+}>) => {
   const themeMode = useAppSelector(appSelectors.getThemeMode);
 
   return (
@@ -35,8 +36,8 @@ export const TestPaperProvider = ({
           : CombinedDarkTheme
       }
     >
+      {withAuthModal && <AuthModal />}
       {children}
-      <AuthModal />
     </PaperProvider>
   );
 };
@@ -44,12 +45,29 @@ export const TestPaperProvider = ({
 export function TestWrapper({
   children,
   store = setupStore({}),
-}: PropsWithChildren<{ store?: AppStore }>): JSX.Element {
+  withAuthModal = true,
+}: PropsWithChildren<{
+  store?: AppStore;
+  withAuthModal?: boolean;
+}>): JSX.Element {
   return (
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
-        <TestPaperProvider>{children}</TestPaperProvider>
+        <TestPaperProvider withAuthModal={withAuthModal}>
+          {children}
+        </TestPaperProvider>
       </I18nextProvider>
+    </Provider>
+  );
+}
+
+export function TestHooksWrapper({
+  children,
+  store = setupStore({}),
+}: PropsWithChildren<{ store?: AppStore }>): JSX.Element {
+  return (
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
     </Provider>
   );
 }
@@ -61,11 +79,14 @@ export function renderWithProviders(
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},
+  withAuthModal = true,
 ) {
   return {
     store,
     ...render(ui, {
-      wrapper: (props) => <TestWrapper store={store} {...props} />,
+      wrapper: (props) => (
+        <TestWrapper store={store} {...props} withAuthModal={withAuthModal} />
+      ),
       ...renderOptions,
     }),
   };
