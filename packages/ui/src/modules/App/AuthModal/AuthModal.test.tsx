@@ -7,10 +7,11 @@ import {
   MOCK_APP_STATE,
   MOCK_USER_STATE,
 } from "../../../../__mocks__/mockData";
+import lodash from "lodash";
 
 jest.useFakeTimers();
 
-it("handles correctly type LOGIN", async () => {
+it("handles correctly type LOGIN (as a guest)", async () => {
   renderWithProviders(
     <AuthModal />,
     {
@@ -42,9 +43,43 @@ it("handles correctly type LOGIN", async () => {
     expect(getByText("Continue as a guest")).toBeOnTheScreen();
   });
 
-  await fireEvent.press(getByTestId("continue-as-guest-button"));
+  fireEvent.press(getByTestId("continue-as-guest-button"));
 
-  expect(queryByText("Continue as a guest")).not.toBeOnTheScreen();
+  await waitFor(async () => {
+    expect(queryByText("Continue as a guest")).not.toBeOnTheScreen();
+  });
+});
+
+it("handles correctly type LOGIN (as a standard user)", async () => {
+  renderWithProviders(
+    <AuthModal />,
+    {
+      preloadedState: {
+        app: {
+          ...MOCK_APP_STATE,
+          authModal: {
+            isVisible: true,
+            type: AUTH_MODAL_TYPES.LOGIN,
+          },
+        },
+        user: MOCK_USER_STATE,
+      },
+    },
+    false,
+  );
+
+  const { getByTestId, getAllByTestId, queryByTestId } = screen;
+
+  const inputs = getAllByTestId("text-input-flat-label-active");
+
+  fireEvent.changeText(inputs[0], "test@email.com");
+  fireEvent.changeText(inputs[1], "password");
+
+  fireEvent.press(getByTestId("login-button"));
+
+  await waitFor(async () => {
+    expect(queryByTestId("login-button")).not.toBeOnTheScreen();
+  });
 });
 
 it("handles correctly type REGISTER", async () => {
@@ -98,7 +133,66 @@ it("handles correctly type REGISTER", async () => {
 
   fireEvent.press(getByText("OK"));
 
-  expect(queryAllByText("Register")).toHaveLength(1);
+  await waitFor(async () => {
+    expect(queryAllByText("Register")).toHaveLength(1);
+  });
+});
+
+it("handles correctly type REGISTER (turn from anonymous to standard user", async () => {
+  const MOCK_STATE_UPDATED = lodash.cloneDeep(MOCK_USER_STATE);
+  if (MOCK_STATE_UPDATED.me) {
+    MOCK_STATE_UPDATED.me.isAnonymous = true;
+    MOCK_STATE_UPDATED.me.password = "";
+    MOCK_STATE_UPDATED.me.email = "";
+  }
+  renderWithProviders(
+    <AuthModal />,
+    {
+      preloadedState: {
+        app: {
+          ...MOCK_APP_STATE,
+          authModal: {
+            isVisible: true,
+            type: AUTH_MODAL_TYPES.REGISTER,
+          },
+        },
+        user: MOCK_STATE_UPDATED,
+      },
+    },
+    false,
+  );
+
+  const {
+    getByText,
+    getAllByText,
+    getAllByTestId,
+    queryAllByText,
+    getByTestId,
+    findByText,
+  } = screen;
+
+  await waitFor(async () => {
+    expect(getAllByText("Register")).toHaveLength(2);
+    expect(getAllByText("Email")).toHaveLength(2);
+    expect(getByText("Log in")).toBeOnTheScreen();
+  });
+
+  const inputs = getAllByTestId("text-input-flat-label-active");
+
+  fireEvent.changeText(inputs[0], "test@email.com");
+  fireEvent.press(getByTestId("register-button"));
+
+  expect(
+    await findByText(
+      "We have sent you an email to verify your account. Once you verify your email, please set a password.",
+    ),
+  ).toBeOnTheScreen();
+
+  fireEvent.press(getByText("OK"));
+
+  await waitFor(async () => {
+    expect(queryAllByText("Register")).toHaveLength(0);
+  });
 });
 
 it("handles correctly type FORGOT_PASSWORD", async () => {
@@ -149,7 +243,9 @@ it("handles correctly type FORGOT_PASSWORD", async () => {
 
   fireEvent.press(getByText("OK"));
 
-  expect(queryByText("Type your email")).not.toBeOnTheScreen();
+  await waitFor(async () => {
+    expect(queryByText("Type your email")).not.toBeOnTheScreen();
+  });
 });
 
 it("handles correctly type SET_PASSWORD", async () => {
@@ -195,5 +291,7 @@ it("handles correctly type SET_PASSWORD", async () => {
 
   fireEvent.press(getByText("OK"));
 
-  expect(queryAllByText("Set password")).toHaveLength(0);
+  await waitFor(async () => {
+    expect(queryAllByText("Set password")).toHaveLength(0);
+  });
 });
