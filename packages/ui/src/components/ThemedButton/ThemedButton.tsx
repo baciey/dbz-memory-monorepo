@@ -9,6 +9,7 @@ export const ThemedButton = ({
   onPress,
   type = "primary",
   disabled,
+  testID,
 }: ThemedButtonProps) => {
   const theme = useTheme();
   let buttonColor = theme.colors.primary;
@@ -26,6 +27,7 @@ export const ThemedButton = ({
       buttonColor={buttonColor}
       textColor={textColor}
       disabled={disabled}
+      testID={testID}
     >
       {text}
     </Button>

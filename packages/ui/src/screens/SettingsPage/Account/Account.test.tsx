@@ -8,13 +8,13 @@ import {
 } from "../../../../__mocks__/mockData";
 import lodash from "lodash";
 
-jest.useFakeTimers();
-
 const aboutLogoutWarning =
   "You are about to log out. You are a guest user so you will lose all your data. Are you sure?";
 
 describe("logged in user", () => {
   it("displays correctly for logged in user", () => {
+    jest.useFakeTimers();
+
     renderWithProviders(<Account />, {
       preloadedState: {
         app: MOCK_APP_STATE,
@@ -70,6 +70,8 @@ describe("anonymous user", () => {
   }
 
   it("displays correctly for anonymous user", () => {
+    jest.useFakeTimers();
+
     renderWithProviders(<Account />, {
       preloadedState: {
         app: MOCK_APP_STATE,
@@ -126,6 +128,8 @@ describe("anonymous user with email not confirmed", () => {
   }
 
   it("displays correctly for anonymous user with email not confirmed", () => {
+    jest.useFakeTimers();
+
     renderWithProviders(<Account />, {
       preloadedState: {
         app: MOCK_APP_STATE,
@@ -166,6 +170,8 @@ describe("anonymous user with email confirmed", () => {
   }
 
   it("displays correctly for anonymous user with email confirmed", () => {
+    jest.useFakeTimers();
+
     renderWithProviders(<Account />, {
       preloadedState: {
         app: MOCK_APP_STATE,

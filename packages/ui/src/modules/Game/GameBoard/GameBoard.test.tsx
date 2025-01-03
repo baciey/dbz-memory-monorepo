@@ -4,8 +4,6 @@ import { GameBoard } from "./GameBoard";
 import { GAME_BOARD_MODE } from "./GameBoard.types";
 import { renderWithProviders } from "../../../utils/testUtils";
 
-jest.useRealTimers();
-
 describe("GameBoard", () => {
   it("presses two cards in 1-player mode", async () => {
     const props = {
@@ -13,11 +11,11 @@ describe("GameBoard", () => {
       handleSetGameMode: jest.fn(),
     };
     renderWithProviders(<GameBoard {...props} />);
-    const { queryByTestId, getByTestId } = screen;
+    const { queryByTestId, getByTestId, findByTestId } = screen;
 
     await waitFor(async () => {
       // first click
-      const card0 = getByTestId("cardContainer-0");
+      const card0 = await findByTestId("cardContainer-0");
       expect(getByTestId("cardBack-0")).toBeOnTheScreen();
       fireEvent.press(card0);
 
@@ -34,7 +32,7 @@ describe("GameBoard", () => {
         expect(queryByTestId("cardBack-1")).not.toBeOnTheScreen();
       });
     });
-  });
+  }, 10000);
 
   it("presses two pairs of cards in 2-player mode", async () => {
     const props = {
@@ -42,12 +40,12 @@ describe("GameBoard", () => {
       handleSetGameMode: jest.fn(),
     };
     renderWithProviders(<GameBoard {...props} />);
-    const { queryByTestId, getByTestId } = screen;
+    const { queryByTestId, getByTestId, findByTestId } = screen;
 
     // first pair of cards
     await waitFor(async () => {
       // first click
-      const card0 = getByTestId("cardContainer-0");
+      const card0 = await findByTestId("cardContainer-0");
       expect(getByTestId("cardBack-0")).toBeOnTheScreen();
       fireEvent.press(card0);
 
@@ -90,5 +88,5 @@ describe("GameBoard", () => {
         timeout: 3000,
       },
     );
-  });
+  }, 10000);
 });

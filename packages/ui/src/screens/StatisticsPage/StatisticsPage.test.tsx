@@ -1,6 +1,6 @@
 import React from "react";
 import { renderWithProviders } from "../../utils/testUtils";
-import { fireEvent, screen, waitFor } from "@testing-library/react-native";
+import { fireEvent, screen } from "@testing-library/react-native";
 import { StatisticsPage } from "./StatisticsPage";
 import { MOCK_GAME_STATE } from "../../../__mocks__/mockData";
 

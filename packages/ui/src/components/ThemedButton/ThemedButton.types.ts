@@ -8,4 +8,5 @@ export type ThemedButtonProps = {
   style?: StyleProp<ViewStyle>;
   type?: "primary" | "secondary";
   disabled?: boolean;
+  testID?: string;
 };

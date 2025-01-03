@@ -1,11 +1,9 @@
 import React from "react";
 import { HomePage } from "./HomePage";
 import { renderWithProviders } from "../../utils/testUtils";
-import { fireEvent, screen, waitFor } from "@testing-library/react-native";
+import { fireEvent, screen } from "@testing-library/react-native";
 
-jest.useFakeTimers();
-
-it("presses 1 player button then cancel", async () => {
+it("presses 1 player button then cancel", () => {
   renderWithProviders(<HomePage />);
   const { getByText, queryByText } = screen;
 
@@ -13,14 +11,12 @@ it("presses 1 player button then cancel", async () => {
   expect(getByText("Enter your name")).toBeOnTheScreen();
   fireEvent.press(getByText("Cancel"));
 
-  await waitFor(() => {
-    expect(queryByText("Cancel")).not.toBeOnTheScreen();
-  });
+  expect(queryByText("Cancel")).not.toBeOnTheScreen();
 });
 
 it("presses 1 player button then confirm", async () => {
   renderWithProviders(<HomePage />);
-  const { getByText, getByTestId, queryByTestId } = screen;
+  const { getByText, getByTestId, queryByTestId, findByTestId } = screen;
 
   expect(queryByTestId("cardContainer-0")).not.toBeOnTheScreen();
   fireEvent.press(getByText("1 player"));
@@ -28,12 +24,10 @@ it("presses 1 player button then confirm", async () => {
   fireEvent.changeText(input, "test name");
   fireEvent.press(getByText("Confirm"));
 
-  await waitFor(() => {
-    expect(getByTestId("cardContainer-0")).toBeOnTheScreen();
-  });
+  expect(await findByTestId("cardContainer-0")).toBeOnTheScreen();
 });
 
-it("presses 2 players button then cancel", async () => {
+it("presses 2 players button then cancel", () => {
   renderWithProviders(<HomePage />);
   const { getByText, queryByText } = screen;
 
@@ -41,14 +35,12 @@ it("presses 2 players button then cancel", async () => {
   expect(getByText("Enter your names")).toBeOnTheScreen();
   fireEvent.press(getByText("Cancel"));
 
-  await waitFor(() => {
-    expect(queryByText("Cancel")).not.toBeOnTheScreen();
-  });
+  expect(queryByText("Cancel")).not.toBeOnTheScreen();
 });
 
 it("presses 2 players button then confirm", async () => {
   renderWithProviders(<HomePage />);
-  const { getByText, getByTestId, queryByTestId } = screen;
+  const { getByText, getByTestId, queryByTestId, findByTestId } = screen;
 
   expect(queryByTestId("cardContainer-0")).not.toBeOnTheScreen();
   fireEvent.press(getByText("2 players"));
@@ -60,7 +52,5 @@ it("presses 2 players button then confirm", async () => {
   fireEvent.changeText(input2, "test name 2");
   fireEvent.press(getByText("Confirm"));
 
-  await waitFor(() => {
-    expect(getByTestId("cardContainer-0")).toBeOnTheScreen();
-  });
+  expect(await findByTestId("cardContainer-0")).toBeOnTheScreen();
 });

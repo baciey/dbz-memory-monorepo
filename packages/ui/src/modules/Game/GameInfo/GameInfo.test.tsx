@@ -1,5 +1,5 @@
 import React from "react";
-import { screen, waitFor } from "@testing-library/react-native";
+import { screen } from "@testing-library/react-native";
 import { renderWithProviders } from "../../../utils/testUtils";
 import { GameInfo } from "./GameInfo";
 import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard";
@@ -13,19 +13,17 @@ describe("GameInfo", () => {
     scores: { player1: 4, player2: 5 },
     playerTurn: PLAYER_TURN.player1,
   };
-  it("displays correct info for 1-player mode", async () => {
+  it("displays correct info for 1-player mode", () => {
     renderWithProviders(<GameInfo {...defaultProps} />);
     const { getByText, queryByText } = screen;
 
-    await waitFor(() => {
-      expect(getByText("Time: 5 sec")).toBeOnTheScreen();
+    expect(getByText("Time: 5 sec")).toBeOnTheScreen();
 
-      expect(queryByText("Player 1: 4")).not.toBeOnTheScreen();
-      expect(queryByText("Player 2: 5")).not.toBeOnTheScreen();
-    });
+    expect(queryByText("Player 1: 4")).not.toBeOnTheScreen();
+    expect(queryByText("Player 2: 5")).not.toBeOnTheScreen();
   });
 
-  it("displays correct info for 2-player mode", async () => {
+  it("displays correct info for 2-player mode", () => {
     const props = {
       ...defaultProps,
       mode: GAME_BOARD_MODE.player2,
@@ -33,11 +31,9 @@ describe("GameInfo", () => {
     renderWithProviders(<GameInfo {...props} />);
     const { getByText, queryByText } = screen;
 
-    await waitFor(() => {
-      expect(getByText("Player 1: 4")).toBeOnTheScreen();
-      expect(getByText("Player 2: 5")).toBeOnTheScreen();
+    expect(getByText("Player 1: 4")).toBeOnTheScreen();
+    expect(getByText("Player 2: 5")).toBeOnTheScreen();
 
-      expect(queryByText("Time: 5 sec")).not.toBeOnTheScreen();
-    });
+    expect(queryByText("Time: 5 sec")).not.toBeOnTheScreen();
   });
 });
