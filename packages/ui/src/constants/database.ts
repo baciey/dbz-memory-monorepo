@@ -8,4 +8,5 @@ export enum STORAGE_BUCKET {
   main = "main/",
   board = "board/",
   avatars = "avatars/",
+  logos = "logos/",
 }
