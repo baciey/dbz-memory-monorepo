@@ -18,6 +18,7 @@ export {
 export { SettingsPage } from "./src/screens/SettingsPage";
 export { HomePage } from "./src/screens/HomePage";
 export { StatisticsPage } from "./src/screens/StatisticsPage";
+export { AboutPage } from "./src/screens/AboutPage";
 
 //REDUX
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";

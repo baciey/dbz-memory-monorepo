@@ -4,6 +4,7 @@ import { STORAGE_BUCKET } from "../constants/database";
 
 type Images = {
   board: string[];
+  logos: string[];
   main: {
     logo: string;
     sonHQ: string;
@@ -16,6 +17,7 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
   const [publicUrl, setPublicUrl] = useState("");
   const [images, setImages] = useState<Images>({
     board: [],
+    logos: [],
     main: {
       logo: "",
       sonHQ: "",
@@ -31,6 +33,17 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
       } = supabase.storage.from("").getPublicUrl("");
 
       const { data: boardImages } = await supabase.storage.from("board").list();
+      const { data: logoImages } = await supabase.storage.from("logos").list();
+
+      const boardImagesMapped =
+        boardImages?.map(
+          (image) => publicUrl + STORAGE_BUCKET.board + image.name,
+        ) || [];
+
+      const logoImagesMapped =
+        logoImages?.map(
+          (image) => publicUrl + STORAGE_BUCKET.logos + image.name,
+        ) || [];
 
       const main = {
         logo: publicUrl + STORAGE_BUCKET.main + "logo.png",
@@ -39,16 +52,12 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.jpg",
       };
 
-      const boardImagesMapped =
-        boardImages?.map(
-          (image) => publicUrl + STORAGE_BUCKET.board + image.name,
-        ) || [];
-
       setPublicUrl(publicUrl);
       setImages({
         // board: [boardImagesMapped[0]],
         board: boardImagesMapped,
         main: main,
+        logos: logoImagesMapped,
       });
     };
 
