@@ -36,9 +36,13 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
       const { data: logoImages } = await supabase.storage.from("logos").list();
 
       const boardImagesMapped =
-        boardImages?.map(
-          (image) => publicUrl + STORAGE_BUCKET.board + image.name,
-        ) || [];
+        boardImages
+          ?.map((image) => {
+            if (image.metadata.size > 0) {
+              return publicUrl + STORAGE_BUCKET.board + image.name;
+            } else return null;
+          })
+          .filter((image) => image !== null) || [];
 
       const logoImagesMapped =
         logoImages?.map(
@@ -49,7 +53,7 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         logo: publicUrl + STORAGE_BUCKET.main + "logo.png",
         sonHQ: publicUrl + STORAGE_BUCKET.main + "sonHQ.png",
         sonLQ: publicUrl + STORAGE_BUCKET.main + "sonLQ.png",
-        cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.jpg",
+        cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.png",
       };
 
       setPublicUrl(publicUrl);

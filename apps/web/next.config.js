@@ -1,8 +1,6 @@
 module.exports = {
   reactStrictMode: true,
-  basePath: "/dbz-memory-monorepo",
-  output: "export",
-
+  // output: "export",
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
