@@ -26,6 +26,7 @@ export const Card = memo(
               height: width,
               uri: card.src || undefined,
             }}
+            onLoadEnd={setIsLoaded}
             testID={`cardFront-${index}`}
           />
           {!card.isRevealed && (
@@ -36,7 +37,6 @@ export const Card = memo(
                 height: width,
                 uri: images.main.cardBack || undefined,
               }}
-              onLoadEnd={setIsLoaded}
               testID={`cardBack-${index}`}
             />
           )}
