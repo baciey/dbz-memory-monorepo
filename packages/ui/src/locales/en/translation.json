@@ -89,5 +89,8 @@
     "password": {
       "min6Characters": "Password is too short (minimum is 6 characters)"
     }
+  },
+  "copyright": {
+    "copyright": "Copyright"
   }
 }

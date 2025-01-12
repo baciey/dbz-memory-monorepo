@@ -8,14 +8,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: Platform.OS === "web" ? 24 : 100,
   },
-  cardLeft: {
+  card: {
     padding: 16,
   },
-  cardRight: {
-    padding: 16,
-    flexShrink: 1,
-    maxWidth: 600,
-  },
+
   cardTitle: {
     minHeight: 0,
     marginBottom: 8,

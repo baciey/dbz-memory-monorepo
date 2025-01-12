@@ -89,5 +89,8 @@
     "password": {
       "min6Characters": "Hasło jest zbyt krótkie (minimum to 6 znaków)."
     }
+  },
+  "copyright": {
+    "copyright": "Prawa autorskie"
   }
 }

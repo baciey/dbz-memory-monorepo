@@ -55,7 +55,7 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         sonLQ: publicUrl + STORAGE_BUCKET.main + "sonLQ.png",
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.png",
       };
-
+      console.log(boardImagesMapped);
       setPublicUrl(publicUrl);
       setImages({
         // board: [boardImagesMapped[0]],
