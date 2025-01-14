@@ -1,13 +1,9 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    flexGrow: 1,
-    width: "100%",
-    paddingTop: Platform.OS === "web" ? 24 : 100,
+    alignItems: "flex-start",
   },
-
   row: {
     flexDirection: "row",
     alignItems: "center",

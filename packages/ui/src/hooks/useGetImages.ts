@@ -6,9 +6,8 @@ type Images = {
   board: string[];
   logos: string[];
   main: {
-    logo: string;
-    sonHQ: string;
-    sonLQ: string;
+    bgWeb: string;
+    bgMobile: string;
     cardBack: string;
   };
 };
@@ -19,9 +18,8 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
     board: [],
     logos: [],
     main: {
-      logo: "",
-      sonHQ: "",
-      sonLQ: "",
+      bgWeb: "",
+      bgMobile: "",
       cardBack: "",
     },
   });
@@ -50,12 +48,10 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         ) || [];
 
       const main = {
-        logo: publicUrl + STORAGE_BUCKET.main + "logo.png",
-        sonHQ: publicUrl + STORAGE_BUCKET.main + "sonHQ.png",
-        sonLQ: publicUrl + STORAGE_BUCKET.main + "sonLQ.png",
+        bgWeb: publicUrl + STORAGE_BUCKET.main + "bgWeb.png",
+        bgMobile: publicUrl + STORAGE_BUCKET.main + "bgMobile.png",
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.png",
       };
-      console.log(boardImagesMapped);
       setPublicUrl(publicUrl);
       setImages({
         // board: [boardImagesMapped[0]],

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const GLOBAL_STYLES = {
   m: {
@@ -62,5 +62,12 @@ export const globalStyles = StyleSheet.create({
   heading: {
     alignSelf: "center",
     marginBottom: 32,
+  },
+  pageContainer: {
+    padding: 16,
+    flexGrow: 1,
+    width: "100%",
+    paddingTop: Platform.OS === "web" ? 24 : 100,
+    alignItems: "center",
   },
 });
