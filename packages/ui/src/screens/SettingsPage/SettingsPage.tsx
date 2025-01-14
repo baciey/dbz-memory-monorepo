@@ -82,7 +82,10 @@ export const SettingsPage = () => {
   }, [publicUrl, me?.avatarUrl, meUpdateStatus, meStatus]);
 
   return (
-    <ThemedView style={styles.container} testID="settings-container">
+    <ThemedView
+      style={[globalStyles.pageContainer, styles.container]}
+      testID="settings-container"
+    >
       <Text variant="headlineSmall" style={globalStyles.heading}>
         {t("settings.settings")}
       </Text>

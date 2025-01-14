@@ -13,7 +13,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .prettierignore",
     "reset-dev": "git checkout dev && git fetch origin && git reset --hard origin/dev",
     "remove-nm": "rm -rf apps/**/node_modules packages/**/node_modules node_modules && yarn install",
-    "local-build": "cd apps/expo-app && eas build --platform android --preview --local"
+    "local-build": "cd apps/expo-app && eas build --platform android --preview --local",
+    "test": "cd packages/ui && yarn test && cd .."
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

@@ -5,7 +5,7 @@ import { Avatar, Card, Text } from "react-native-paper";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { Linking, Pressable, View } from "react-native";
-import { description, authors } from "./CopyrightPage.const";
+import { authors, description } from "./CopyrightPage.const";
 import { Link } from "./Link";
 
 export const CopyrightPage = () => {
@@ -13,7 +13,7 @@ export const CopyrightPage = () => {
 
   const authorsList = authors.map((author) => {
     return (
-      <Card style={styles.card}>
+      <Card style={styles.card} key={author.name}>
         <Link text="Author: " url={author.authorUrl} name={author.name} />
         <Link
           text="License: "
@@ -24,7 +24,7 @@ export const CopyrightPage = () => {
         {author.images.map((image) => {
           return (
             <Card.Title
-              key={image.name}
+              key={image.originalUrl}
               style={styles.cardTitle}
               title={image.name}
               left={() => (
@@ -44,13 +44,16 @@ export const CopyrightPage = () => {
   });
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
         Copyright
       </Text>
+      <Text style={globalStyles.heading}>{description}</Text>
       <View
         style={{
           flexDirection: isMobile ? "column" : "row",
+          flexWrap: isMobile ? "nowrap" : "wrap",
+          justifyContent: "center",
           gap: 16,
         }}
       >

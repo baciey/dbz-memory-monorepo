@@ -31,6 +31,10 @@
 // "https://iyiklcyyvmubcqjqhuhc.supabase.co/storage/v1/object/public//board/trunks.jpg",
 // "https://iyiklcyyvmubcqjqhuhc.supabase.co/storage/v1/object/public//board/vegita.jpg",
 
+// https://www.deviantart.com/carlthedog23/gallery
+// https://creativecommons.org/licenses/by/3.0/
+// https://www.deviantart.com/carlthedog23/art/ssg-goku-2-845953446
+
 export const authors = [
   {
     name: "kosejhesi",
@@ -52,7 +56,7 @@ export const authors = [
     authorUrl: "https://www.deviantart.com/luimuu/gallery",
     images: [
       {
-        name: "Gohan",
+        name: "Kid Gohan",
         originalUrl:
           "https://www.deviantart.com/luimuu/art/Kid-Gohan-772771232",
         myUrl:
@@ -67,7 +71,7 @@ export const authors = [
     authorUrl: "https://www.deviantart.com/shady0da/gallery",
     images: [
       {
-        name: "Goku",
+        name: "SSJ Goku",
         originalUrl:
           "https://www.deviantart.com/shady0da/art/SS-Goku-PFP-676409925",
         myUrl:
@@ -134,16 +138,22 @@ export const authors = [
     licenseUrl: "https://creativecommons.org/licenses/by-nd/3.0/",
     licenseShort: "CC BY-ND 3.0",
   },
+  {
+    name: "carlthedog23",
+    authorUrl: "https://www.deviantart.com/carlthedog23/gallery",
+    images: [
+      {
+        name: "Goku",
+        originalUrl:
+          "https://www.deviantart.com/carlthedog23/art/ssg-goku-2-845953446",
+        myUrl:
+          "https://iyiklcyyvmubcqjqhuhc.supabase.co/storage/v1/object/public//main/bgWeb.png",
+      },
+    ],
+    licenseUrl: "https://creativecommons.org/licenses/by/3.0/",
+    licenseShort: "CC BY 3.0",
+  },
 ];
 
-export const description = `I use React Native as the core of my development process, enabling me to build cross-platform applications for iOS, Android, and web (thanks to the React Native Web package, the application is available for browsers). 
-  
-  To maintain clean and scalable code, I rely on TypeScript, the ultimate choice for type-safe development. For web applications, I use Next.js. I manage complex application states with Redux, ensuring predictable data flow and scalability.
-  
-  For consistent UI design and theming, I rely on React Native Paper, a robust component library built on Material Design principles. For internationalization, I use i18next, a translation library that supports dynamic language switching.
-  
-  I ensure my apps are reliable and bug-free by thoroughly testing them with Jest and the React Native Testing Library. For backend needs, I depend on Supabase, which provides authentication, image storage, and database management, allowing me to focus on building features.
-  
-  When deploying my Next.js web app, I use Netlify, which automates the process through GitHub integration, ensuring quick and secure builds. The same is reached with Expo EAS, when deploying to Google Play or creating preview .apk builds. My projects are organized with Yarn Workspaces, simplifying dependency management and code sharing in my monorepo structure. 
-  
-  This workflow lets me write code once for mobile and web (browsers). Whole pages are imported to web and mobile, only navigation is managed separately.`;
+export const description =
+  "Images used in this application are created by the following authors and licensed under the following licenses.";
