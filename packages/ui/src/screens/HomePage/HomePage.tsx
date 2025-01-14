@@ -75,7 +75,7 @@ export const HomePage = () => {
             },
           ]}
           source={{
-            uri: images.main.sonHQ || undefined,
+            uri: images.main.bgWeb || undefined,
           }}
         />
       </View>

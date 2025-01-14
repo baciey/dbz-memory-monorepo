@@ -28,7 +28,7 @@ export const AboutPage = () => {
   });
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
         About this project
       </Text>

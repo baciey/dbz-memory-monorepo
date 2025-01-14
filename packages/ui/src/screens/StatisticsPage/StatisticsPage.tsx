@@ -52,7 +52,7 @@ export const StatisticsPage = () => {
     }
   }, [me, dispatch, showPersonalGames, searchQuery]);
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
         {t("statistics.statistics")}
       </Text>
