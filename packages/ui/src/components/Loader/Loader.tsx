@@ -6,7 +6,7 @@ import { LoaderProps } from "./Loader.types";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 
 export const Loader = ({ isVisible, withBackground }: LoaderProps) => {
-  const { width, height } = useGetScreenDimensions();
+  const { width, height, isWeb } = useGetScreenDimensions();
   if (!isVisible) {
     return null;
   }
@@ -17,7 +17,7 @@ export const Loader = ({ isVisible, withBackground }: LoaderProps) => {
         {
           backgroundColor: withBackground ? "rgba(0,0,0,0.5)" : "transparent",
         },
-        { minHeight: height, minWidth: width },
+        { minHeight: isWeb ? "100%" : height, minWidth: width },
       ]}
     >
       <ActivityIndicator size="large" testID="loader" />

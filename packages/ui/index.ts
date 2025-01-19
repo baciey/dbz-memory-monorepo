@@ -20,6 +20,7 @@ export { HomePage } from "./src/screens/HomePage";
 export { StatisticsPage } from "./src/screens/StatisticsPage";
 export { AboutPage } from "./src/screens/AboutPage";
 export { CopyrightPage } from "./src/screens/CopyrightPage";
+export { ContactPage } from "./src/screens/ContactPage";
 
 //REDUX
 export { store, useAppDispatch, useAppSelector } from "./src/redux/store";

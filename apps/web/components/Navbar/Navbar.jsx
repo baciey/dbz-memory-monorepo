@@ -17,6 +17,7 @@ export const Navbar = () => {
   const settingsPath = `/${ROUTES.settings}`;
   const statisticsPath = `/${ROUTES.statistics}`;
   const copyrightPath = `/${ROUTES.copyright}`;
+  const contactPath = `/${ROUTES.contact}`;
 
   const pages = [
     {
@@ -34,6 +35,10 @@ export const Navbar = () => {
     {
       name: t("copyright.copyright"),
       path: copyrightPath,
+    },
+    {
+      name: t("contact.contact"),
+      path: contactPath,
     },
   ];
 
