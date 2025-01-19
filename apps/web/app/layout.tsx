@@ -4,7 +4,7 @@ import { Providers } from "../components/Providers";
 import { Navbar } from "../components/Navbar";
 import "../styles/global.css";
 import { AuthModal } from "@repo/ui";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function RootLayout({
   children,

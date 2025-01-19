@@ -13,6 +13,10 @@ export default function TabLayout() {
   const settingsIconOutline = "settings-outline" as const;
   const statisticsIcon = "bar-chart" as const;
   const statisticsIconOutline = "bar-chart-outline" as const;
+  const contactIcon = "mail" as const;
+  const contactIconOutline = "mail-outline" as const;
+  const copyrightIcon = "information-circle" as const;
+  const copyrightIconOutline = "information-circle-outline" as const;
 
   const tabs = [
     {
@@ -32,6 +36,18 @@ export default function TabLayout() {
       title: t("statistics.statistics"),
       icon: statisticsIcon,
       iconOutline: statisticsIconOutline,
+    },
+    {
+      name: ROUTES.contact,
+      title: t("contact.contact"),
+      icon: contactIcon,
+      iconOutline: contactIconOutline,
+    },
+    {
+      name: ROUTES.copyright,
+      title: t("copyright.copyright"),
+      icon: copyrightIcon,
+      iconOutline: copyrightIconOutline,
     },
   ];
   return (

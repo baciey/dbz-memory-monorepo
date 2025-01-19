@@ -92,5 +92,13 @@
   },
   "copyright": {
     "copyright": "Copyright"
+  },
+  "contact": {
+    "contact": "Contact",
+    "contactUs": "Contact us",
+    "message": "Message",
+    "send": "Send",
+    "yourEmail": "Your email",
+    "messageError": "This field cannot be empty."
   }
 }

@@ -9,11 +9,17 @@ import { authors, description } from "./CopyrightPage.const";
 import { Link } from "./Link";
 
 export const CopyrightPage = () => {
-  const { isMobile } = useGetScreenDimensions();
+  const { isMobile, width } = useGetScreenDimensions();
+
+  const mobileCardWidth =
+    width / 2 - globalStyles.pageContainer.padding - styles.cardContainer.gap;
 
   const authorsList = authors.map((author) => {
     return (
-      <Card style={styles.card} key={author.name}>
+      <Card
+        style={[styles.card, { width: isMobile ? mobileCardWidth : "auto" }]}
+        key={author.name}
+      >
         <Link text="Author: " url={author.authorUrl} name={author.name} />
         <Link
           text="License: "
@@ -49,16 +55,7 @@ export const CopyrightPage = () => {
         Copyright
       </Text>
       <Text style={globalStyles.heading}>{description}</Text>
-      <View
-        style={{
-          flexDirection: isMobile ? "column" : "row",
-          flexWrap: isMobile ? "nowrap" : "wrap",
-          justifyContent: "center",
-          gap: 16,
-        }}
-      >
-        {authorsList}
-      </View>
+      <View style={styles.cardContainer}>{authorsList}</View>
     </ThemedView>
   );
 };
