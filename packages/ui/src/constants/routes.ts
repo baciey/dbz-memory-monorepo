@@ -4,4 +4,5 @@ export enum ROUTES {
   statistics = "statistics",
   about = "about",
   copyright = "copyright",
+  contact = "contact",
 }
