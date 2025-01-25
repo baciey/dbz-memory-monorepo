@@ -4,6 +4,7 @@ export { ThemedView } from "./src/components/ThemedView";
 export { Text } from "react-native-paper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
 export { Loader } from "./src/components/Loader";
+export { Icon } from "./src/components/Icon";
 
 //MODULES
 export { PaperProviderWrapper } from "./src/modules/App/PaperProviderWrapper";
@@ -31,6 +32,7 @@ export { gameSelectors } from "./src/modules/Game/selectors";
 export { useGetLanguageFromAsyncStorage } from "./src/hooks/useGetLanguageFromAsyncStorage";
 export { useGetThemeFromAsyncStorage } from "./src/hooks/useGetThemeFromAsyncStorage";
 export { useHandleAuthState } from "./src/hooks/useHandleAuthState";
+export { useGetScreenDimensions } from "./src/hooks/useGetScreenDimensions";
 
 //CONSTANTS
 export { STORAGE_KEYS } from "./src/constants/storage";

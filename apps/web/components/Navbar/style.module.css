@@ -1,20 +1,23 @@
 .container {
-  height: 50px;
+  /* height: 50px; */
 }
 .list {
   list-style: none;
   display: flex;
-  gap: 16px;
+  padding-left: 16px;
 }
+
+.listMobile {
+  justify-content: space-around;
+  padding-left: 0;
+}
+
 .listItem {
   font-weight: normal;
+  padding: 2px 16px;
+  border-radius: 50px;
 }
-.listItem.active {
-  /* font-weight: bold; */
-}
-.listItem.active .anchor {
-  text-decoration: underline;
-}
+
 .listItem:hover .anchor {
   opacity: 0.8;
   cursor: pointer;
