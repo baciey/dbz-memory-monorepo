@@ -38,7 +38,13 @@ export const HomePage = () => {
   };
 
   return (
-    <ThemedView type="surface" style={styles.container}>
+    <ThemedView
+      type="surface"
+      style={[
+        styles.container,
+        { justifyContent: gameMode === null ? "center" : "flex-start" },
+      ]}
+    >
       <ThemedAlert
         actionButtonOnPress={() => setGameMode(null)}
         isVisible={Boolean(alert)}
