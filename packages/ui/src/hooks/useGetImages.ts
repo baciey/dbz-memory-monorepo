@@ -35,12 +35,10 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
 
       const boardImagesMapped =
         boardImages
-          ?.map((image) => {
-            if (image.metadata.size > 0) {
-              return publicUrl + STORAGE_BUCKET.board + image.name;
-            } else return null;
-          })
-          .filter((image) => image !== null) || [];
+          ?.filter((image) => image.metadata.size > 0)
+          .map((image) => {
+            return publicUrl + STORAGE_BUCKET.board + image.name;
+          }) || [];
 
       const logoImagesMapped =
         logoImages?.map(
