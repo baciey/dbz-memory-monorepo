@@ -10,6 +10,6 @@ it("renders correctly", async () => {
   const { getByText } = screen;
 
   await waitFor(() => {
-    expect(getByText("Contact")).toBeOnTheScreen();
+    expect(getByText("Contact us")).toBeOnTheScreen();
   });
 });
