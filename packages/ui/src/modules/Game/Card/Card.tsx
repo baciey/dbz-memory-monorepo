@@ -19,16 +19,17 @@ export const Card = memo(
             },
           ]}
         >
-          <Image
-            style={[styles.image]}
-            source={{
-              width: width,
-              height: width,
-              uri: card.src || undefined,
-            }}
-            onLoadEnd={setIsLoaded}
-            testID={`cardFront-${index}`}
-          />
+          {card.isRevealed && (
+            <Image
+              style={[styles.image]}
+              source={{
+                width: width,
+                height: width,
+                uri: card.src || undefined,
+              }}
+              testID={`cardFront-${index}`}
+            />
+          )}
           {!card.isRevealed && (
             <Image
               style={[styles.image]}
@@ -37,6 +38,7 @@ export const Card = memo(
                 height: width,
                 uri: images.main.cardBack || undefined,
               }}
+              onLoadEnd={setIsLoaded}
               testID={`cardBack-${index}`}
             />
           )}
