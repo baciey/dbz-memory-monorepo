@@ -16,6 +16,7 @@ export type Scores = {
 export enum GAME_BOARD_MODE {
   player1 = "player1",
   player2 = "player2",
+  multiplayer = "multiplayer",
 }
 
 export enum PLAYER_TURN {

@@ -17,6 +17,9 @@ export const ThemedButton = ({
   if (type === "secondary") {
     buttonColor = theme.colors.secondary;
     textColor = theme.colors.onSecondary;
+  } else if (type === "tertiary") {
+    buttonColor = theme.colors.tertiary;
+    textColor = theme.colors.onTertiary;
   }
   return (
     <Button

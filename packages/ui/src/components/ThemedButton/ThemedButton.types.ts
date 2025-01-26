@@ -6,7 +6,7 @@ export type ThemedButtonProps = {
   onPress: (event: GestureResponderEvent) => void;
   icon?: IconSource;
   style?: StyleProp<ViewStyle>;
-  type?: "primary" | "secondary";
+  type?: "primary" | "secondary" | "tertiary";
   disabled?: boolean;
   testID?: string;
 };

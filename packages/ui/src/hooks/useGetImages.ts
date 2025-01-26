@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { STORAGE_BUCKET } from "../constants/database";
 
-type Images = {
+export type Images = {
   board: string[];
   logos: string[];
   main: {
@@ -52,8 +52,13 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
       };
       setPublicUrl(publicUrl);
       setImages({
-        // board: [boardImagesMapped[0]],
-        board: boardImagesMapped,
+        board: [
+          boardImagesMapped[0],
+          boardImagesMapped[1],
+          boardImagesMapped[2],
+          boardImagesMapped[3],
+        ],
+        // board: boardImagesMapped,
         main: main,
         logos: logoImagesMapped,
       });

@@ -13,6 +13,5 @@ export type CardProps = {
   width: number;
   card: CardType;
   onPress: () => void;
-  setIsLoaded: () => void;
   index: number;
 };
