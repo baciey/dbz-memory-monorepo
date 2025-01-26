@@ -1,52 +1,56 @@
 import React from "react";
-import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard/GameBoard.types";
+import { GAME_BOARD_MODE } from "../GameBoard/GameBoard.types";
 import { ThemedView } from "../../../components/ThemedView";
 import { GameInfoProps } from "./GameInfo.types";
 import { useTranslation } from "react-i18next";
 import { styles } from "./GameInfo.styles";
-import { GLOBAL_STYLES } from "../../../styles/globalStyles";
-import { useAppSelector } from "../../../redux/store";
-import { Text, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 
 export const GameInfo = ({
   mode,
   elapsedTime,
-  scores,
-  playerTurn,
+  player1Score,
+  player2Score,
+  player1Name,
+  player2Name,
+  player2Id,
+  isPlayer1Turn,
 }: GameInfoProps) => {
   const { t } = useTranslation();
-  const theme = useTheme();
 
-  const player1Name =
-    useAppSelector((state) => state.game.playersNames[0]) || t("game.player1");
-  const player2Name =
-    useAppSelector((state) => state.game.playersNames[1]) || t("game.player2");
+  const activeStyle = { color: "lightgreen" };
+  const inactiveStyle = { color: "grey" };
+  const player1Style = isPlayer1Turn ? activeStyle : inactiveStyle;
+  const player2Style = !isPlayer1Turn ? activeStyle : inactiveStyle;
 
   if (mode === GAME_BOARD_MODE.player1) {
     return (
-      <Text variant="titleMedium" style={GLOBAL_STYLES.m.mb16}>
-        {elapsedTime === 0
-          ? t("game.startTimer")
-          : `${t("game.time")}: ${elapsedTime} ${t("game.sec")}`}
-      </Text>
-    );
-  } else if (mode === GAME_BOARD_MODE.player2) {
-    const activeStyle = { color: theme.colors.primary };
-    const inactiveStyle = { color: theme.colors.secondary };
-    const player1Style =
-      playerTurn === PLAYER_TURN.player1 ? activeStyle : inactiveStyle;
-    const player2Style =
-      playerTurn === PLAYER_TURN.player2 ? activeStyle : inactiveStyle;
-
-    return (
-      <ThemedView style={styles.player2Container}>
-        <Text variant="titleLarge" style={player1Style}>
-          {`${player1Name}: ${scores.player1}`}
-        </Text>
-        <Text variant="titleLarge" style={[player2Style, styles.player2text]}>
-          {`${player2Name}: ${scores.player2}`}
+      <ThemedView style={styles.container}>
+        <Text variant="titleMedium">
+          {elapsedTime === 0
+            ? t("game.startTimer")
+            : `${t("game.time")}: ${elapsedTime} ${t("game.sec")}`}
         </Text>
       </ThemedView>
     );
-  } else return null;
+  } else {
+    if (mode === GAME_BOARD_MODE.multiplayer && !player2Id) {
+      return (
+        <ThemedView style={styles.container}>
+          <Text variant="titleMedium">{t("game.waitingForOpponent")}</Text>
+        </ThemedView>
+      );
+    } else {
+      return (
+        <ThemedView style={styles.container}>
+          <Text variant="titleMedium" style={player1Style}>
+            {`${player1Name}: ${player1Score}`}
+          </Text>
+          <Text variant="titleMedium" style={player2Style}>
+            {`${player2Name}: ${player2Score}`}
+          </Text>
+        </ThemedView>
+      );
+    }
+  }
 };

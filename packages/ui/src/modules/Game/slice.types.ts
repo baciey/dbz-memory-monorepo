@@ -1,44 +1,119 @@
 import { ACTION_STATUS } from "../App/slice.types";
+import { CardType, SelectedCardType } from "./Card/Card.types";
 
 export interface GameState {
-  imagesPercentageLoaded: number;
   playersNames: string[];
   playerName: string;
-  onePlayerGames: SinglePlayerGame[];
-  twoPlayerGames: MultiPlayerGame[];
+  onePlayerGames: OnePlayerGame[];
+  twoPlayerGames: TwoPlayerGame[];
   onePlayerGamesStatus: ACTION_STATUS;
   twoPlayerGamesStatus: ACTION_STATUS;
   showPersonalGames: boolean;
+  multiPlayerGames: MultiPlayerGame[];
+  multiPlayerGamesStatus: ACTION_STATUS;
 }
 
-export type SinglePlayerGameResponse = {
+export type OnePlayerGameResponse = {
+  id: number;
   time: number;
   name: string;
-  id: number;
   created_at: string;
 };
 
-export type SinglePlayerGame = {
+export type OnePlayerGame = {
+  id: number;
   time: number;
   name: string;
-  id: number;
   createdAt: string;
 };
 
-export type MultiPlayerGameResponse = {
-  player1_name: string;
-  player2_name: string;
-  player1_score: number;
-  player2_score: number;
+export type TwoPlayerGame = {
   id: number;
-  created_at: string;
-};
-
-export type MultiPlayerGame = {
   player1Name: string;
   player2Name: string;
   player1Score: number;
   player2Score: number;
-  id: number;
   createdAt: string;
+};
+
+export type MultiPlayerGame = {
+  id: number;
+  player1Id: string;
+  player2Id: string | null;
+  player1Score: number;
+  player2Score: number;
+  player1Name: string;
+  player2Name: string | null;
+  isPlayer1Ready: boolean;
+  isPlayer2Ready: boolean;
+  cards: CardType[];
+  firstCard: SelectedCardType | null;
+  secondCard: SelectedCardType | null;
+  isPlayer1Turn: boolean;
+  winner: string | null;
+  isOver: boolean;
+  createdAt: string;
+};
+
+export type MultiPlayerGameResponse = {
+  id: number;
+  player1_id: string;
+  player2_id: string | null;
+  player1_score: number;
+  player2_score: number;
+  player1_name: string;
+  player2_name: string | null;
+  is_player1_ready: boolean;
+  is_player2_ready: boolean;
+  cards: CardType[];
+  first_card: SelectedCardType | null;
+  second_card: SelectedCardType | null;
+  is_player1_turn: boolean;
+  winner: string | null;
+  is_over: boolean;
+  created_at: string;
+};
+
+export type CreateMultiPlayerGameParams = {
+  player1Id: string;
+  player1Name: string;
+  cards: CardType[];
+  onJoinOrCreatePublicGame: (game: MultiPlayerGame) => void;
+};
+
+export type UpdateMultiPlayerGameParams = {
+  id: number;
+  player2Id?: string | null;
+  player1Score?: number;
+  player2Score?: number;
+  player2Name?: string | null;
+  isPlayer1Ready?: boolean;
+  isPlayer2Ready?: boolean;
+  cards?: CardType[];
+  isPlayer1Turn?: boolean;
+  firstCard?: SelectedCardType | null;
+  secondCard?: SelectedCardType | null;
+  winner?: string;
+  isOver?: boolean;
+};
+
+export type UpdateMultiPlayerGameRequestParams = {
+  player2_id?: string | null;
+  player1_score?: number;
+  player2_score?: number;
+  player2_name?: string | null;
+  is_player1_ready?: boolean;
+  is_player2_ready?: boolean;
+  cards?: CardType[];
+  is_player1_turn?: boolean;
+  first_card?: SelectedCardType | null;
+  second_card?: SelectedCardType | null;
+  winner?: string;
+  is_over?: boolean;
+};
+
+export type GetMultiPlayerGameParams = {
+  userId?: string;
+  isOver?: boolean;
+  searchQuery?: string;
 };

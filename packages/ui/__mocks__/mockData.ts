@@ -9,7 +9,6 @@ import { GameState } from "../src/modules/Game/slice.types";
 import { UserState } from "../src/modules/User/slice.types";
 
 export const MOCK_GAME_STATE: GameState = {
-  imagesPercentageLoaded: 0,
   playersNames: ["mock name 1", "mock name 2"],
   playerName: "mock single player name",
   twoPlayerGames: [
@@ -47,6 +46,8 @@ export const MOCK_GAME_STATE: GameState = {
   onePlayerGamesStatus: ACTION_STATUS.SUCCESS,
   twoPlayerGamesStatus: ACTION_STATUS.SUCCESS,
   showPersonalGames: false,
+  multiPlayerGames: [],
+  multiPlayerGamesStatus: ACTION_STATUS.SUCCESS,
 };
 
 export const MOCK_APP_STATE: AppState = {

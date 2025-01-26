@@ -17,9 +17,9 @@ import { useValidation } from "../../../hooks/useValidation";
 
 export const NamesModal = ({
   isVisible,
-  setIsVisible,
   mode,
-  setGameMode,
+  onCancel,
+  onConfirm,
 }: NamesModalProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -54,7 +54,7 @@ export const NamesModal = ({
     const hasErrors = validateNames().some((error) => error !== "");
     if (hasErrors) return;
 
-    setIsVisible(false);
+    onConfirm();
     if (isPlayer2Mode) {
       const names = playersNames.map((name) => name.trim());
       dispatch(gameSliceActions.setPlayersNames(names));
@@ -85,7 +85,6 @@ export const NamesModal = ({
       <Modal
         dismissable={false}
         visible={isVisible}
-        onDismiss={() => setIsVisible(false)}
         contentContainerStyle={[
           styles.contentContainer,
           {
@@ -130,10 +129,7 @@ export const NamesModal = ({
           <ThemedButton
             text={t("buttons.cancel")}
             type="primary"
-            onPress={() => {
-              setIsVisible(false);
-              setGameMode(null);
-            }}
+            onPress={onCancel}
           />
         </ThemedView>
       </Modal>

@@ -4,6 +4,13 @@ import { DATABASE_TABLE } from "../../constants/database";
 import { Platform } from "react-native";
 import { dateFormatter } from "../../utils/date";
 import { PayloadThunkAction } from "../../redux/store";
+import {
+  CreateMultiPlayerGameParams,
+  GetMultiPlayerGameParams,
+  UpdateMultiPlayerGameParams,
+  UpdateMultiPlayerGameRequestParams,
+} from "./slice.types";
+import { proccessMultiPlayerGame } from "./utils";
 
 // for testing purposes
 const onePlayerGames = [
@@ -340,9 +347,132 @@ const updateTwoPlayerGames = (
   };
 };
 
+const createMultiPlayerGame = ({
+  player1Id,
+  player1Name,
+  cards,
+  onJoinOrCreatePublicGame,
+}: CreateMultiPlayerGameParams): PayloadThunkAction => {
+  return async (dispatch) => {
+    supabase
+      .from(DATABASE_TABLE.multi_player_games)
+      .insert({
+        player1_id: player1Id,
+        player1_name: player1Name,
+        cards: cards,
+      })
+      .select()
+      .then(({ data }) => {
+        if (data) {
+          const proccessedData = proccessMultiPlayerGame(data[0]);
+          onJoinOrCreatePublicGame(proccessedData);
+        }
+      });
+    dispatch(getMultiPlayerGames({}));
+  };
+};
+
+const updateMultiPlayerGame = ({
+  id,
+  player1Score,
+  player2Id,
+  player2Score,
+  player2Name,
+  isPlayer1Ready,
+  isPlayer2Ready,
+  cards,
+  isPlayer1Turn,
+  firstCard,
+  secondCard,
+  winner,
+  isOver,
+}: UpdateMultiPlayerGameParams): PayloadThunkAction => {
+  return async (dispatch) => {
+    const data: UpdateMultiPlayerGameRequestParams = {};
+
+    if (player2Id !== undefined) data["player2_id"] = player2Id;
+    if (player1Score !== undefined) data["player1_score"] = player1Score;
+    if (player2Score !== undefined) data["player2_score"] = player2Score;
+    if (player2Name !== undefined) data["player2_name"] = player2Name;
+    if (isPlayer1Turn !== undefined) data["is_player1_turn"] = isPlayer1Turn;
+    if (isPlayer1Ready !== undefined) data["is_player1_ready"] = isPlayer1Ready;
+    if (isPlayer2Ready !== undefined) data["is_player2_ready"] = isPlayer2Ready;
+    if (cards !== undefined) data["cards"] = cards;
+    if (firstCard !== undefined) data["first_card"] = firstCard;
+    if (secondCard !== undefined) data["second_card"] = secondCard;
+    if (winner !== undefined) data["winner"] = winner;
+    if (isOver !== undefined) data["is_over"] = isOver;
+
+    console.log({ data });
+
+    await supabase
+      .from(DATABASE_TABLE.multi_player_games)
+      .update(data)
+      .eq("id", id);
+    dispatch(getMultiPlayerGames({}));
+  };
+};
+
+const getMultiPlayerGames = ({
+  userId = "",
+  isOver = false,
+  searchQuery = "",
+}: GetMultiPlayerGameParams): PayloadThunkAction => {
+  return async (dispatch) => {
+    dispatch(gameSliceActions.multiPlayerGamesLoading());
+    console.log("getMultiplayerPlayerGames", { userId });
+
+    let query = supabase
+      .from(DATABASE_TABLE.multi_player_games)
+      .select(
+        `id, player1_name, player2_name, player1_id, player2_id, player1_score, player2_score, is_player1_ready, is_player2_ready, is_player1_turn, cards, first_card, second_card, winner, is_over, created_at`,
+      )
+      .eq("is_over", isOver)
+      .or(
+        `player1_name.ilike.%${searchQuery}%,player2_name.ilike.%${searchQuery}%`,
+      );
+
+    if (userId) {
+      query = query.or(`player1_id.eq.${userId},player2_id.eq.${userId}`);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      dispatch(gameSliceActions.multiPlayerGamesError());
+    } else {
+      // Order by date
+      data.sort((a, b) => {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      });
+      const processedData = data.map((game) => {
+        return proccessMultiPlayerGame(game);
+      });
+
+      dispatch(gameSliceActions.multiPlayerGamesSuccess(processedData));
+    }
+  };
+};
+
+const deleteMultiPlayerGame = (id: number): PayloadThunkAction => {
+  return async (dispatch) => {
+    await supabase
+      .from(DATABASE_TABLE.multi_player_games)
+      .delete()
+      .eq("id", id);
+    dispatch(getMultiPlayerGames({}));
+  };
+};
+
 export const gameActions = {
   getOnePlayerGames,
   getTwoPlayerGames,
   updateOnePlayerGames,
   updateTwoPlayerGames,
+  createMultiPlayerGame,
+  getMultiPlayerGames,
+  updateMultiPlayerGame,
+  deleteMultiPlayerGame,
 };

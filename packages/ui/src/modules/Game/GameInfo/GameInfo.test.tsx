@@ -2,7 +2,7 @@ import React from "react";
 import { screen } from "@testing-library/react-native";
 import { renderWithProviders } from "../../../utils/testUtils";
 import { GameInfo } from "./GameInfo";
-import { GAME_BOARD_MODE, PLAYER_TURN } from "../GameBoard";
+import { GAME_BOARD_MODE } from "../GameBoard";
 
 jest.useFakeTimers();
 
@@ -10,8 +10,12 @@ describe("GameInfo", () => {
   const defaultProps = {
     mode: GAME_BOARD_MODE.player1,
     elapsedTime: 5,
-    scores: { player1: 4, player2: 5 },
-    playerTurn: PLAYER_TURN.player1,
+    player1Score: 4,
+    player2Score: 5,
+    player1Name: "Player 1",
+    player2Name: "Player 2",
+    player2Id: "player2Id",
+    isPlayer1Turn: true,
   };
   it("displays correct info for 1-player mode", () => {
     renderWithProviders(<GameInfo {...defaultProps} />);
