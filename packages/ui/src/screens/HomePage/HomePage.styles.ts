@@ -22,10 +22,15 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
+    opacity: 0.1,
   },
   returnButton: {
+    zIndex: 1,
+    alignSelf: "flex-start",
+  },
+  returnButtonWeb: {
     position: "absolute",
-    top: 0,
+    top: 16,
     left: 16,
   },
 });

@@ -3,7 +3,6 @@ import { GameState } from "./slice.types";
 import { ACTION_STATUS } from "../App/slice.types";
 
 const initialGameState: GameState = {
-  imagesPercentageLoaded: 0,
   playersNames: [],
   playerName: "",
   onePlayerGames: [],
@@ -11,6 +10,8 @@ const initialGameState: GameState = {
   onePlayerGamesStatus: ACTION_STATUS.IDLE,
   twoPlayerGamesStatus: ACTION_STATUS.IDLE,
   showPersonalGames: false,
+  multiPlayerGames: [],
+  multiPlayerGamesStatus: ACTION_STATUS.IDLE,
 };
 
 export const GAME_REDUCER_NAME = "game";
@@ -19,12 +20,6 @@ const gameSlice = createSlice({
   name: GAME_REDUCER_NAME,
   initialState: initialGameState,
   reducers: {
-    setImagesPercentageLoaded: (
-      state,
-      action: PayloadAction<GameState["imagesPercentageLoaded"]>,
-    ) => {
-      state.imagesPercentageLoaded = action.payload;
-    },
     setPlayersNames: (
       state,
       action: PayloadAction<GameState["playersNames"]>,
@@ -71,6 +66,22 @@ const gameSlice = createSlice({
       action: PayloadAction<GameState["showPersonalGames"]>,
     ) => {
       state.showPersonalGames = action.payload;
+    },
+    multiPlayerGamesLoading(state) {
+      state.multiPlayerGamesStatus = ACTION_STATUS.LOADING;
+    },
+    multiPlayerGamesSuccess(
+      state,
+      action: PayloadAction<GameState["multiPlayerGames"]>,
+    ) {
+      state.multiPlayerGames = action.payload;
+      state.multiPlayerGamesStatus = ACTION_STATUS.SUCCESS;
+    },
+    multiPlayerGamesError(state) {
+      state.multiPlayerGamesStatus = ACTION_STATUS.ERROR;
+    },
+    multiPlayerGamesIdle(state) {
+      state.multiPlayerGamesStatus = ACTION_STATUS.IDLE;
     },
   },
 });

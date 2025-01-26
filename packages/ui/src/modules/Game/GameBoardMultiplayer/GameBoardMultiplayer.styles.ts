@@ -13,4 +13,13 @@ export const styles = StyleSheet.create({
     gap: 16,
     backgroundColor: "transparent",
   },
+  returnButton: {
+    zIndex: 1,
+    alignSelf: "flex-start",
+  },
+  returnButtonWeb: {
+    position: "absolute",
+    top: 16,
+    left: 16,
+  },
 });

@@ -13,12 +13,13 @@ import {
 import { GameInfo } from "../GameInfo";
 import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { gameSliceActions } from "../slice";
-import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { gameActions } from "../actions";
 import { ThemedAlert } from "../../../components/ThemedAlert";
 import { useTranslation } from "react-i18next";
+import { gameSelectors } from "../selectors";
+import { useCalculateCardAndBoardDimensions } from "../hooks";
+import { getShuffledBoardImages } from "../utils";
 
 export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
   const dispatch = useAppDispatch();
@@ -38,35 +39,21 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
 
-  const player1Name = useAppSelector((state) => state.game.playersNames[0]);
-  const player2Name = useAppSelector((state) => state.game.playersNames[1]);
+  const me = useAppSelector((state) => state.user.me);
+  const player1Name =
+    useAppSelector(gameSelectors.getPlayersNames)[0] || t("game.player1");
+  const player2Name =
+    useAppSelector(gameSelectors.getPlayersNames)[1] || t("game.player2");
   const singlePlayerName = useAppSelector((state) => state.game.playerName);
   const showPersonalGames = useAppSelector(
     (state) => state.game.showPersonalGames,
   );
-  const loadedImages = cards.filter((card) => card.isLoaded);
-
-  const percentageLoaded = (loadedImages.length / cards.length) * 100 || 0;
-  const isEveryImageLoaded = percentageLoaded === 100;
-
   const { images } = useGetImages();
 
   useEffect(() => {
-    const shuffleBoardImages = (): CardType[] =>
-      images.board
-        .flatMap((image) => [image, image])
-        .sort(() => Math.random() - 0.5)
-        .map((image) => ({
-          isRevealed: false,
-          isPaired: false,
-          src: image,
-          isLoaded: false,
-        }));
-
-    setCards(shuffleBoardImages());
+    const shuffledBoardImages = getShuffledBoardImages(images.board);
+    setCards(shuffledBoardImages);
   }, [images]);
-
-  const me = useAppSelector((state) => state.user.me);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -86,29 +73,10 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
     };
   }, [startTime, endTime, mode]);
 
-  const { width: deviceWidth, height: deviceHeight } = useGetScreenDimensions();
-
-  // Dynamically calculate card and container dimensions
-  useEffect(() => {
-    const padding = 16;
-    const gap = 16;
-    const scrollBarWidth = 20;
-    const smallScreenItemsInRow = 4;
-    const largeScreenItemsInRow = 5;
-
-    const isSmallScreen = deviceWidth <= 600;
-    const itemsInRow = isSmallScreen
-      ? smallScreenItemsInRow
-      : largeScreenItemsInRow;
-
-    const mainDimension = Math.min(deviceWidth, deviceHeight);
-    const totalGap = gap * (itemsInRow - 1) + 2 * padding + scrollBarWidth;
-    const cardWidth = mainDimension / itemsInRow - totalGap / itemsInRow;
-    const containerWidth = cardWidth * itemsInRow + totalGap - scrollBarWidth;
-
-    setCardWidth(cardWidth);
-    setContainerWidth(containerWidth);
-  }, [deviceWidth, deviceHeight]);
+  useCalculateCardAndBoardDimensions({
+    setCardWidth,
+    setContainerWidth,
+  });
 
   // Save single player score to the database
   useEffect(() => {
@@ -166,7 +134,7 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
         scores.player1 > scores.player2 ? player1Name : player2Name;
 
       const alertMessage = isTie
-        ? `${t("game.itsATie")}`
+        ? `${t("game.itsATie")}!`
         : `${t("game.congratulations")} ${winnerName}! ${t("game.youHaveWonTheGame")}! \n${t("game.finalScore")}: ${scores.player1} : ${scores.player2}`;
 
       setAlert(alertMessage);
@@ -238,43 +206,23 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
     setCards(updatedCards);
   };
 
-  const handleIsImageLoaded = (index: number) => {
-    if (isEveryImageLoaded) return;
-    const updatedCards = [...cards];
-    updatedCards[index].isLoaded = true;
-    setCards(updatedCards);
-  };
-
-  useEffect(() => {
-    dispatch(gameSliceActions.setImagesPercentageLoaded(percentageLoaded));
-  }, [isEveryImageLoaded, percentageLoaded, dispatch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(gameSliceActions.setImagesPercentageLoaded(0));
-    };
-  }, [dispatch]);
-
   return (
-    <View
-      style={{
-        opacity: isEveryImageLoaded ? 1 : 0,
-      }}
-    >
+    <View>
       <ThemedAlert
         text={alert}
         onDismiss={() => setAlert("")}
         isVisible={Boolean(alert)}
         actionButtonOnPress={() => handleSetGameMode(null)}
       />
-      {isEveryImageLoaded && (
-        <GameInfo
-          mode={mode}
-          elapsedTime={elapsedTime}
-          scores={scores}
-          playerTurn={playerTurn}
-        />
-      )}
+      <GameInfo
+        mode={mode}
+        elapsedTime={elapsedTime}
+        isPlayer1Turn={playerTurn === PLAYER_TURN.player1}
+        player1Score={scores.player1}
+        player2Score={scores.player2}
+        player1Name={player1Name}
+        player2Name={player2Name}
+      />
       <ThemedView
         style={[
           styles.cardsContainer,
@@ -290,7 +238,6 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
             width={cardWidth}
             card={card}
             onPress={() => handleCardPress(index)}
-            setIsLoaded={() => handleIsImageLoaded(index)}
           />
         ))}
       </ThemedView>

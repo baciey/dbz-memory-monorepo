@@ -49,11 +49,26 @@
     "player2Name": "Player 2 name",
     "player1": "Player 1",
     "player2": "Player 2",
-    "itsATie": "It's a tie! The game has ended!",
+    "itsATie": "It's a tie! The game has ended",
     "congratulations": "Congratulations",
     "youHaveWonTheGame": "You have won the game",
     "finalScore": "Final score",
-    "youHaveFinishedGameIn": "You have finished the game in"
+    "youHaveFinishedGameIn": "You have finished the game in",
+
+    "join": "Join",
+    "create": "Create",
+    "publicGames": "Public games",
+    "ownGameAlert": "You can't join your own game with the same account",
+    "gameCreatedAlert": "You already have a game created with this account. You can only play one game at a time",
+    "gameJoinAlert": "You already are in a game with this account. You can only play one game at a time",
+    "waitingForOpponent": "Waiting for opponent...",
+    "wonTheGame": "won the game",
+    "timesUp": "Time's up",
+    "hurryUp": "Hurry up",
+    "left": "left",
+    "hasLeftTheGame": "has left the game",
+    "setYourselfReady": "Press OK to set yourself ready",
+    "joinedTheGame": "joined the game"
   },
   "buttons": {
     "confirm": "Confirm",
