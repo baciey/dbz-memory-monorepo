@@ -154,6 +154,3 @@ export const authors = [
     licenseShort: "CC BY 3.0",
   },
 ];
-
-export const description =
-  "Images used in this application are created by the following authors and licensed under the following licenses.";
