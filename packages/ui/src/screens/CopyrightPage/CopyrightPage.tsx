@@ -5,10 +5,12 @@ import { Avatar, Card, Text } from "react-native-paper";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { Linking, Pressable, View } from "react-native";
-import { authors, description } from "./CopyrightPage.const";
+import { authors } from "./CopyrightPage.const";
 import { Link } from "./Link";
+import { useTranslation } from "react-i18next";
 
 export const CopyrightPage = () => {
+  const { t } = useTranslation();
   const { isMobile, width } = useGetScreenDimensions();
 
   const mobileCardWidth =
@@ -20,9 +22,13 @@ export const CopyrightPage = () => {
         style={[styles.card, { width: isMobile ? mobileCardWidth : "auto" }]}
         key={author.name}
       >
-        <Link text="Author: " url={author.authorUrl} name={author.name} />
         <Link
-          text="License: "
+          text={`${t("copyright.author")}: `}
+          url={author.authorUrl}
+          name={author.name}
+        />
+        <Link
+          text={`${t("copyright.license")}: `}
           url={author.licenseUrl}
           name={author.licenseShort}
         />
@@ -52,9 +58,9 @@ export const CopyrightPage = () => {
   return (
     <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
-        Copyright
+        {t("copyright.copyright")}
       </Text>
-      <Text style={globalStyles.heading}>{description}</Text>
+      <Text style={globalStyles.heading}>{t("copyright.description")}</Text>
       <View style={styles.cardContainer}>{authorsList}</View>
     </ThemedView>
   );

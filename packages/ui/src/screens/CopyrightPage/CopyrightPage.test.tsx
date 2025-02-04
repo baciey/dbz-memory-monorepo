@@ -2,7 +2,7 @@ import React from "react";
 import { renderWithProviders } from "../../utils/testUtils";
 import { screen, waitFor } from "@testing-library/react-native";
 import { CopyrightPage } from "./CopyrightPage";
-import { authors, description } from "./CopyrightPage.const";
+import { authors } from "./CopyrightPage.const";
 
 jest.useFakeTimers();
 
@@ -12,7 +12,6 @@ it("renders correctly", async () => {
 
   await waitFor(() => {
     expect(getByText("Copyright")).toBeOnTheScreen();
-    expect(getByText(description)).toBeOnTheScreen();
 
     authors.forEach((author) => {
       expect(getByText(author.name)).toBeOnTheScreen();
