@@ -53,7 +53,22 @@
     "congratulations": "Gratulacje",
     "youHaveWonTheGame": "Wygrałeś grę",
     "finalScore": "Ostateczny wynik",
-    "youHaveFinishedGameIn": "Ukończyłeś grę w czasie"
+    "youHaveFinishedGameIn": "Ukończyłeś grę w czasie",
+
+    "join": "Dołącz",
+    "create": "Utwórz",
+    "publicGames": "Publiczne gry",
+    "ownGameAlert": "Nie możesz dołączyć do własnej gry na tym samym koncie",
+    "gameCreatedAlert": "Masz już utworzoną grę na tym koncie. Możesz grać tylko w jedną grę naraz",
+    "gameJoinAlert": "Już bierzesz udział w grze na tym koncie. Możesz grać tylko w jedną grę naraz",
+    "waitingForOpponent": "Oczekiwanie na przeciwnika...",
+    "wonTheGame": "wygrał(a) grę",
+    "timesUp": "Czas minął",
+    "hurryUp": "Pośpiesz się",
+    "left": "opuścił(a)",
+    "hasLeftTheGame": "opuścił(a) grę",
+    "setYourselfReady": "Naciśnij OK, aby ustawić się jako gotowy",
+    "joinedTheGame": "dołączył(a) do gry"
   },
   "buttons": {
     "confirm": "Potwierdź",
@@ -91,6 +106,17 @@
     }
   },
   "copyright": {
-    "copyright": "Prawa autorskie"
+    "copyright": "Prawa autorskie",
+    "license": "Licencja",
+    "author": "Autor",
+    "description": "Obrazy użyte w tej aplikacji zostały stworzone przez następujących autorów i są licencjonowane na podstawie poniższych licencji."
+  },
+  "contact": {
+    "contact": "Kontakt",
+    "contactUs": "Skontaktuj się z nami",
+    "message": "Wiadomość",
+    "send": "Wyślij",
+    "yourEmail": "Twój e-mail",
+    "messageError": "To pole nie może być puste."
   }
 }

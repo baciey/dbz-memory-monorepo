@@ -106,7 +106,10 @@
     }
   },
   "copyright": {
-    "copyright": "Copyright"
+    "copyright": "Copyright",
+    "license": "License",
+    "author": "Author",
+    "description": "Images used in this application are created by the following authors and licensed under the following licenses."
   },
   "contact": {
     "contact": "Contact",
