@@ -42,7 +42,6 @@ export const HomePage = () => {
   const handleShowReturnAlert = () => {
     setAlert(t("home.returnAlert"));
   };
-  console.log(isLobbyVisible);
 
   return (
     <ThemedView

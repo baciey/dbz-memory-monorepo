@@ -107,7 +107,7 @@ export const ContactPage = () => {
           text={t("contact.send")}
           disabled={loading}
           onPress={sendMessage}
-          testID="send-message-button"
+          testID="send-button"
         />
       </View>
     </ThemedView>
