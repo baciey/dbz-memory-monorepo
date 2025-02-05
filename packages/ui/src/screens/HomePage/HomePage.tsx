@@ -39,8 +39,10 @@ export const HomePage = () => {
     if (mode !== null) setIsNamesModalVisible(true);
   };
 
-  const handleShowReturnAlert = () => {
-    setAlert(t("home.returnAlert"));
+  const handleReturnToMenu = () => {
+    setGameMode(null);
+    setIsNamesModalVisible(false);
+    setIsLobbyVisible(false);
   };
 
   return (
@@ -52,7 +54,7 @@ export const HomePage = () => {
       ]}
     >
       <ThemedAlert
-        actionButtonOnPress={() => setGameMode(null)}
+        actionButtonOnPress={handleReturnToMenu}
         isVisible={Boolean(alert)}
         onDismiss={() => setAlert("")}
         text={alert}
@@ -87,7 +89,7 @@ export const HomePage = () => {
       isLobbyVisible ? (
         <ThemedButton
           text={t("home.goBack")}
-          onPress={handleShowReturnAlert}
+          onPress={() => setAlert(t("home.returnAlert"))}
           style={[
             GLOBAL_STYLES.m.mb16,
             isWeb ? {} : { marginTop: 50 },

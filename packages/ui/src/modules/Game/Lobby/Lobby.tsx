@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { ThemedButton } from "../../../components/ThemedButton";
@@ -42,12 +42,12 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
   );
 
   useEffect(() => {
-    dispatch(gameActions.getMultiPlayerGames({}));
+    dispatch(gameActions.getMultiPlayerGames());
   }, [dispatch, me]);
 
   useEffect(() => {
     const handleChange = () => {
-      dispatch(gameActions.getMultiPlayerGames({}));
+      dispatch(gameActions.getMultiPlayerGames());
     };
 
     const channel = supabase
@@ -69,21 +69,24 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
     };
   }, [dispatch]);
 
-  const isJoinCreatePossible = (game?: MultiPlayerGame) => {
-    return true;
-    if (me?.id === game?.player1Id) {
-      setAlert(t("game.ownGameAlert"));
-      return false;
-    } else if (isUserAlreadyGameOwner) {
-      setAlert(t("game.gameCreatedAlert"));
-      return false;
-    } else if (isUserAlreadyInGame) {
-      setAlert(t("game.gameJoinAlert"));
-      return false;
-    } else {
+  const isJoinCreatePossible = useCallback(
+    (game?: MultiPlayerGame) => {
       return true;
-    }
-  };
+      if (me?.id === game?.player1Id) {
+        setAlert(t("game.ownGameAlert"));
+        return false;
+      } else if (isUserAlreadyGameOwner) {
+        setAlert(t("game.gameCreatedAlert"));
+        return false;
+      } else if (isUserAlreadyInGame) {
+        setAlert(t("game.gameJoinAlert"));
+        return false;
+      } else {
+        return true;
+      }
+    },
+    [me, isUserAlreadyGameOwner, isUserAlreadyInGame, t],
+  );
 
   const createPublicGame = () => {
     if (me?.id && isJoinCreatePossible()) {
@@ -97,34 +100,41 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
     }
   };
 
-  const joinPublicGame = (game: MultiPlayerGame) => {
-    if (me?.id && isJoinCreatePossible(game)) {
-      const params: UpdateMultiPlayerGameParams = {
-        id: game.id,
-        player2Id: me.id,
-        player2Name: playerName,
-      };
-      dispatch(gameActions.updateMultiPlayerGame({ ...params }));
-      const gameUpdated = {
-        ...game,
-        player2Id: me.id,
-        player2Name: playerName,
-      };
-      onJoinOrCreatePublicGame(gameUpdated);
-    }
-  };
+  const joinPublicGame = useCallback(
+    (game: MultiPlayerGame) => {
+      if (me?.id && isJoinCreatePossible(game)) {
+        const params: UpdateMultiPlayerGameParams = {
+          id: game.id,
+          player2Id: me.id,
+          player2Name: playerName,
+        };
+        dispatch(gameActions.updateMultiPlayerGame({ ...params }));
+        const gameUpdated = {
+          ...game,
+          player2Id: me.id,
+          player2Name: playerName,
+        };
+        onJoinOrCreatePublicGame(gameUpdated);
+      }
+    },
+    [me, playerName, isJoinCreatePossible, onJoinOrCreatePublicGame, dispatch],
+  );
 
-  const publicGamesElement = multiPlayerGames.map((game) => {
-    return (
-      <View key={game.id} style={styles.gameRowContainer}>
-        <ThemedButton
-          onPress={() => joinPublicGame(game)}
-          text={t("game.join")}
-        />
-        <Text>{game.player1Name}</Text>
-      </View>
-    );
-  });
+  const publicGamesElement = useMemo(() => {
+    return multiPlayerGames
+      .filter((game) => !game.isOver)
+      .map((game) => {
+        return (
+          <View key={game.id} style={styles.gameRowContainer}>
+            <ThemedButton
+              onPress={() => joinPublicGame(game)}
+              text={t("game.join")}
+            />
+            <Text>{game.player1Name}</Text>
+          </View>
+        );
+      });
+  }, [multiPlayerGames, t, joinPublicGame]);
 
   const { height: screenHeight, isMobile } = useGetScreenDimensions();
   const divider = isMobile ? 2 : 1.5;
