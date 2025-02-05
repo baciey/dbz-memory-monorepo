@@ -111,9 +111,3 @@ export type UpdateMultiPlayerGameRequestParams = {
   winner?: string;
   is_over?: boolean;
 };
-
-export type GetMultiPlayerGameParams = {
-  userId?: string;
-  isOver?: boolean;
-  searchQuery?: string;
-};

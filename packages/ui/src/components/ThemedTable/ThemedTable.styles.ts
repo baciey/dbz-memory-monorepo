@@ -23,4 +23,7 @@ export const styles = StyleSheet.create({
   noDataText: {
     padding: 16,
   },
+  iconContainer: {
+    marginLeft: 8,
+  },
 });

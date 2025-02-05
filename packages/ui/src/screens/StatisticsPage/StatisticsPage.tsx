@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ThemedView } from "../../components/ThemedView";
 import { styles } from "./StatisticsPage.styles";
 import { Loader } from "../../components/Loader";
@@ -34,6 +34,8 @@ export const StatisticsPage = () => {
   const me = useAppSelector(userSelectors.getMe);
   const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
+  const multiPlayerGames = useAppSelector(gameSelectors.getMultiPlayerGames);
+
   const showPersonalGames = useAppSelector(
     (state) => state.game.showPersonalGames,
   );
@@ -43,14 +45,66 @@ export const StatisticsPage = () => {
 
   const isTwoPlayerTab = tab === STATISTICS_PAGE_TABS.player2;
 
-  useEffect(() => {
+  const multiPlayerGamesFiltered = useMemo(() => {
+    return multiPlayerGames
+      .filter(
+        (game) =>
+          game.isOver &&
+          (showPersonalGames
+            ? game.player1Id === me?.id || game.player2Id === me?.id
+            : true) &&
+          (searchQuery
+            ? game.player1Name.includes(searchQuery) ||
+              game.player2Name?.includes(searchQuery)
+            : true),
+      )
+      .map((game) => {
+        return {
+          player1Name: game.player1Name,
+          player2Name: game.player2Name,
+          player1Score: game.player1Score,
+          player2Score: game.player2Score,
+          createdAt: game.createdAt,
+          winner: game.winner,
+          player1Id: game.player1Id,
+          player2Id: game.player2Id,
+        };
+      });
+  }, [multiPlayerGames, showPersonalGames, me, searchQuery]);
+
+  const tableComponent = useMemo(() => {
+    if (tab === STATISTICS_PAGE_TABS.player1) {
+      return (
+        <ThemedTable config={onePlayerTableConfig(t)} data={onePlayerGames} />
+      );
+    } else if (tab === STATISTICS_PAGE_TABS.player2) {
+      return (
+        <ThemedTable config={twoPlayerTableConfig(t)} data={twoPlayerGames} />
+      );
+    } else if (tab === STATISTICS_PAGE_TABS.multiplayer) {
+      return (
+        <ThemedTable
+          config={twoPlayerTableConfig(t)}
+          data={multiPlayerGamesFiltered}
+        />
+      );
+    }
+  }, [onePlayerGames, twoPlayerGames, multiPlayerGamesFiltered, tab, t]);
+
+  const fetchGames = useCallback(() => {
     if (me?.id) {
       dispatch(
         gameActions.getOnePlayerGames(me.id, showPersonalGames, searchQuery),
       );
       dispatch(gameActions.getTwoPlayerGames(me.id, searchQuery));
+      dispatch(gameActions.getMultiPlayerGames());
     }
   }, [me, dispatch, showPersonalGames, searchQuery]);
+
+  useEffect(() => {
+    fetchGames();
+  }, [fetchGames, tab]);
+
   return (
     <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
@@ -70,6 +124,10 @@ export const StatisticsPage = () => {
           {
             value: STATISTICS_PAGE_TABS.player2,
             label: t("statistics.player2"),
+          },
+          {
+            value: STATISTICS_PAGE_TABS.multiplayer,
+            label: t("statistics.multiplayer"),
           },
         ]}
       />
@@ -118,11 +176,7 @@ export const StatisticsPage = () => {
         </View>
       </View>
 
-      {isTwoPlayerTab ? (
-        <ThemedTable config={twoPlayerTableConfig(t)} data={twoPlayerGames} />
-      ) : (
-        <ThemedTable config={onePlayerTableConfig(t)} data={onePlayerGames} />
-      )}
+      {tableComponent}
     </ThemedView>
   );
 };
