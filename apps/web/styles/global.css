@@ -3,9 +3,9 @@ body {
     "Arial", sans-serif;
 }
 
-/* 50px navbar height */
+/* 54px navbar height */
 .pageContainer {
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh - 54px);
   display: flex;
 }
 

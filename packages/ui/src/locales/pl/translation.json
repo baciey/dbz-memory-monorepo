@@ -34,7 +34,8 @@
     "p1Name": "G1 imię",
     "p2Name": "G2 imię",
     "p1Score": "G1 wynik",
-    "p2Score": "G2 wynik"
+    "p2Score": "G2 wynik",
+    "multiplayer": "Wielu graczy"
   },
   "game": {
     "startTimer": "Naciśnij dowolną kartę, aby uruchomić stoper",

@@ -5,5 +5,7 @@ export type ThemedTableProps = {
     rowId: string;
   }[];
 
-  data: Record<string, string | number>[];
+  data: DataItem[];
 };
+
+export type DataItem = Record<string, string | number | null>;

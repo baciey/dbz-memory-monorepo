@@ -268,6 +268,7 @@ export const GameBoardMultiplayer = ({
           isVisible={Boolean(alert)}
           actionButtonOnPress={alertOnPress}
           withCancel={isAlertWithCancel}
+          onDismiss={() => setAlert("")}
         />
 
         {isUserGameOwner &&

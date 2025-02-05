@@ -6,7 +6,6 @@ import { dateFormatter } from "../../utils/date";
 import { PayloadThunkAction } from "../../redux/store";
 import {
   CreateMultiPlayerGameParams,
-  GetMultiPlayerGameParams,
   UpdateMultiPlayerGameParams,
   UpdateMultiPlayerGameRequestParams,
 } from "./slice.types";
@@ -368,7 +367,7 @@ const createMultiPlayerGame = ({
           onJoinOrCreatePublicGame(proccessedData);
         }
       });
-    dispatch(getMultiPlayerGames({}));
+    dispatch(getMultiPlayerGames());
   };
 };
 
@@ -413,28 +412,16 @@ const updateMultiPlayerGame = ({
   };
 };
 
-const getMultiPlayerGames = ({
-  userId = "",
-  isOver = false,
-  searchQuery = "",
-}: GetMultiPlayerGameParams): PayloadThunkAction => {
+const getMultiPlayerGames = (): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(gameSliceActions.multiPlayerGamesLoading());
-    console.log("getMultiplayerPlayerGames", { userId });
+    console.log("getMultiplayerPlayerGames");
 
-    let query = supabase
+    const query = supabase
       .from(DATABASE_TABLE.multi_player_games)
       .select(
         `id, player1_name, player2_name, player1_id, player2_id, player1_score, player2_score, is_player1_ready, is_player2_ready, is_player1_turn, cards, first_card, second_card, winner, is_over, created_at`,
-      )
-      .eq("is_over", isOver)
-      .or(
-        `player1_name.ilike.%${searchQuery}%,player2_name.ilike.%${searchQuery}%`,
       );
-
-    if (userId) {
-      query = query.or(`player1_id.eq.${userId},player2_id.eq.${userId}`);
-    }
 
     const { data, error } = await query;
 
@@ -462,7 +449,7 @@ const deleteMultiPlayerGame = (id: number): PayloadThunkAction => {
       .from(DATABASE_TABLE.multi_player_games)
       .delete()
       .eq("id", id);
-    dispatch(getMultiPlayerGames({}));
+    dispatch(getMultiPlayerGames());
   };
 };
 

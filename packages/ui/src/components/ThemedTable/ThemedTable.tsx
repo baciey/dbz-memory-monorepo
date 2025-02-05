@@ -5,7 +5,7 @@ import { ScrollView, View } from "react-native";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { styles } from "./ThemedTable.styles";
 import { useGetImages } from "../../hooks/useGetImages";
-import { getTextColor } from "./ThemedTable.utils";
+import { shouldDisplayWinIcon } from "./ThemedTable.utils";
 import {
   DEFAULT_ITEMS_PER_PAGE,
   DESKTOP_TABLE_HEIGHT_DIVIDER,
@@ -82,18 +82,15 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                           ? publicUrl + item["avatarUrl"]
                           : null;
 
-                      const textColor = getTextColor(
-                        theme,
+                      const isWinIcon = shouldDisplayWinIcon(
                         column.rowId,
-                        Number(item.player1Score),
-                        Number(item.player2Score),
+                        item,
                       );
 
                       return (
                         <DataTable.Cell
                           key={column.rowId}
                           style={[{ minWidth: cellWidth }, styles.cursorAuto]}
-                          textStyle={[{ color: textColor }]}
                         >
                           {avatarUrl ? (
                             <Avatar.Image
@@ -102,6 +99,15 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                             />
                           ) : (
                             value
+                          )}
+                          {isWinIcon && (
+                            <View style={styles.iconContainer}>
+                              <Icon
+                                source="trophy"
+                                size={20}
+                                color="lightgreen"
+                              />
+                            </View>
                           )}
                         </DataTable.Cell>
                       );
