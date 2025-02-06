@@ -4,7 +4,7 @@ export { ThemedView } from "./src/components/ThemedView";
 export { Text } from "react-native-paper";
 export { CustomSwitch } from "./src/components/CustomSwitch";
 export { Loader } from "./src/components/Loader";
-export { Icon } from "./src/components/Icon";
+export { Icon } from "react-native-paper";
 
 //MODULES
 export { PaperProviderWrapper } from "./src/modules/App/PaperProviderWrapper";
