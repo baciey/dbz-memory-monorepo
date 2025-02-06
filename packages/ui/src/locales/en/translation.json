@@ -66,10 +66,11 @@
     "wonTheGame": "won the game",
     "timesUp": "Time's up",
     "hurryUp": "Hurry up",
-    "left": "left",
+    "timeToMove": "Time to move",
     "hasLeftTheGame": "has left the game",
     "setYourselfReady": "Press OK to set yourself ready",
-    "joinedTheGame": "joined the game"
+    "joinedTheGame": "joined the game",
+    "deletedDueToInactivity": "The game has been deleted due to inactivity"
   },
   "buttons": {
     "confirm": "Confirm",

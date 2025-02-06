@@ -11,8 +11,6 @@ import { GAME_BOARD_MODE } from "../GameBoard/GameBoard.types";
 import { MultiPlayerGame } from "../slice.types";
 import { gameActions } from "../actions";
 import { useTranslation } from "react-i18next";
-import { getShuffledBoardImages } from "../utils";
-import { useGetImages } from "../../../hooks/useGetImages";
 import { Text } from "react-native-paper";
 import { useGameHasEnded } from "./useGameHasEnded";
 import { useSupabaseListener } from "./useSupabaseListener";
@@ -21,8 +19,9 @@ import { usePlayerTimeToMove } from "./usePlayerTimeToMove";
 import { ThemedButton } from "../../../components/ThemedButton";
 import { GLOBAL_STYLES } from "../../../styles/globalStyles";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
-
-const timeToMove = 30;
+import { getShuffledBoardImages } from "../utils";
+import { useGetImages } from "../../../hooks/useGetImages";
+import { defaultTimeToMove } from "./GameBoardMultiPlayer.const";
 
 export const GameBoardMultiplayer = ({
   handleSetGameMode,
@@ -39,11 +38,8 @@ export const GameBoardMultiplayer = ({
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
   const [isAlertWithCancel, setIsAlertWithCancel] = useState<boolean>(false);
-  const [player1TimeToMove, setPlayer1TimeToMove] =
-    useState<number>(timeToMove);
-  const [player2TimeToMove, setPlayer2TimeToMove] =
-    useState<number>(timeToMove);
   const [game, setGame] = useState<MultiPlayerGame>(initialGame);
+  const [timeToMove, setTimeToMove] = useState<number>(defaultTimeToMove);
 
   const {
     id,
@@ -59,9 +55,17 @@ export const GameBoardMultiplayer = ({
     firstCard,
     secondCard,
     isPlayer1Turn,
+    isOver,
+    deletedDueToInactivity,
   } = game;
 
-  const isUserGameOwner = me?.id === player1Id;
+  const isMeGameOwner = me?.id === player1Id;
+
+  const showOpponentLeftGameAlert = useCallback(() => {
+    setAlert(`${game.player2Name} ${t("game.hasLeftTheGame")}`);
+    setIsAlertWithCancel(false);
+    setAlertOnPress(undefined);
+  }, [game.player2Name, t]);
 
   const showOwnerClosedGameAlert = useCallback(() => {
     setAlert(`${player1Name} ${t("game.hasLeftTheGame")}`);
@@ -72,6 +76,148 @@ export const GameBoardMultiplayer = ({
       };
     });
   }, [handleSetGameMode, t, player1Name]);
+
+  useEffect(() => {
+    const showGameDeletedDueToInactivityAlert = () => {
+      setAlert(`${t("game.deletedDueToInactivity")}`);
+      setIsAlertWithCancel(false);
+      setAlertOnPress(() => {
+        return () => {
+          handleSetGameMode(null);
+        };
+      });
+    };
+
+    if (deletedDueToInactivity) {
+      showGameDeletedDueToInactivityAlert();
+    }
+  }, [deletedDueToInactivity, handleSetGameMode, t, player1Name, player2Name]);
+
+  const resetGame = useCallback(() => {
+    const shuffledBoardImages = getShuffledBoardImages(images.board);
+
+    dispatch(
+      gameActions.updateMultiPlayerGame({
+        id,
+        isPlayer2Ready: false,
+        cards: shuffledBoardImages,
+        player2Id: null,
+        isPlayer1Ready: false,
+        player1Score: 0,
+        player2Score: 0,
+        isPlayer1Turn: true,
+        firstCard: null,
+        secondCard: null,
+      }),
+    );
+  }, [dispatch, id, images.board]);
+
+  const setWinnerWithDelay = useCallback(
+    (
+      playerId: string | null,
+      delay: number = 1000,
+      isAbandoned: boolean = false,
+    ) => {
+      if (playerId) {
+        setTimeout(
+          () =>
+            dispatch(
+              gameActions.updateMultiPlayerGame({
+                id,
+                isOver: true,
+                isAbandoned,
+                winner: playerId,
+              }),
+            ),
+          delay,
+        );
+      }
+    },
+    [dispatch, id],
+  );
+
+  const handleOpponentLeftGame = useCallback(() => {
+    const looserName = isMeGameOwner ? player2Name : player1Name;
+    const winnerName = isMeGameOwner ? player1Name : player2Name;
+    const winnerId = isMeGameOwner ? player1Id : player2Id;
+
+    let isAbandoned = false;
+
+    // players are ready - game has started
+    if (isPlayer1Ready && isPlayer2Ready && player2Id && !isOver) {
+      setWinnerWithDelay(winnerId, 0, true);
+      isAbandoned = true;
+    } // one or both players are not ready, but both are in the game - game has not started
+    else if ((!isPlayer1Ready || !isPlayer2Ready) && player2Id && !isOver) {
+      if (isMeGameOwner) {
+        resetGame();
+        showOpponentLeftGameAlert();
+      } else {
+        showOwnerClosedGameAlert();
+      }
+    }
+
+    if (isAbandoned) {
+      const alertMessage = `${winnerName} ${t("game.wonTheGame")}! ${looserName} ${t("game.hasLeftTheGame")}. \n${t("game.finalScore")}: ${player1Score} : ${player2Score}`;
+      setAlert(alertMessage);
+      setAlertOnPress(() => {
+        return () => {
+          handleSetGameMode(null);
+        };
+      });
+    }
+  }, [
+    isOver,
+    isPlayer1Ready,
+    isPlayer2Ready,
+    player2Id,
+    isMeGameOwner,
+    player1Id,
+    setWinnerWithDelay,
+    player1Name,
+    player2Name,
+    player1Score,
+    player2Score,
+    handleSetGameMode,
+    t,
+    resetGame,
+    showOwnerClosedGameAlert,
+    showOpponentLeftGameAlert,
+  ]);
+
+  const handleMeLeftGame = useCallback(() => {
+    if (isOver) {
+      return handleSetGameMode(null);
+    }
+    const winnerId = isMeGameOwner ? player2Id : player1Id;
+
+    // players are ready - game has started
+    if (isPlayer1Ready && isPlayer2Ready) {
+      setWinnerWithDelay(winnerId, 1000, true);
+    }
+    // one or both players are not ready, but both are in the game - game has not started
+    else if ((!isPlayer1Ready || !isPlayer2Ready) && player2Id) {
+      if (isMeGameOwner) {
+        dispatch(gameActions.deleteMultiPlayerGame(id));
+      } else {
+        handleSetGameMode(null);
+      }
+      // only game owner is in the game
+    } else if (!player2Id) {
+      dispatch(gameActions.deleteMultiPlayerGame(id));
+    }
+  }, [
+    isOver,
+    isPlayer1Ready,
+    isPlayer2Ready,
+    player2Id,
+    isMeGameOwner,
+    setWinnerWithDelay,
+    player1Id,
+    handleSetGameMode,
+    dispatch,
+    id,
+  ]);
 
   const showSetOwnerReadyAlert = useCallback(() => {
     setAlert(
@@ -104,56 +250,51 @@ export const GameBoardMultiplayer = ({
     setIsAlertWithCancel(true);
     setAlertOnPress(() => {
       return () => {
+        handleMeLeftGame();
         handleSetGameMode(null);
-
-        if (isUserGameOwner) {
-          dispatch(gameActions.deleteMultiPlayerGame(id));
-        } else {
-          const shuffledBoardImages = getShuffledBoardImages(images.board);
-
-          dispatch(
-            gameActions.updateMultiPlayerGame({
-              id,
-              isPlayer2Ready: false,
-              cards: shuffledBoardImages,
-              player2Id: null,
-              isPlayer1Ready: false,
-              player1Score: 0,
-              player2Score: 0,
-              isPlayer1Turn: true,
-              firstCard: null,
-              secondCard: null,
-            }),
-          );
-        }
       };
     });
   };
 
-  const showOpponentLeftGameAlert = useCallback(() => {
-    setAlert(`${game.player2Name} ${t("game.hasLeftTheGame")}`);
-    setIsAlertWithCancel(false);
-    setAlertOnPress(undefined);
-  }, [game.player2Name, t]);
-
   useEffect(() => {
-    if (!isUserGameOwner) {
+    if (isMeGameOwner && player2Id) {
+      showSetOwnerReadyAlert();
+    } else if (!isMeGameOwner) {
       showSetOpponentReadyAlert();
     }
-  }, [isUserGameOwner, showSetOpponentReadyAlert]);
+  }, [
+    isMeGameOwner,
+    player2Id,
+    showSetOwnerReadyAlert,
+    showSetOpponentReadyAlert,
+  ]);
 
-  useEffect(() => {
-    if (isUserGameOwner && player2Id) {
-      showSetOwnerReadyAlert();
-    }
-  }, [isUserGameOwner, player2Id, showSetOwnerReadyAlert]);
+  //when user closes the tab in browser
+  // useEffect(() => {
+  //   if (isWeb) {
+  //     window.addEventListener("beforeunload", handleMeLeftGame);
+  //     return () => {
+  //       window.removeEventListener("beforeunload", handleMeLeftGame);
+  //     };
+  //   }
+  // }, [handleMeLeftGame, isWeb, handleSetGameMode, player2Id]);
 
-  useSupabaseListener({
+  const { activePlayers } = useSupabaseListener({
     gameId: id,
     setGame,
-    showOwnerClosedGameAlert,
-    showOpponentLeftGameAlert,
   });
+  const [isRoomFull, setIsRoomFull] = useState(false);
+  useEffect(() => {
+    if (activePlayers.length === 2) {
+      setIsRoomFull(true);
+    }
+  }, [activePlayers, handleOpponentLeftGame]);
+  useEffect(() => {
+    if (isRoomFull && activePlayers.length === 1) {
+      handleOpponentLeftGame();
+      setIsRoomFull(false);
+    }
+  }, [isRoomFull, activePlayers, handleOpponentLeftGame]);
 
   useCalculateCardAndBoardDimensions({
     setCardWidth,
@@ -169,19 +310,17 @@ export const GameBoardMultiplayer = ({
 
   usePlayerTimeToMove({
     game,
-    setPlayer1TimeToMove,
-    setPlayer2TimeToMove,
-    player1TimeToMove,
-    player2TimeToMove,
     handleSetGameMode,
     setAlert,
     setAlertOnPress,
+    timeToMove,
+    setTimeToMove,
   });
 
   const handleCardPress = (index: number) => {
     if (
-      (!isUserGameOwner && isPlayer1Turn) ||
-      (isUserGameOwner && !isPlayer1Turn) ||
+      (!isMeGameOwner && isPlayer1Turn) ||
+      (isMeGameOwner && !isPlayer1Turn) ||
       (firstCard && secondCard) ||
       cards[index].isRevealed ||
       !player2Id ||
@@ -201,6 +340,7 @@ export const GameBoardMultiplayer = ({
           cards: updatedCards,
         }),
       );
+      setTimeToMove(defaultTimeToMove);
     } else {
       const currentCard = { ...updatedCards[index], index };
 
@@ -211,6 +351,7 @@ export const GameBoardMultiplayer = ({
           cards: updatedCards,
         }),
       );
+      setTimeToMove(defaultTimeToMove);
 
       const isMatch = firstCard.src === currentCard.src;
 
@@ -241,18 +382,15 @@ export const GameBoardMultiplayer = ({
         );
       }, 2000);
     }
-
-    setPlayer1TimeToMove(timeToMove);
-    setPlayer2TimeToMove(timeToMove);
   };
 
-  const timeDisplayElement = (time: number) => {
-    return <Text>{`${t("game.hurryUp")}! ${time}s ${t("game.left")}`}</Text>;
-  };
+  const isMyTurn =
+    (isMeGameOwner && isPlayer1Turn) || (!isMeGameOwner && !isPlayer1Turn);
 
   return (
     <>
       <ThemedButton
+        icon="arrow-left"
         text={t("home.goBack")}
         onPress={showGoBackToMenuAlert}
         style={[
@@ -271,13 +409,12 @@ export const GameBoardMultiplayer = ({
           onDismiss={() => setAlert("")}
         />
 
-        {isUserGameOwner &&
-          player1TimeToMove < 10 &&
-          timeDisplayElement(player1TimeToMove)}
-        {!isUserGameOwner &&
-          player2TimeToMove < 10 &&
-          timeDisplayElement(player2TimeToMove)}
         <View>
+          {isMyTurn && timeToMove < 10 && (
+            <Text
+              style={isMobile ? {} : { position: "absolute", right: 0 }}
+            >{`${t("game.hurryUp")}! ${t("game.timeToMove")}: ${timeToMove}s`}</Text>
+          )}
           <GameInfo
             mode={GAME_BOARD_MODE.multiplayer}
             isPlayer1Turn={isPlayer1Turn}

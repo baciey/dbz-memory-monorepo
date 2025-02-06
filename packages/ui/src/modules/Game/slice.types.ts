@@ -52,6 +52,10 @@ export type MultiPlayerGame = {
   isPlayer1Turn: boolean;
   winner: string | null;
   isOver: boolean;
+  isAbandoned: boolean;
+  deletedDueToInactivity: boolean;
+  timeToMove: number;
+  endedDueToTime: boolean;
   createdAt: string;
 };
 
@@ -71,6 +75,10 @@ export type MultiPlayerGameResponse = {
   is_player1_turn: boolean;
   winner: string | null;
   is_over: boolean;
+  is_abandoned: boolean;
+  deleted_due_to_inactivity: boolean;
+  time_to_move: number;
+  ended_due_to_time: boolean;
   created_at: string;
 };
 
@@ -94,7 +102,10 @@ export type UpdateMultiPlayerGameParams = {
   firstCard?: SelectedCardType | null;
   secondCard?: SelectedCardType | null;
   winner?: string;
+  isAbandoned?: boolean;
   isOver?: boolean;
+  endedDueToTime?: boolean;
+  timeToMove?: number;
 };
 
 export type UpdateMultiPlayerGameRequestParams = {
@@ -110,4 +121,7 @@ export type UpdateMultiPlayerGameRequestParams = {
   second_card?: SelectedCardType | null;
   winner?: string;
   is_over?: boolean;
+  is_abandoned?: boolean;
+  time_to_move?: number;
+  ended_due_to_time?: boolean;
 };

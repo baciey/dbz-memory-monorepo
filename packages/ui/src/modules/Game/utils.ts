@@ -22,6 +22,10 @@ export const proccessMultiPlayerGame = (
     secondCard: game.second_card,
     winner: game.winner,
     isOver: game.is_over,
+    isAbandoned: game.is_abandoned,
+    deletedDueToInactivity: game.deleted_due_to_inactivity,
+    timeToMove: game.time_to_move,
+    endedDueToTime: game.ended_due_to_time,
     createdAt: dateFormatter(game.created_at),
   };
 };

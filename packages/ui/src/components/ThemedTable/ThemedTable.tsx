@@ -98,7 +98,7 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                               source={{ uri: avatarUrl }}
                             />
                           ) : (
-                            value
+                            <Text>{value}</Text>
                           )}
                           {isWinIcon && (
                             <View style={styles.iconContainer}>

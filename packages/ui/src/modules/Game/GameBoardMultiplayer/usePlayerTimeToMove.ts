@@ -1,21 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { gameActions } from "../actions";
-import { useAppDispatch } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { UsePlayerTimeToMoveProps } from "./GameBoardMultiplayer.types";
 import { useTranslation } from "react-i18next";
 
 export const usePlayerTimeToMove = ({
   game,
-  setPlayer1TimeToMove,
-  setPlayer2TimeToMove,
-  player1TimeToMove,
-  player2TimeToMove,
   handleSetGameMode,
   setAlert,
   setAlertOnPress,
+  timeToMove,
+  setTimeToMove,
 }: UsePlayerTimeToMoveProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const me = useAppSelector((state) => state.user.me);
 
   const {
     isPlayer1Turn,
@@ -27,15 +26,24 @@ export const usePlayerTimeToMove = ({
     player2Id,
     player1Name,
     player2Name,
+    endedDueToTime,
   } = game;
 
+  const timeToMoveRef = useRef(timeToMove);
+  const isMeGameOwner = me?.id === player1Id;
+  const isMyTurn =
+    (isPlayer1Turn && isMeGameOwner) || (!isPlayer1Turn && !isMeGameOwner);
+
   useEffect(() => {
-    if (!isPlayer1Ready || !isPlayer2Ready || isOver) return;
+    timeToMoveRef.current = timeToMove;
+  }, [timeToMove]);
+
+  useEffect(() => {
+    if (!isPlayer1Ready || !isPlayer2Ready || isOver || !isMyTurn) return;
+
     const int = setInterval(() => {
-      if (isPlayer1Turn) {
-        setPlayer1TimeToMove((prev) => prev - 1);
-      } else {
-        setPlayer2TimeToMove((prev) => prev - 1);
+      if (timeToMoveRef.current > 0) {
+        setTimeToMove(timeToMoveRef.current - 1);
       }
     }, 1000);
 
@@ -43,52 +51,70 @@ export const usePlayerTimeToMove = ({
       clearInterval(int);
     };
   }, [
-    isPlayer1Turn,
-    isPlayer2Ready,
     isPlayer1Ready,
+    isPlayer2Ready,
     isOver,
-    setPlayer1TimeToMove,
-    setPlayer2TimeToMove,
+    dispatch,
+    id,
+    setTimeToMove,
+    isMyTurn,
   ]);
 
   useEffect(() => {
     let winnerId = null;
-    let winnerName = null;
-    if (player1TimeToMove === 0 && player2Id) {
-      winnerId = player2Id;
-      winnerName = player2Name;
-    } else if (player2TimeToMove === 0 && player1Id) {
-      winnerId = player1Id;
-      winnerName = player1Name;
+
+    if (timeToMove === 0 && isMyTurn) {
+      winnerId = isPlayer1Turn ? player2Id : player1Id;
     }
+
     if (winnerId) {
-      const alertMessage = `${t("game.timesUp")}! ${winnerName} ${t("game.wonTheGame")}`;
+      dispatch(
+        gameActions.updateMultiPlayerGame({
+          id: id,
+          winner: winnerId,
+          isOver: true,
+          endedDueToTime: true,
+        }),
+      );
+    }
+  }, [
+    dispatch,
+    id,
+    player1Id,
+    player2Id,
+    handleSetGameMode,
+    t,
+    timeToMove,
+    isPlayer1Turn,
+    endedDueToTime,
+    isMyTurn,
+  ]);
+
+  useEffect(() => {
+    let winnerName = null;
+    if (endedDueToTime) {
+      winnerName = isPlayer1Turn ? player2Name : player1Name;
+    }
+
+    if (winnerName) {
+      const alertMessage = `${t("game.timesUp")}! ${winnerName} ${t(
+        "game.wonTheGame",
+      )}`;
       setAlert(alertMessage);
       setAlertOnPress(() => {
         return () => {
           handleSetGameMode(null);
         };
       });
-      dispatch(
-        gameActions.updateMultiPlayerGame({
-          id: id,
-          winner: winnerId,
-          isOver: true,
-        }),
-      );
     }
   }, [
-    player1TimeToMove,
-    dispatch,
-    id,
-    player1Name,
-    player1Id,
-    player2Id,
-    player2Name,
-    player2TimeToMove,
+    endedDueToTime,
     handleSetGameMode,
+    player1Name,
+    player2Name,
     setAlert,
     setAlertOnPress,
     t,
+    isPlayer1Turn,
   ]);
 };

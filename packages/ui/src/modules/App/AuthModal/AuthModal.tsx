@@ -75,8 +75,6 @@ export const AuthModal = () => {
   };
 
   const signIn = async () => {
-    console.log("signIn");
-
     const hasError = validateInputs(["email", "password"]);
     if (hasError) return;
 
@@ -97,7 +95,6 @@ export const AuthModal = () => {
   };
 
   const signInAnonymously = async () => {
-    console.log("signInAnonymously");
     const { data, error } = await supabase.auth.signInAnonymously();
     if (error) {
       setAlert(error.message);
@@ -108,8 +105,6 @@ export const AuthModal = () => {
   };
 
   const signUp = async () => {
-    console.log("signUp");
-
     const hasError = validateInputs(["email", "password", "repeatPassword"]);
     if (hasError) return;
 
@@ -135,8 +130,6 @@ export const AuthModal = () => {
   };
 
   const updatePassword = async () => {
-    console.log("updatePassword");
-
     const hasError = validateInputs(["password", "repeatPassword"]);
     if (hasError) return;
 
@@ -159,8 +152,6 @@ export const AuthModal = () => {
   };
 
   const updateEmail = async () => {
-    console.log("updateEmail");
-
     const hasError = validateInputs(["email"]);
     if (hasError) return;
 
@@ -200,7 +191,6 @@ export const AuthModal = () => {
   };
 
   const closeModal = useCallback(() => {
-    console.log("close modal");
     dispatch(
       appSliceActions.setAuthModal({
         isVisible: false,
@@ -221,8 +211,6 @@ export const AuthModal = () => {
   );
 
   const handleForgotPassword = async () => {
-    console.log("handleForgotPassword");
-
     const hasError = validateInputs(["email"]);
     if (hasError) return;
 

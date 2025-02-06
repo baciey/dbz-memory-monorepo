@@ -215,7 +215,6 @@ const getOnePlayerGames = (
   showPersonal?: boolean,
   searchQuery: string = "",
 ): PayloadThunkAction => {
-  console.log("getOnePlayerGames");
   return async (dispatch) => {
     dispatch(gameSliceActions.onePlayerGamesLoading());
 
@@ -266,7 +265,6 @@ const getTwoPlayerGames = (
 ): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(gameSliceActions.twoPlayerGamesLoading());
-    console.log("getTwoPlayerGames");
 
     supabase
       .from(DATABASE_TABLE.two_player_games)
@@ -385,6 +383,8 @@ const updateMultiPlayerGame = ({
   secondCard,
   winner,
   isOver,
+  isAbandoned,
+  endedDueToTime,
 }: UpdateMultiPlayerGameParams): PayloadThunkAction => {
   return async (dispatch) => {
     const data: UpdateMultiPlayerGameRequestParams = {};
@@ -401,26 +401,27 @@ const updateMultiPlayerGame = ({
     if (secondCard !== undefined) data["second_card"] = secondCard;
     if (winner !== undefined) data["winner"] = winner;
     if (isOver !== undefined) data["is_over"] = isOver;
-
-    console.log({ data });
+    if (isAbandoned !== undefined) data["is_abandoned"] = isAbandoned;
+    if (endedDueToTime !== undefined)
+      data["ended_due_to_time"] = endedDueToTime;
 
     await supabase
       .from(DATABASE_TABLE.multi_player_games)
       .update(data)
       .eq("id", id);
-    dispatch(getMultiPlayerGames({}));
+
+    dispatch(getMultiPlayerGames());
   };
 };
 
 const getMultiPlayerGames = (): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(gameSliceActions.multiPlayerGamesLoading());
-    console.log("getMultiplayerPlayerGames");
 
     const query = supabase
       .from(DATABASE_TABLE.multi_player_games)
       .select(
-        `id, player1_name, player2_name, player1_id, player2_id, player1_score, player2_score, is_player1_ready, is_player2_ready, is_player1_turn, cards, first_card, second_card, winner, is_over, created_at`,
+        `id, player1_name, player2_name, player1_id, player2_id, player1_score, player2_score, is_player1_ready, is_player2_ready, is_player1_turn, cards, first_card, second_card, winner, is_over, is_abandoned, deleted_due_to_inactivity, time_to_move, ended_due_to_time, created_at`,
       );
 
     const { data, error } = await query;
@@ -434,9 +435,11 @@ const getMultiPlayerGames = (): PayloadThunkAction => {
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
       });
-      const processedData = data.map((game) => {
-        return proccessMultiPlayerGame(game);
-      });
+      const processedData = data
+        .filter((game) => game.id)
+        .map((game) => {
+          return proccessMultiPlayerGame(game);
+        });
 
       dispatch(gameSliceActions.multiPlayerGamesSuccess(processedData));
     }

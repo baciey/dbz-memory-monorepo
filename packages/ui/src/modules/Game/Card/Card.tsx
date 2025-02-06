@@ -19,7 +19,8 @@ export const Card = memo(({ width, card, onPress, index }: CardProps) => {
         ]}
       >
         <Image
-          style={[styles.image, { opacity: card.isRevealed ? 1 : 0 }]}
+          // style={[styles.image, { opacity: card.isRevealed ? 1 : 0 }]}
+          style={[styles.image, { opacity: card.isRevealed ? 1 : 1 }]}
           source={{
             width: width,
             height: width,
@@ -29,7 +30,8 @@ export const Card = memo(({ width, card, onPress, index }: CardProps) => {
         />
         {!card.isRevealed && (
           <Image
-            style={styles.image}
+            // style={styles.image}
+            style={[styles.image, { opacity: 0.7 }]}
             source={{
               width: width,
               height: width,
