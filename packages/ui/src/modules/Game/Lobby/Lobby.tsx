@@ -1,17 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, IconButton } from "react-native-paper";
 import { ThemedButton } from "../../../components/ThemedButton";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { gameActions } from "../actions";
 import { userSelectors } from "../../User/selectors";
 import { gameSelectors } from "../selectors";
 import { useGetImages } from "../../../hooks/useGetImages";
-import {
-  CreateMultiPlayerGameParams,
-  MultiPlayerGame,
-  UpdateMultiPlayerGameParams,
-} from "../slice.types";
+import { CreateMultiPlayerGameParams, MultiPlayerGame } from "../slice.types";
 import { LobbyProps } from "./Lobby.types";
 import { supabase } from "../../../utils/supabase";
 import { DATABASE_TABLE } from "../../../constants/database";
@@ -21,7 +17,10 @@ import { useTranslation } from "react-i18next";
 import { styles } from "./Lobby.styles";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 
-export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
+export const Lobby = ({
+  onJoinOrCreatePublicGame,
+  handleSetGameMode,
+}: LobbyProps) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector(userSelectors.getMe);
   const playerName = useAppSelector(gameSelectors.getPlayerName);
@@ -33,12 +32,17 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
   const shuffledBoardImages = getShuffledBoardImages(images.board);
 
   const [alert, setAlert] = useState<string>("");
+  const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
 
   const isUserAlreadyGameOwner = multiPlayerGames.some(
-    (game) => game.player1Id === me?.id,
+    (game) =>
+      game.player1Id === me?.id && !game.isOver && !game.deletedDueToInactivity,
   );
   const isUserAlreadyInGame = multiPlayerGames.some(
-    (game) => game.player1Id === me?.id || game.player2Id === me?.id,
+    (game) =>
+      (game.player1Id === me?.id || game.player2Id === me?.id) &&
+      !game.isOver &&
+      !game.deletedDueToInactivity,
   );
 
   useEffect(() => {
@@ -71,7 +75,7 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
 
   const isJoinCreatePossible = useCallback(
     (game?: MultiPlayerGame) => {
-      return true;
+      setAlertOnPress(undefined);
       if (me?.id === game?.player1Id) {
         setAlert(t("game.ownGameAlert"));
         return false;
@@ -101,40 +105,81 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
   };
 
   const joinPublicGame = useCallback(
-    (game: MultiPlayerGame) => {
+    async (game: MultiPlayerGame) => {
       if (me?.id && isJoinCreatePossible(game)) {
-        const params: UpdateMultiPlayerGameParams = {
-          id: game.id,
-          player2Id: me.id,
-          player2Name: playerName,
+        const params = {
+          player2_id: me.id,
+          player2_name: playerName,
         };
-        dispatch(gameActions.updateMultiPlayerGame({ ...params }));
-        const gameUpdated = {
-          ...game,
-          player2Id: me.id,
-          player2Name: playerName,
-        };
-        onJoinOrCreatePublicGame(gameUpdated);
+
+        const { error } = await supabase
+          .from(DATABASE_TABLE.multi_player_games)
+          .update(params)
+          .eq("id", game.id);
+
+        if (error) {
+          setAlert(
+            "You can't join this game for some technical reason. Please try again.",
+          );
+          setAlertOnPress(() => {
+            return () => {
+              handleSetGameMode(null);
+            };
+          });
+        } else {
+          const gameUpdated = {
+            ...game,
+            player2Id: me.id,
+            player2Name: playerName,
+          };
+          onJoinOrCreatePublicGame(gameUpdated);
+        }
       }
     },
-    [me, playerName, isJoinCreatePossible, onJoinOrCreatePublicGame, dispatch],
+    [
+      me,
+      playerName,
+      isJoinCreatePossible,
+      onJoinOrCreatePublicGame,
+      handleSetGameMode,
+    ],
+  );
+
+  const handleDeleteGame = useCallback(
+    (id: number) => {
+      dispatch(gameActions.deleteMultiPlayerGame(id));
+    },
+    [dispatch],
   );
 
   const publicGamesElement = useMemo(() => {
     return multiPlayerGames
-      .filter((game) => !game.isOver)
+      .filter(
+        (game) => !game.isOver && !game.deletedDueToInactivity,
+        //  &&
+        // game.player2Id === null,
+      )
       .map((game) => {
+        const isMeGameOwner = game.player1Id === me?.id;
         return (
           <View key={game.id} style={styles.gameRowContainer}>
             <ThemedButton
               onPress={() => joinPublicGame(game)}
               text={t("game.join")}
+              icon="arrow-left"
             />
             <Text>{game.player1Name}</Text>
+            {isMeGameOwner && (
+              <IconButton
+                icon="close"
+                size={20}
+                onPress={() => handleDeleteGame(game.id)}
+              />
+            )}
           </View>
         );
       });
-  }, [multiPlayerGames, t, joinPublicGame]);
+  }, [multiPlayerGames, t, joinPublicGame, handleDeleteGame, me?.id]);
 
   const { height: screenHeight, isMobile } = useGetScreenDimensions();
   const divider = isMobile ? 2 : 1.5;
@@ -144,7 +189,8 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
       <ThemedAlert
         text={alert}
         isVisible={Boolean(alert)}
-        actionButtonOnPress={() => setAlert("")}
+        actionButtonOnPress={alertOnPress}
+        onDismiss={() => setAlert("")}
       />
       <View
         style={[styles.columnsContainer, { width: isMobile ? "100%" : "auto" }]}
@@ -162,6 +208,7 @@ export const Lobby = ({ onJoinOrCreatePublicGame }: LobbyProps) => {
             onPress={createPublicGame}
             text={t("game.create")}
             type="tertiary"
+            icon="plus"
           />
           <ScrollView
             nestedScrollEnabled

@@ -8,7 +8,6 @@ import { GLOBAL_STYLES } from "../../styles/globalStyles";
 import { Image, View } from "react-native";
 import { ThemedAlert } from "../../components/ThemedAlert/ThemedAlert";
 import { styles } from "./HomePage.styles";
-import { Loader } from "../../components/Loader/";
 import { NamesModal } from "../../modules/Game/NamesModal";
 import { useGetPlayerNameFromAsyncStorage } from "../../hooks/useGetPlayerNameFromAsyncStorage";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
@@ -60,14 +59,6 @@ export const HomePage = () => {
         text={alert}
         withCancel
       />
-      <Loader
-        isVisible={
-          (gameMode === GAME_BOARD_MODE.player1 ||
-            gameMode === GAME_BOARD_MODE.player2) &&
-          !isNamesModalVisible &&
-          !isLobbyVisible
-        }
-      />
       <View style={styles.backgroundImageContainer}>
         <Image
           style={[
@@ -88,8 +79,16 @@ export const HomePage = () => {
         !isNamesModalVisible) ||
       isLobbyVisible ? (
         <ThemedButton
+          icon="arrow-left"
           text={t("home.goBack")}
-          onPress={() => setAlert(t("home.returnAlert"))}
+          onPress={
+            isLobbyVisible
+              ? () => {
+                  setGameMode(null);
+                  setIsLobbyVisible(false);
+                }
+              : () => setAlert(t("home.returnAlert"))
+          }
           style={[
             GLOBAL_STYLES.m.mb16,
             isWeb ? {} : { marginTop: 50 },
@@ -160,6 +159,7 @@ export const HomePage = () => {
               setInitialGame(game);
               setIsLobbyVisible(false);
             }}
+            handleSetGameMode={handleSetGameMode}
           />
         )}
     </ThemedView>

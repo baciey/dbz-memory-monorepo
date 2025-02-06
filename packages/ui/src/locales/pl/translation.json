@@ -66,10 +66,11 @@
     "wonTheGame": "wygrał(a) grę",
     "timesUp": "Czas minął",
     "hurryUp": "Pośpiesz się",
-    "left": "opuścił(a)",
+    "timeToMove": "Czas na ruch",
     "hasLeftTheGame": "opuścił(a) grę",
     "setYourselfReady": "Naciśnij OK, aby ustawić się jako gotowy",
-    "joinedTheGame": "dołączył(a) do gry"
+    "joinedTheGame": "dołączył(a) do gry",
+    "deletedDueToInactivity": "Gra została usunięta z powodu braku aktywności"
   },
   "buttons": {
     "confirm": "Potwierdź",

@@ -13,7 +13,6 @@ import { appSliceActions } from "../App/slice";
 const getMe = (session: Session): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(userSliceActions.meLoading());
-    console.log("getMe");
     supabase
       .from(DATABASE_TABLE.profiles)
       .select(`username, avatar_url, password`)
@@ -51,13 +50,11 @@ const getMe = (session: Session): PayloadThunkAction => {
 const updateMe = (me: MeUpdate, session: Session): PayloadThunkAction => {
   return async (dispatch) => {
     dispatch(userSliceActions.meUpdateLoading());
-    console.log("updateMe");
     supabase
       .from(DATABASE_TABLE.profiles)
       .upsert(me)
       .then(({ error }) => {
         if (error) {
-          console.log({ error });
           dispatch(userSliceActions.meUpdateError());
         } else {
           dispatch(getMe(session));
@@ -90,7 +87,6 @@ const uploadAvatar = (
     });
 
     if (result.canceled || !result.assets || result.assets.length === 0) {
-      console.log("User cancelled image picker.", result);
       setIsAvatarLoaded(true);
       return;
     }

@@ -16,18 +16,14 @@ export type UseGameHasEndedProps = {
 
 export type UseSupabaseListenerProps = {
   gameId: number;
-  showOwnerClosedGameAlert: () => void;
-  showOpponentLeftGameAlert: () => void;
   setGame: Dispatch<SetStateAction<MultiPlayerGame>>;
 };
 
 export type UsePlayerTimeToMoveProps = {
   game: MultiPlayerGame;
-  setPlayer1TimeToMove: Dispatch<SetStateAction<number>>;
-  setPlayer2TimeToMove: Dispatch<SetStateAction<number>>;
-  player1TimeToMove: number;
-  player2TimeToMove: number;
   handleSetGameMode: (mode: GAME_BOARD_MODE | null) => void;
   setAlert: Dispatch<SetStateAction<string>>;
   setAlertOnPress: Dispatch<SetStateAction<(() => void) | undefined>>;
+  timeToMove: number;
+  setTimeToMove: Dispatch<SetStateAction<number>>;
 };
