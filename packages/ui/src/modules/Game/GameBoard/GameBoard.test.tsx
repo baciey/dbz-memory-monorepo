@@ -5,11 +5,15 @@ import { GAME_BOARD_MODE } from "./GameBoard.types";
 import { renderWithProviders } from "../../../utils/testUtils";
 
 describe("GameBoard", () => {
+  const props = {
+    mode: GAME_BOARD_MODE.player1,
+    handleSetGameMode: jest.fn(),
+    setAlert: jest.fn(),
+    setAlertOnPress: jest.fn(),
+    setIsAlertWithCancel: jest.fn(),
+  };
+
   it("presses two cards in 1-player mode", async () => {
-    const props = {
-      mode: GAME_BOARD_MODE.player1,
-      handleSetGameMode: jest.fn(),
-    };
     renderWithProviders(<GameBoard {...props} />);
     const { queryByTestId, getByTestId, findByTestId } = screen;
 
@@ -35,11 +39,11 @@ describe("GameBoard", () => {
   }, 10000);
 
   it("presses two pairs of cards in 2-player mode", async () => {
-    const props = {
+    const customProps = {
+      ...props,
       mode: GAME_BOARD_MODE.player2,
-      handleSetGameMode: jest.fn(),
     };
-    renderWithProviders(<GameBoard {...props} />);
+    renderWithProviders(<GameBoard {...customProps} />);
     const { queryByTestId, getByTestId, findByTestId } = screen;
 
     // first pair of cards

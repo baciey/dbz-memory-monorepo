@@ -15,13 +15,18 @@ import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { gameActions } from "../actions";
-import { ThemedAlert } from "../../../components/ThemedAlert";
 import { useTranslation } from "react-i18next";
 import { gameSelectors } from "../selectors";
 import { useCalculateCardAndBoardDimensions } from "../hooks";
 import { getShuffledBoardImages } from "../utils";
 
-export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
+export const GameBoard = ({
+  mode,
+  handleSetGameMode,
+  setAlert,
+  setAlertOnPress,
+  alertOnPress,
+}: GameBoardProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -30,7 +35,6 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
   const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
   const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
-  const [alert, setAlert] = useState<string>("");
 
   // Timer and score state
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -97,6 +101,13 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
       setAlert(
         `${t("game.congratulations")}! ${t("game.youHaveFinishedGameIn")} ${elapsedTime} ${t("game.seconds")}!`,
       );
+      if (!alertOnPress) {
+        setAlertOnPress(() => {
+          return () => {
+            handleSetGameMode(null);
+          };
+        });
+      }
     }
   }, [
     endTime,
@@ -107,6 +118,10 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
     dispatch,
     showPersonalGames,
     t,
+    handleSetGameMode,
+    setAlert,
+    setAlertOnPress,
+    alertOnPress,
   ]);
 
   // Save 2-players scores to the database
@@ -138,8 +153,28 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
         : `${t("game.congratulations")} ${winnerName}! ${t("game.youHaveWonTheGame")}! \n${t("game.finalScore")}: ${scores.player1} : ${scores.player2}`;
 
       setAlert(alertMessage);
+      if (!alertOnPress) {
+        setAlertOnPress(() => {
+          return () => {
+            handleSetGameMode(null);
+          };
+        });
+      }
     }
-  }, [scores, player1Name, player2Name, mode, cards, me?.id, dispatch, t]);
+  }, [
+    scores,
+    player1Name,
+    player2Name,
+    mode,
+    cards,
+    me?.id,
+    dispatch,
+    t,
+    handleSetGameMode,
+    setAlert,
+    setAlertOnPress,
+    alertOnPress,
+  ]);
 
   const handleCardPress = (index: number) => {
     if (firstCard && secondCard) return; // Prevent further clicks
@@ -208,12 +243,6 @@ export const GameBoard = ({ mode, handleSetGameMode }: GameBoardProps) => {
 
   return (
     <View>
-      <ThemedAlert
-        text={alert}
-        onDismiss={() => setAlert("")}
-        isVisible={Boolean(alert)}
-        actionButtonOnPress={() => handleSetGameMode(null)}
-      />
       <GameInfo
         mode={mode}
         elapsedTime={elapsedTime}

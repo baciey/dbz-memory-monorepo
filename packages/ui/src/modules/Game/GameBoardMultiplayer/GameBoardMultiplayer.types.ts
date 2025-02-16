@@ -5,6 +5,10 @@ import { Dispatch, SetStateAction } from "react";
 export type GameBoardMultiplayerProps = {
   handleSetGameMode: (mode: GAME_BOARD_MODE | null) => void;
   initialGame: MultiPlayerGame;
+  setAlert: Dispatch<SetStateAction<string>>;
+  setAlertOnPress: Dispatch<SetStateAction<(() => void) | undefined>>;
+  setIsAlertWithCancel: Dispatch<SetStateAction<boolean>>;
+  alertOnPress: (() => void) | undefined;
 };
 
 export type UseGameHasEndedProps = {
@@ -12,6 +16,7 @@ export type UseGameHasEndedProps = {
   setAlert: Dispatch<SetStateAction<string>>;
   setAlertOnPress: Dispatch<SetStateAction<(() => void) | undefined>>;
   handleSetGameMode: (mode: GAME_BOARD_MODE | null) => void;
+  alertOnPress: (() => void) | undefined;
 };
 
 export type UseSupabaseListenerProps = {
@@ -26,4 +31,5 @@ export type UsePlayerTimeToMoveProps = {
   setAlertOnPress: Dispatch<SetStateAction<(() => void) | undefined>>;
   timeToMove: number;
   setTimeToMove: Dispatch<SetStateAction<number>>;
+  alertOnPress: (() => void) | undefined;
 };

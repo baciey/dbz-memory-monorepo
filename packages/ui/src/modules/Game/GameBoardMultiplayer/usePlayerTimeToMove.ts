@@ -11,6 +11,7 @@ export const usePlayerTimeToMove = ({
   setAlertOnPress,
   timeToMove,
   setTimeToMove,
+  alertOnPress,
 }: UsePlayerTimeToMoveProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -101,11 +102,13 @@ export const usePlayerTimeToMove = ({
         "game.wonTheGame",
       )}`;
       setAlert(alertMessage);
-      setAlertOnPress(() => {
-        return () => {
-          handleSetGameMode(null);
-        };
-      });
+      if (!alertOnPress) {
+        setAlertOnPress(() => {
+          return () => {
+            handleSetGameMode(null);
+          };
+        });
+      }
     }
   }, [
     endedDueToTime,
@@ -116,5 +119,6 @@ export const usePlayerTimeToMove = ({
     setAlertOnPress,
     t,
     isPlayer1Turn,
+    alertOnPress,
   ]);
 };

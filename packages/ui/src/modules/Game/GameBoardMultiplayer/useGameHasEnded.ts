@@ -9,6 +9,7 @@ export const useGameHasEnded = ({
   handleSetGameMode,
   setAlert,
   setAlertOnPress,
+  alertOnPress,
 }: UseGameHasEndedProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -63,11 +64,13 @@ export const useGameHasEnded = ({
       }
 
       setAlert(alertMessage);
-      setAlertOnPress(() => {
-        return () => {
-          handleSetGameMode(null);
-        };
-      });
+      if (!alertOnPress) {
+        setAlertOnPress(() => {
+          return () => {
+            handleSetGameMode(null);
+          };
+        });
+      }
     }
   }, [
     player1Name,
@@ -82,8 +85,9 @@ export const useGameHasEnded = ({
     dispatch,
     t,
     isOver,
-    handleSetGameMode,
     setAlert,
     setAlertOnPress,
+    alertOnPress,
+    handleSetGameMode,
   ]);
 };

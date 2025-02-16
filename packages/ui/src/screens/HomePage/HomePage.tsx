@@ -15,6 +15,7 @@ import { useGetImages } from "../../hooks/useGetImages";
 import { GameBoardMultiplayer } from "../../modules/Game/GameBoardMultiplayer";
 import { Lobby } from "../../modules/Game/Lobby";
 import { MultiPlayerGame } from "../../modules/Game/slice.types";
+import { set } from "lodash";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -28,10 +29,12 @@ export const HomePage = () => {
   useGetPlayerNameFromAsyncStorage();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
-  const [alert, setAlert] = useState<string>("");
   const [isLobbyVisible, setIsLobbyVisible] = useState(false);
   const [initialGame, setInitialGame] = useState<MultiPlayerGame | null>(null);
   const [isNamesModalVisible, setIsNamesModalVisible] = useState(false);
+  const [alert, setAlert] = useState<string>("");
+  const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
+  const [isAlertWithCancel, setIsAlertWithCancel] = useState<boolean>(false);
 
   const handleSetGameMode = (mode: GAME_BOARD_MODE | null) => {
     setGameMode(mode);
@@ -53,11 +56,15 @@ export const HomePage = () => {
       ]}
     >
       <ThemedAlert
-        actionButtonOnPress={handleReturnToMenu}
-        isVisible={Boolean(alert)}
-        onDismiss={() => setAlert("")}
         text={alert}
-        withCancel
+        isVisible={Boolean(alert)}
+        actionButtonOnPress={alertOnPress}
+        withCancel={isAlertWithCancel}
+        onDismiss={() => {
+          setAlert("");
+          setIsAlertWithCancel(false);
+          setAlertOnPress(undefined);
+        }}
       />
       <View style={styles.backgroundImageContainer}>
         <Image
@@ -87,7 +94,11 @@ export const HomePage = () => {
                   setGameMode(null);
                   setIsLobbyVisible(false);
                 }
-              : () => setAlert(t("home.returnAlert"))
+              : () => {
+                  setAlert(t("home.returnAlert"));
+                  setIsAlertWithCancel(true);
+                  setAlertOnPress(handleReturnToMenu);
+                }
           }
           style={[
             GLOBAL_STYLES.m.mb16,
@@ -137,7 +148,13 @@ export const HomePage = () => {
       {(gameMode === GAME_BOARD_MODE.player1 ||
         gameMode === GAME_BOARD_MODE.player2) &&
         !isNamesModalVisible && (
-          <GameBoard mode={gameMode} handleSetGameMode={handleSetGameMode} />
+          <GameBoard
+            mode={gameMode}
+            handleSetGameMode={handleSetGameMode}
+            setAlert={setAlert}
+            setAlertOnPress={setAlertOnPress}
+            alertOnPress={alertOnPress}
+          />
         )}
 
       {gameMode === GAME_BOARD_MODE.multiplayer &&
@@ -147,6 +164,10 @@ export const HomePage = () => {
           <GameBoardMultiplayer
             handleSetGameMode={handleSetGameMode}
             initialGame={initialGame}
+            setAlert={setAlert}
+            setAlertOnPress={setAlertOnPress}
+            setIsAlertWithCancel={setIsAlertWithCancel}
+            alertOnPress={alertOnPress}
           />
         )}
 
@@ -160,6 +181,9 @@ export const HomePage = () => {
               setIsLobbyVisible(false);
             }}
             handleSetGameMode={handleSetGameMode}
+            setAlert={setAlert}
+            setAlertOnPress={setAlertOnPress}
+            setIsAlertWithCancel={setIsAlertWithCancel}
           />
         )}
     </ThemedView>

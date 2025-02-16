@@ -70,7 +70,9 @@
     "hasLeftTheGame": "has left the game",
     "setYourselfReady": "Press OK to set yourself ready",
     "joinedTheGame": "joined the game",
-    "deletedDueToInactivity": "The game has been deleted due to inactivity"
+    "deletedDueToInactivity": "The game has been deleted due to inactivity",
+    "youHaveBeenKickedDueToInactivity": "You have been kicked from the game due to inactivity",
+    "joinGameError": "You can't join this game for some technical reason. Please try again."
   },
   "buttons": {
     "confirm": "Confirm",
