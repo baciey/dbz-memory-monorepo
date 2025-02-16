@@ -31,7 +31,7 @@ export const Card = memo(({ width, card, onPress, index }: CardProps) => {
         {!card.isRevealed && (
           <Image
             // style={styles.image}
-            style={[styles.image, { opacity: 0.7 }]}
+            style={[styles.image, { opacity: 0.3 }]}
             source={{
               width: width,
               height: width,

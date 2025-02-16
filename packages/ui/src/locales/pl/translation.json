@@ -70,7 +70,9 @@
     "hasLeftTheGame": "opuścił(a) grę",
     "setYourselfReady": "Naciśnij OK, aby ustawić się jako gotowy",
     "joinedTheGame": "dołączył(a) do gry",
-    "deletedDueToInactivity": "Gra została usunięta z powodu braku aktywności"
+    "deletedDueToInactivity": "Gra została usunięta z powodu braku aktywności",
+    "youHaveBeenKickedDueToInactivity": "Zostałeś(aś) wyrzucony(a) z gry z powodu braku aktywności",
+    "joinGameError": "Nie możesz dołączyć do tej gry z powodu problemów technicznych. Spróbuj ponownie."
   },
   "buttons": {
     "confirm": "Potwierdź",
