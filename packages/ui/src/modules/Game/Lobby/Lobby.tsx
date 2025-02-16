@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { ScrollView, View } from "react-native";
 import { Text, useTheme, IconButton } from "react-native-paper";
 import { ThemedButton } from "../../../components/ThemedButton";
@@ -12,7 +12,6 @@ import { LobbyProps } from "./Lobby.types";
 import { supabase } from "../../../utils/supabase";
 import { DATABASE_TABLE } from "../../../constants/database";
 import { getShuffledBoardImages } from "../utils";
-import { ThemedAlert } from "../../../components/ThemedAlert";
 import { useTranslation } from "react-i18next";
 import { styles } from "./Lobby.styles";
 import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
@@ -20,6 +19,8 @@ import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 export const Lobby = ({
   onJoinOrCreatePublicGame,
   handleSetGameMode,
+  setAlert,
+  setAlertOnPress,
 }: LobbyProps) => {
   const dispatch = useAppDispatch();
   const me = useAppSelector(userSelectors.getMe);
@@ -30,9 +31,6 @@ export const Lobby = ({
   const { t } = useTranslation();
   const { images } = useGetImages();
   const shuffledBoardImages = getShuffledBoardImages(images.board);
-
-  const [alert, setAlert] = useState<string>("");
-  const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
 
   const isUserAlreadyGameOwner = multiPlayerGames.some(
     (game) =>
@@ -89,7 +87,14 @@ export const Lobby = ({
         return true;
       }
     },
-    [me, isUserAlreadyGameOwner, isUserAlreadyInGame, t],
+    [
+      me,
+      isUserAlreadyGameOwner,
+      isUserAlreadyInGame,
+      t,
+      setAlert,
+      setAlertOnPress,
+    ],
   );
 
   const createPublicGame = () => {
@@ -118,9 +123,7 @@ export const Lobby = ({
           .eq("id", game.id);
 
         if (error) {
-          setAlert(
-            "You can't join this game for some technical reason. Please try again.",
-          );
+          setAlert(t("game.joinGameError"));
           setAlertOnPress(() => {
             return () => {
               handleSetGameMode(null);
@@ -142,6 +145,9 @@ export const Lobby = ({
       isJoinCreatePossible,
       onJoinOrCreatePublicGame,
       handleSetGameMode,
+      setAlert,
+      setAlertOnPress,
+      t,
     ],
   );
 
@@ -155,9 +161,10 @@ export const Lobby = ({
   const publicGamesElement = useMemo(() => {
     return multiPlayerGames
       .filter(
-        (game) => !game.isOver && !game.deletedDueToInactivity,
-        //  &&
-        // game.player2Id === null,
+        (game) =>
+          !game.isOver &&
+          !game.deletedDueToInactivity &&
+          game.player2Id === null,
       )
       .map((game) => {
         const isMeGameOwner = game.player1Id === me?.id;
@@ -186,12 +193,6 @@ export const Lobby = ({
 
   return (
     <View style={[styles.container]}>
-      <ThemedAlert
-        text={alert}
-        isVisible={Boolean(alert)}
-        actionButtonOnPress={alertOnPress}
-        onDismiss={() => setAlert("")}
-      />
       <View
         style={[styles.columnsContainer, { width: isMobile ? "100%" : "auto" }]}
       >

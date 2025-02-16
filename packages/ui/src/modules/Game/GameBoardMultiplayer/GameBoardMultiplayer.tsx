@@ -5,7 +5,6 @@ import { ThemedView } from "../../../components/ThemedView";
 import { GameInfo } from "../GameInfo";
 import { View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { ThemedAlert } from "../../../components/ThemedAlert";
 import { GameBoardMultiplayerProps } from "./GameBoardMultiplayer.types";
 import { GAME_BOARD_MODE } from "../GameBoard/GameBoard.types";
 import { MultiPlayerGame } from "../slice.types";
@@ -26,6 +25,10 @@ import { defaultTimeToMove } from "./GameBoardMultiPlayer.const";
 export const GameBoardMultiplayer = ({
   handleSetGameMode,
   initialGame,
+  setAlert,
+  setAlertOnPress,
+  setIsAlertWithCancel,
+  alertOnPress,
 }: GameBoardMultiplayerProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -35,9 +38,6 @@ export const GameBoardMultiplayer = ({
 
   const [cardWidth, setCardWidth] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState<number>(0);
-  const [alert, setAlert] = useState<string>("");
-  const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
-  const [isAlertWithCancel, setIsAlertWithCancel] = useState<boolean>(false);
   const [game, setGame] = useState<MultiPlayerGame>(initialGame);
   const [timeToMove, setTimeToMove] = useState<number>(defaultTimeToMove);
 
@@ -65,7 +65,7 @@ export const GameBoardMultiplayer = ({
     setAlert(`${game.player2Name} ${t("game.hasLeftTheGame")}`);
     setIsAlertWithCancel(false);
     setAlertOnPress(undefined);
-  }, [game.player2Name, t]);
+  }, [game.player2Name, t, setIsAlertWithCancel, setAlert, setAlertOnPress]);
 
   const showOwnerClosedGameAlert = useCallback(() => {
     setAlert(`${player1Name} ${t("game.hasLeftTheGame")}`);
@@ -75,7 +75,14 @@ export const GameBoardMultiplayer = ({
         handleSetGameMode(null);
       };
     });
-  }, [handleSetGameMode, t, player1Name]);
+  }, [
+    handleSetGameMode,
+    t,
+    player1Name,
+    setAlert,
+    setIsAlertWithCancel,
+    setAlertOnPress,
+  ]);
 
   useEffect(() => {
     const showGameDeletedDueToInactivityAlert = () => {
@@ -91,7 +98,16 @@ export const GameBoardMultiplayer = ({
     if (deletedDueToInactivity) {
       showGameDeletedDueToInactivityAlert();
     }
-  }, [deletedDueToInactivity, handleSetGameMode, t, player1Name, player2Name]);
+  }, [
+    deletedDueToInactivity,
+    handleSetGameMode,
+    t,
+    player1Name,
+    player2Name,
+    setAlert,
+    setIsAlertWithCancel,
+    setAlertOnPress,
+  ]);
 
   const resetGame = useCallback(() => {
     const shuffledBoardImages = getShuffledBoardImages(images.board);
@@ -99,10 +115,11 @@ export const GameBoardMultiplayer = ({
     dispatch(
       gameActions.updateMultiPlayerGame({
         id,
+        isPlayer1Ready: false,
         isPlayer2Ready: false,
         cards: shuffledBoardImages,
         player2Id: null,
-        isPlayer1Ready: false,
+        player2Name: null,
         player1Score: 0,
         player2Score: 0,
         isPlayer1Turn: true,
@@ -183,6 +200,8 @@ export const GameBoardMultiplayer = ({
     resetGame,
     showOwnerClosedGameAlert,
     showOpponentLeftGameAlert,
+    setAlert,
+    setAlertOnPress,
   ]);
 
   const handleMeLeftGame = useCallback(() => {
@@ -231,7 +250,15 @@ export const GameBoardMultiplayer = ({
         );
       };
     });
-  }, [game.player2Name, id, dispatch, t]);
+  }, [
+    game.player2Name,
+    id,
+    dispatch,
+    t,
+    setAlertOnPress,
+    setIsAlertWithCancel,
+    setAlert,
+  ]);
 
   const showSetOpponentReadyAlert = useCallback(() => {
     setAlert(t("game.setYourselfReady"));
@@ -243,7 +270,7 @@ export const GameBoardMultiplayer = ({
         );
       };
     });
-  }, [id, dispatch, t]);
+  }, [id, dispatch, t, setAlertOnPress, setIsAlertWithCancel, setAlert]);
 
   const showGoBackToMenuAlert = () => {
     setAlert(t("home.returnAlert"));
@@ -259,7 +286,7 @@ export const GameBoardMultiplayer = ({
   useEffect(() => {
     if (isMeGameOwner && player2Id) {
       showSetOwnerReadyAlert();
-    } else if (!isMeGameOwner) {
+    } else if (!isMeGameOwner && player2Id) {
       showSetOpponentReadyAlert();
     }
   }, [
@@ -268,33 +295,47 @@ export const GameBoardMultiplayer = ({
     showSetOwnerReadyAlert,
     showSetOpponentReadyAlert,
   ]);
-
-  //when user closes the tab in browser
-  // useEffect(() => {
-  //   if (isWeb) {
-  //     window.addEventListener("beforeunload", handleMeLeftGame);
-  //     return () => {
-  //       window.removeEventListener("beforeunload", handleMeLeftGame);
-  //     };
-  //   }
-  // }, [handleMeLeftGame, isWeb, handleSetGameMode, player2Id]);
-
   const { activePlayers } = useSupabaseListener({
     gameId: id,
     setGame,
   });
   const [isRoomFull, setIsRoomFull] = useState(false);
   useEffect(() => {
-    if (activePlayers.length === 2) {
+    if (activePlayers.length === 2 && !isRoomFull) {
       setIsRoomFull(true);
     }
-  }, [activePlayers, handleOpponentLeftGame]);
+  }, [activePlayers, handleOpponentLeftGame, isRoomFull]);
   useEffect(() => {
-    if (isRoomFull && activePlayers.length === 1) {
-      handleOpponentLeftGame();
+    if (isRoomFull && activePlayers.length === 1 && me?.id) {
+      if (activePlayers.includes(me?.id)) {
+        handleOpponentLeftGame();
+      } else {
+        if (isMeGameOwner) {
+          dispatch(gameActions.deleteMultiPlayerGame(id));
+        }
+        setAlert(t("game.youHaveBeenKickedDueToInactivity"));
+        setIsAlertWithCancel(false);
+        setAlertOnPress(undefined);
+        handleSetGameMode(null);
+      }
+
       setIsRoomFull(false);
     }
-  }, [isRoomFull, activePlayers, handleOpponentLeftGame]);
+  }, [
+    isRoomFull,
+    activePlayers,
+    handleOpponentLeftGame,
+    me?.id,
+    handleMeLeftGame,
+    handleSetGameMode,
+    t,
+    setAlert,
+    setIsAlertWithCancel,
+    setAlertOnPress,
+    isMeGameOwner,
+    dispatch,
+    id,
+  ]);
 
   useCalculateCardAndBoardDimensions({
     setCardWidth,
@@ -306,6 +347,7 @@ export const GameBoardMultiplayer = ({
     handleSetGameMode,
     setAlert,
     setAlertOnPress,
+    alertOnPress,
   });
 
   usePlayerTimeToMove({
@@ -315,6 +357,7 @@ export const GameBoardMultiplayer = ({
     setAlertOnPress,
     timeToMove,
     setTimeToMove,
+    alertOnPress,
   });
 
   const handleCardPress = (index: number) => {
@@ -401,14 +444,6 @@ export const GameBoardMultiplayer = ({
         ]}
       />
       <View>
-        <ThemedAlert
-          text={alert}
-          isVisible={Boolean(alert)}
-          actionButtonOnPress={alertOnPress}
-          withCancel={isAlertWithCancel}
-          onDismiss={() => setAlert("")}
-        />
-
         <View>
           {isMyTurn && timeToMove < 10 && (
             <Text
