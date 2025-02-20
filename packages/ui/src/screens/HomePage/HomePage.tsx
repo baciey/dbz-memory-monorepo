@@ -15,7 +15,6 @@ import { useGetImages } from "../../hooks/useGetImages";
 import { GameBoardMultiplayer } from "../../modules/Game/GameBoardMultiplayer";
 import { Lobby } from "../../modules/Game/Lobby";
 import { MultiPlayerGame } from "../../modules/Game/slice.types";
-import { set } from "lodash";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -183,7 +182,6 @@ export const HomePage = () => {
             handleSetGameMode={handleSetGameMode}
             setAlert={setAlert}
             setAlertOnPress={setAlertOnPress}
-            setIsAlertWithCancel={setIsAlertWithCancel}
           />
         )}
     </ThemedView>

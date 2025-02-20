@@ -1,13 +1,13 @@
 import React from "react";
 import { renderWithProviders } from "../../utils/testUtils";
 import { screen, waitFor } from "@testing-library/react-native";
-import { CopyrightPage } from "./CopyrightPage";
-import { authors } from "./CopyrightPage.const";
+import { PrivacyPolicyPage } from "./PrivacyPolicyPage";
+import { authors } from "./PrivacyPolicyPage.const";
 
 jest.useFakeTimers();
 
 it("renders correctly", async () => {
-  renderWithProviders(<CopyrightPage />);
+  renderWithProviders(<PrivacyPolicyPage />);
   const { getByText, getAllByText } = screen;
 
   await waitFor(() => {

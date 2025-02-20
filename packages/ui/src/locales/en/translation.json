@@ -122,5 +122,9 @@
     "send": "Send",
     "yourEmail": "Your email",
     "messageError": "This field cannot be empty."
+  },
+  "privacyPolicy": {
+    "privacyPolicy": "Privacy policy",
+    "content": "1. Introduction\nThis Privacy Policy explains how the DBZ Memory Game (the 'App') collects, uses, and stores user data. By using the App, you agree to the terms of this Privacy Policy.\n\n2. Data Collection and Usage\nThe App collects and stores the following user data:\n- Player names or nicknames\n- Game scores\n- Completion time and date\n\nThis data is used solely for in-app features, such as displaying statistics in the 'Statistics' section. The App does **not** share, sell, or transmit this data to third parties.\n\n3. Data Storage and Security\nAll collected data is stored locally on the user's device or within the App's infrastructure. Reasonable security measures are in place to protect user data from unauthorized access or loss.\n\n4. Data Retention and Deletion\nData is stored for the duration of the App’s functionality. If users wish to delete their data, they may contact us by email or contact form within the App and by clearing their App data manually.\n\n5. Contact Information\nIf you have any questions regarding this Privacy Policy, please contact:\n**Developer:** Maciej Baczyński\n**Email:** baciey@gmail.com\n\n6. Changes to the Privacy Policy\nThis Privacy Policy may be updated periodically. Any changes will be reflected in the App."
   }
 }
