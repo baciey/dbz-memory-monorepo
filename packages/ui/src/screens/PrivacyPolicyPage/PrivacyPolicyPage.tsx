@@ -1,15 +1,15 @@
 import React from "react";
 import { ThemedView } from "../../components/ThemedView";
-import { styles } from "./CopyrightPage.styles";
+import { styles } from "./PrivacyPolicyPage.styles";
 import { Avatar, Card, Text } from "react-native-paper";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 import { Linking, Pressable, View } from "react-native";
-import { authors } from "./CopyrightPage.const";
+import { authors } from "./PrivacyPolicyPage.const";
 import { Link } from "./Link";
 import { useTranslation } from "react-i18next";
 
-export const CopyrightPage = () => {
+export const PrivacyPolicyPage = () => {
   const { t } = useTranslation();
   const { isMobile, width } = useGetScreenDimensions();
 
@@ -58,9 +58,20 @@ export const CopyrightPage = () => {
   return (
     <ThemedView style={globalStyles.pageContainer}>
       <Text variant="headlineSmall" style={globalStyles.heading}>
+        {t("privacyPolicy.privacyPolicy")}
+      </Text>
+      <Text
+        variant="bodyMedium"
+        style={[globalStyles.heading, { maxWidth: isMobile ? "100%" : 800 }]}
+      >
+        {t("privacyPolicy.content")}
+      </Text>
+      <Text variant="headlineSmall" style={globalStyles.heading}>
         {t("copyright.copyright")}
       </Text>
-      <Text style={globalStyles.heading}>{t("copyright.description")}</Text>
+      <Text variant="bodyMedium" style={globalStyles.heading}>
+        {t("copyright.description")}
+      </Text>
       <View style={styles.cardContainer}>{authorsList}</View>
     </ThemedView>
   );

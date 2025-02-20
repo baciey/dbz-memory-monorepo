@@ -122,5 +122,9 @@
     "send": "Wyślij",
     "yourEmail": "Twój e-mail",
     "messageError": "To pole nie może być puste."
+  },
+  "privacyPolicy": {
+    "privacyPolicy": "Polityka prywatności",
+    "content": "1. Wstęp\nNiniejsza Polityka Prywatności wyjaśnia, w jaki sposób aplikacja DBZ Memory Game (dalej 'Aplikacja') gromadzi, wykorzystuje i przechowuje dane użytkowników. Korzystając z Aplikacji, użytkownik zgadza się na warunki niniejszej Polityki Prywatności.\n\n2. Gromadzenie i wykorzystywanie danych\nAplikacja zbiera i przechowuje następujące dane użytkownika:\n- Imiona lub pseudonimy graczy\n- Wyniki gry\n- Czas i data ukończenia gry\n\nDane te są wykorzystywane wyłącznie do funkcji wewnątrz Aplikacji, takich jak wyświetlanie statystyk w sekcji 'Statystyki'. Aplikacja **nie** udostępnia, nie sprzedaje ani nie przekazuje tych danych osobom trzecim.\n\n3. Przechowywanie i bezpieczeństwo danych\nWszystkie zgromadzone dane są przechowywane lokalnie na urządzeniu użytkownika lub w infrastrukturze Aplikacji. Zastosowano odpowiednie środki bezpieczeństwa w celu ochrony danych przed nieautoryzowanym dostępem lub utratą.\n\n4. Przechowywanie i usuwanie danych\nDane są przechowywane tak długo, jak Aplikacja pozostaje funkcjonalna. Jeśli użytkownik chce usunąć swoje dane, może to zrobić poprzez kontakt mailowy, formularz kontaktowy w Aplikacji oraz ręczne wyczyszczenie danych Aplikacji.\n\n5. Informacje kontaktowe\nW przypadku pytań dotyczących niniejszej Polityki Prywatności prosimy o kontakt:\n**Deweloper:** Maciej Baczyński\n**E-mail:** baciey@gmail.com\n\n6. Zmiany w Polityce Prywatności\nNiniejsza Polityka Prywatności może być okresowo aktualizowana. Wszelkie zmiany zostaną odzwierciedlone w Aplikacji."
   }
 }

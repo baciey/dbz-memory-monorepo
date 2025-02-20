@@ -3,6 +3,6 @@ export enum ROUTES {
   settings = "settings",
   statistics = "statistics",
   about = "about",
-  copyright = "copyright",
+  privacyPolicy = "privacyPolicy",
   contact = "contact",
 }
