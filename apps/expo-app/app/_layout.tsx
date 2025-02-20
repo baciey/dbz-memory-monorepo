@@ -3,7 +3,6 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import SpaceMono from "../assets/fonts/SpaceMono-Regular.ttf";
-// import "react-native-reanimated";
 
 import { Provider } from "react-redux";
 import {

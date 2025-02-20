@@ -1,10 +1,10 @@
 import { ScreenWrapper } from "@/components/ScreenWrapper";
-import { CopyrightPage } from "@repo/ui";
+import { PrivacyPolicyPage } from "@repo/ui";
 
-export default function Copyright() {
+export default function PrivacyPolicy() {
   return (
     <ScreenWrapper>
-      <CopyrightPage />
+      <PrivacyPolicyPage />
     </ScreenWrapper>
   );
 }

@@ -24,7 +24,7 @@ export const Navbar = () => {
   const homePath = `/`;
   const settingsPath = `/${ROUTES.settings}`;
   const statisticsPath = `/${ROUTES.statistics}`;
-  const copyrightPath = `/${ROUTES.copyright}`;
+  const privacyPolicyPath = `/${ROUTES.privacyPolicy}`;
   const contactPath = `/${ROUTES.contact}`;
 
   const homeIcon = "home" as const;
@@ -35,8 +35,8 @@ export const Navbar = () => {
   const statisticsIconOutline = "chart-box-outline" as const;
   const contactIcon = "email" as const;
   const contactIconOutline = "email-outline" as const;
-  const copyrightIcon = "information" as const;
-  const copyrightIconOutline = "information-outline" as const;
+  const privacyPolicyIcon = "information" as const;
+  const privacyPolicyIconOutline = "information-outline" as const;
 
   const pages = [
     {
@@ -64,10 +64,10 @@ export const Navbar = () => {
       iconOutline: contactIconOutline,
     },
     {
-      name: t("copyright.copyright"),
-      path: copyrightPath,
-      icon: copyrightIcon,
-      iconOutline: copyrightIconOutline,
+      name: t("privacyPolicy.privacyPolicy"),
+      path: privacyPolicyPath,
+      icon: privacyPolicyIcon,
+      iconOutline: privacyPolicyIconOutline,
     },
   ];
 
