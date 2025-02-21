@@ -3,6 +3,7 @@ import { gameActions } from "../actions";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { UsePlayerTimeToMoveProps } from "./GameBoardMultiplayer.types";
 import { useTranslation } from "react-i18next";
+import { userSelectors } from "../../User/selectors";
 
 export const usePlayerTimeToMove = ({
   game,
@@ -15,7 +16,7 @@ export const usePlayerTimeToMove = ({
 }: UsePlayerTimeToMoveProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const me = useAppSelector((state) => state.user.me);
+  const me = useAppSelector(userSelectors.getMe);
 
   const {
     isPlayer1Turn,

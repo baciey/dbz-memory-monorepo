@@ -19,6 +19,8 @@ import { useTranslation } from "react-i18next";
 import { gameSelectors } from "../selectors";
 import { useCalculateCardAndBoardDimensions } from "../hooks";
 import { getShuffledBoardImages } from "../utils";
+import { userSelectors } from "../../User/selectors";
+import { use } from "i18next";
 
 export const GameBoard = ({
   mode,
@@ -43,15 +45,13 @@ export const GameBoard = ({
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
 
-  const me = useAppSelector((state) => state.user.me);
+  const me = useAppSelector(userSelectors.getMe);
   const player1Name =
     useAppSelector(gameSelectors.getPlayersNames)[0] || t("game.player1");
   const player2Name =
     useAppSelector(gameSelectors.getPlayersNames)[1] || t("game.player2");
-  const singlePlayerName = useAppSelector((state) => state.game.playerName);
-  const showPersonalGames = useAppSelector(
-    (state) => state.game.showPersonalGames,
-  );
+  const singlePlayerName = useAppSelector(gameSelectors.getPlayerName);
+  const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
   const { images } = useGetImages();
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { STORAGE_KEYS } from "../../../constants/storage";
 import { capitalizeFirst } from "../../../utils/capitalizeFirst";
 import { useValidation } from "../../../hooks/useValidation";
+import { gameSelectors } from "../selectors";
 
 export const NamesModal = ({
   isVisible,
@@ -30,9 +31,9 @@ export const NamesModal = ({
   const [playersNames, setPlayersNames] = useState(["", ""]);
   const [errorText, setErrorText] = useState(["", ""]);
 
-  const player1Name = useAppSelector((state) => state.game.playersNames[0]);
-  const player2Name = useAppSelector((state) => state.game.playersNames[1]);
-  const singlePlayerName = useAppSelector((state) => state.game.playerName);
+  const player1Name = useAppSelector(gameSelectors.getPlayersNames)[0];
+  const player2Name = useAppSelector(gameSelectors.getPlayersNames)[1];
+  const singlePlayerName = useAppSelector(gameSelectors.getPlayerName);
 
   const { isMobile } = useGetScreenDimensions();
 

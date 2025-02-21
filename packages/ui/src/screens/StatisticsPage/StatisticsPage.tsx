@@ -35,10 +35,7 @@ export const StatisticsPage = () => {
   const onePlayerGames = useAppSelector(gameSelectors.getOnePlayerGames);
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
   const multiPlayerGames = useAppSelector(gameSelectors.getMultiPlayerGames);
-
-  const showPersonalGames = useAppSelector(
-    (state) => state.game.showPersonalGames,
-  );
+  const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
   const [searchQuery, setSearchQuery] = useState("");
