@@ -3,6 +3,7 @@ import { gameActions } from "../actions";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { useTranslation } from "react-i18next";
 import { UseGameHasEndedProps } from "./GameBoardMultiplayer.types";
+import { userSelectors } from "../../User/selectors";
 
 export const useGameHasEnded = ({
   game,
@@ -13,7 +14,7 @@ export const useGameHasEnded = ({
 }: UseGameHasEndedProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const me = useAppSelector((state) => state.user.me);
+  const me = useAppSelector(userSelectors.getMe);
 
   const {
     id,

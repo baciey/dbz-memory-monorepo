@@ -21,6 +21,7 @@ import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 import { getShuffledBoardImages } from "../utils";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { defaultTimeToMove } from "./GameBoardMultiPlayer.const";
+import { userSelectors } from "../../User/selectors";
 
 export const GameBoardMultiplayer = ({
   handleSetGameMode,
@@ -32,7 +33,7 @@ export const GameBoardMultiplayer = ({
 }: GameBoardMultiplayerProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const me = useAppSelector((state) => state.user.me);
+  const me = useAppSelector(userSelectors.getMe);
   const { isMobile, isWeb } = useGetScreenDimensions();
   const { images } = useGetImages();
 
