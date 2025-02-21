@@ -5,13 +5,14 @@ import { proccessMultiPlayerGame } from "../utils";
 import { supabase } from "../../../utils/supabase";
 import { DATABASE_TABLE } from "../../../constants/database";
 import { useAppSelector } from "../../../redux/store";
+import { userSelectors } from "../../User/selectors";
 
 export const useSupabaseListener = ({
   gameId,
   setGame,
 }: UseSupabaseListenerProps) => {
   const [activePlayers, setActivePlayers] = useState<string[]>([]);
-  const me = useAppSelector((state) => state.user.me);
+  const me = useAppSelector(userSelectors.getMe);
 
   useEffect(() => {
     if (!gameId) return;
