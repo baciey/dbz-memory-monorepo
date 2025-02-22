@@ -52,13 +52,13 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
       };
       setPublicUrl(publicUrl);
       setImages({
-        board: [
-          boardImagesMapped[0],
-          boardImagesMapped[1],
-          boardImagesMapped[2],
-          boardImagesMapped[3],
-        ],
-        // board: boardImagesMapped,
+        // board: [
+        //   boardImagesMapped[0],
+        //   boardImagesMapped[1],
+        //   boardImagesMapped[2],
+        //   boardImagesMapped[3],
+        // ],// @todo only for testing
+        board: boardImagesMapped,
         main: main,
         logos: logoImagesMapped,
       });
