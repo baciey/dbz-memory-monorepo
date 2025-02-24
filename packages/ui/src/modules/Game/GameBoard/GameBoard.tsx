@@ -20,7 +20,6 @@ import { gameSelectors } from "../selectors";
 import { useCalculateCardAndBoardDimensions } from "../hooks";
 import { getShuffledBoardImages } from "../utils";
 import { userSelectors } from "../../User/selectors";
-import { use } from "i18next";
 
 export const GameBoard = ({
   mode,
@@ -90,18 +89,19 @@ export const GameBoard = ({
       singlePlayerName &&
       me?.id
     ) {
-      dispatch(
-        gameActions.updateOnePlayerGames(
-          me.id,
-          singlePlayerName,
-          elapsedTime,
-          showPersonalGames,
-        ),
-      );
-      setAlert(
-        `${t("game.congratulations")}! ${t("game.youHaveFinishedGameIn")} ${elapsedTime} ${t("game.seconds")}!`,
-      );
       if (!alertOnPress) {
+        dispatch(
+          gameActions.updateOnePlayerGames(
+            me.id,
+            singlePlayerName,
+            elapsedTime,
+            showPersonalGames,
+          ),
+        );
+        setAlert(
+          `${t("game.congratulations")}! ${t("game.youHaveFinishedGameIn")} ${elapsedTime} ${t("game.seconds")}!`,
+        );
+
         setAlertOnPress(() => {
           return () => {
             handleSetGameMode(null);
@@ -135,25 +135,25 @@ export const GameBoard = ({
       player2Name &&
       me?.id
     ) {
-      dispatch(
-        gameActions.updateTwoPlayerGames(
-          player1Name,
-          player2Name,
-          scores.player1,
-          scores.player2,
-          me.id,
-        ),
-      );
-      const isTie = scores.player1 === scores.player2;
-      const winnerName =
-        scores.player1 > scores.player2 ? player1Name : player2Name;
-
-      const alertMessage = isTie
-        ? `${t("game.itsATie")}!`
-        : `${t("game.congratulations")} ${winnerName}! ${t("game.youHaveWonTheGame")}! \n${t("game.finalScore")}: ${scores.player1} : ${scores.player2}`;
-
-      setAlert(alertMessage);
       if (!alertOnPress) {
+        dispatch(
+          gameActions.updateTwoPlayerGames(
+            player1Name,
+            player2Name,
+            scores.player1,
+            scores.player2,
+            me.id,
+          ),
+        );
+        const isTie = scores.player1 === scores.player2;
+        const winnerName =
+          scores.player1 > scores.player2 ? player1Name : player2Name;
+
+        const alertMessage = isTie
+          ? `${t("game.itsATie")}!`
+          : `${t("game.congratulations")} ${winnerName}! ${t("game.youHaveWonTheGame")}! \n${t("game.finalScore")}: ${scores.player1} : ${scores.player2}`;
+
+        setAlert(alertMessage);
         setAlertOnPress(() => {
           return () => {
             handleSetGameMode(null);

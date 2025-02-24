@@ -15,6 +15,7 @@ describe("useValidation", () => {
     expect(validateName("test  ")).toBe("");
     expect(validateName("abc")).toBe(""); // Exactly minimum
     expect(validateName("a".repeat(20))).toBe(""); // Exactly maximum
+    expect(validateName("testñśćółęą")).toBe("");
 
     expect(validateName("  test  test  ")).toBe(
       "No consecutive spaces allowed.",
@@ -69,9 +70,8 @@ describe("useValidation", () => {
     expect(validateName("test?")).toBe(warningLettersNumbers);
     expect(validateName("test~")).toBe(warningLettersNumbers);
     expect(validateName("test\\")).toBe(warningLettersNumbers);
-    expect(validateName("test😀")).toBe(warningLettersNumbers);
     expect(validateName("test€")).toBe(warningLettersNumbers);
-    expect(validateName("testñ")).toBe(warningLettersNumbers);
+    expect(validateName("test😀")).toBe(warningLettersNumbers);
   });
 
   it("validateEmail", () => {

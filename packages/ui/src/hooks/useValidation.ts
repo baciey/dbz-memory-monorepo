@@ -5,7 +5,7 @@ export const useValidation = () => {
 
   const validateName = (text: string): string => {
     const trimmedText = text.trim();
-    if (!/^[a-zA-Z0-9 ]*$/.test(trimmedText)) {
+    if (!/^[\p{L}0-9 ]*$/u.test(trimmedText)) {
       return t("validation.name.onlyLettersNumbersSpaces");
     } else if (trimmedText.length > 20) {
       return t("validation.name.max20Characters");
