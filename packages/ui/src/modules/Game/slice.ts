@@ -12,6 +12,7 @@ const initialGameState: GameState = {
   showPersonalGames: false,
   multiPlayerGames: [],
   multiPlayerGamesStatus: ACTION_STATUS.IDLE,
+  cardsVanishTime: 1.5,
 };
 
 export const GAME_REDUCER_NAME = "game";
@@ -82,6 +83,12 @@ const gameSlice = createSlice({
     },
     multiPlayerGamesIdle(state) {
       state.multiPlayerGamesStatus = ACTION_STATUS.IDLE;
+    },
+    setCardsVanishTime: (
+      state,
+      action: PayloadAction<GameState["cardsVanishTime"]>,
+    ) => {
+      state.cardsVanishTime = action.payload;
     },
   },
 });

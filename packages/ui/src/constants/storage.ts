@@ -3,4 +3,5 @@ export enum STORAGE_KEYS {
   language = "language",
   playerName = "playerName",
   playersNames = "playersNames",
+  cardsVanishTime = "cardsVanishTime",
 }

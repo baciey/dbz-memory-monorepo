@@ -12,6 +12,7 @@ const getShowPersonalGames = (state: RootState) => state.game.showPersonalGames;
 const getMultiPlayerGames = (state: RootState) => state.game.multiPlayerGames;
 const getMultiPlayerGamesStatus = (state: RootState) =>
   state.game.multiPlayerGamesStatus;
+const getCardsVanishTime = (state: RootState) => state.game.cardsVanishTime;
 
 export const gameSelectors = {
   getPlayersNames,
@@ -23,4 +24,5 @@ export const gameSelectors = {
   getShowPersonalGames,
   getMultiPlayerGames,
   getMultiPlayerGamesStatus,
+  getCardsVanishTime,
 };

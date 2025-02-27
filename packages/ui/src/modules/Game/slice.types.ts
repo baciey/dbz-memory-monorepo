@@ -11,6 +11,7 @@ export interface GameState {
   showPersonalGames: boolean;
   multiPlayerGames: MultiPlayerGame[];
   multiPlayerGamesStatus: ACTION_STATUS;
+  cardsVanishTime: number;
 }
 
 export type OnePlayerGameResponse = {
