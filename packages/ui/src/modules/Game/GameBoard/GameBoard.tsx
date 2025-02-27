@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card } from "../Card";
 import { styles } from "./GameBoard.styles";
 import { ThemedView } from "../../../components/ThemedView";
@@ -20,6 +20,7 @@ import { gameSelectors } from "../selectors";
 import { useCalculateCardAndBoardDimensions } from "../hooks";
 import { getShuffledBoardImages } from "../utils";
 import { userSelectors } from "../../User/selectors";
+import { MOVES_LIMIT, MOVES_TIME_MULTIPLIER } from "./GameBoard.const";
 
 export const GameBoard = ({
   mode,
@@ -53,6 +54,8 @@ export const GameBoard = ({
   const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
   const { images } = useGetImages();
   const cardsVanishTime = useAppSelector(gameSelectors.getCardsVanishTime);
+
+  const moves = useRef<number>(0);
 
   useEffect(() => {
     const shuffledBoardImages = getShuffledBoardImages(images.board);
@@ -91,18 +94,23 @@ export const GameBoard = ({
       me?.id
     ) {
       if (!alertOnPress) {
+        let finalScore = elapsedTime;
+        if (moves.current > MOVES_LIMIT) {
+          finalScore =
+            elapsedTime + (moves.current - MOVES_LIMIT) * MOVES_TIME_MULTIPLIER;
+        }
+
         dispatch(
           gameActions.updateOnePlayerGames(
             me.id,
             singlePlayerName,
-            elapsedTime,
+            finalScore,
             showPersonalGames,
           ),
         );
-        setAlert(
-          `${t("game.congratulations")}! ${t("game.youHaveFinishedGameIn")} ${elapsedTime} ${t("game.seconds")}!`,
-        );
 
+        const alert = `${t("game.congratulations")}! ${t("game.youHaveFinishedGame")}\n${t("game.time")}: ${elapsedTime}\n${t("game.moves")}: ${moves.current}\n${t("game.result")}: ${finalScore} (${t("game.movesInfo")})`;
+        setAlert(alert);
         setAlertOnPress(() => {
           return () => {
             handleSetGameMode(null);
@@ -191,7 +199,8 @@ export const GameBoard = ({
       // Set first card
       setFirstCard({ ...updatedCards[index], index });
     } else {
-      // Set second card and handle match logic
+      moves.current += 1;
+      // Set second card
       const currentCard = { ...updatedCards[index], index };
       setSecondCard(currentCard);
 
@@ -252,6 +261,7 @@ export const GameBoard = ({
         player2Score={scores.player2}
         player1Name={player1Name}
         player2Name={player2Name}
+        moves={moves.current}
       />
       <ThemedView
         style={[

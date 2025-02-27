@@ -15,6 +15,7 @@ export const GameInfo = ({
   player2Name,
   player2Id,
   isPlayer1Turn,
+  moves,
 }: GameInfoProps) => {
   const { t } = useTranslation();
 
@@ -31,6 +32,7 @@ export const GameInfo = ({
             ? t("game.startTimer")
             : `${t("game.time")}: ${elapsedTime} ${t("game.sec")}`}
         </Text>
+        <Text variant="titleMedium">{`${t("game.moves")}: ${moves}`}</Text>
       </ThemedView>
     );
   } else {

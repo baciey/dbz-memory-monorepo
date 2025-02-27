@@ -55,7 +55,7 @@
     "congratulations": "Gratulacje",
     "youHaveWonTheGame": "Wygrałeś grę",
     "finalScore": "Ostateczny wynik",
-    "youHaveFinishedGameIn": "Ukończyłeś grę w czasie",
+    "youHaveFinishedGame": "Ukończyłeś grę.",
 
     "join": "Dołącz",
     "create": "Utwórz",
@@ -73,7 +73,10 @@
     "joinedTheGame": "dołączył(a) do gry",
     "deletedDueToInactivity": "Gra została usunięta z powodu braku aktywności",
     "youHaveBeenKickedDueToInactivity": "Zostałeś(aś) wyrzucony(a) z gry z powodu braku aktywności",
-    "joinGameError": "Nie możesz dołączyć do tej gry z powodu problemów technicznych. Spróbuj ponownie."
+    "joinGameError": "Nie możesz dołączyć do tej gry z powodu problemów technicznych. Spróbuj ponownie.",
+    "moves": "Ruchy",
+    "result": "Wynik",
+    "movesInfo": "Każdy ruch powyżej 20 daje dodatkowe 3 sekundy do czasu końcowego"
   },
   "buttons": {
     "confirm": "Potwierdź",

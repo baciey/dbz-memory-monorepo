@@ -55,7 +55,7 @@
     "congratulations": "Congratulations",
     "youHaveWonTheGame": "You have won the game",
     "finalScore": "Final score",
-    "youHaveFinishedGameIn": "You have finished the game in",
+    "youHaveFinishedGame": "You have finished the game.",
 
     "join": "Join",
     "create": "Create",
@@ -73,7 +73,10 @@
     "joinedTheGame": "joined the game",
     "deletedDueToInactivity": "The game has been deleted due to inactivity",
     "youHaveBeenKickedDueToInactivity": "You have been kicked from the game due to inactivity",
-    "joinGameError": "You can't join this game for some technical reason. Please try again."
+    "joinGameError": "You can't join this game for some technical reason. Please try again.",
+    "moves": "Moves",
+    "result": "Result",
+    "movesInfo": "Each move over 20 gives you an extra 3 seconds to final time"
   },
   "buttons": {
     "confirm": "Confirm",
