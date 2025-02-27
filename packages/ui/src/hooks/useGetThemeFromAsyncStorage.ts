@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "../redux/store";
 import { THEME_MODE } from "../constants/theme";
 import { appActions } from "../modules/App/actions";
+import { STORAGE_KEYS } from "../constants/storage";
 
 export const useGetThemeFromAsyncStorage = () => {
   const dispatch = useAppDispatch();
@@ -10,7 +11,7 @@ export const useGetThemeFromAsyncStorage = () => {
   useEffect(() => {
     const setThemeMode = async () => {
       try {
-        const themeMode = await AsyncStorage.getItem("themeMode");
+        const themeMode = await AsyncStorage.getItem(STORAGE_KEYS.themeMode);
         if (themeMode === THEME_MODE.light) {
           dispatch(appActions.changeThemeMode(themeMode));
         } else {
