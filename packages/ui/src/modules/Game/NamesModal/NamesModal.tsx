@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Portal, Text, useTheme } from "react-native-paper";
+import { IconButton, Modal, Portal, Text, useTheme } from "react-native-paper";
 import { NamesModalProps } from "./NamesModal.types";
 import { styles } from "./NamesModal.styles";
 import { ThemedButton } from "../../../components/ThemedButton";
@@ -15,6 +15,7 @@ import { STORAGE_KEYS } from "../../../constants/storage";
 import { capitalizeFirst } from "../../../utils/capitalizeFirst";
 import { useValidation } from "../../../hooks/useValidation";
 import { gameSelectors } from "../selectors";
+import { View } from "react-native";
 
 export const NamesModal = ({
   isVisible,
@@ -34,6 +35,7 @@ export const NamesModal = ({
   const player1Name = useAppSelector(gameSelectors.getPlayersNames)[0];
   const player2Name = useAppSelector(gameSelectors.getPlayersNames)[1];
   const singlePlayerName = useAppSelector(gameSelectors.getPlayerName);
+  const cardsVanishTime = useAppSelector(gameSelectors.getCardsVanishTime);
 
   const { isMobile } = useGetScreenDimensions();
 
@@ -51,7 +53,7 @@ export const NamesModal = ({
     return errors;
   };
 
-  const handleSaveName = () => {
+  const handleConfirm = () => {
     const hasErrors = validateNames().some((error) => error !== "");
     if (hasErrors) return;
 
@@ -64,6 +66,13 @@ export const NamesModal = ({
       const name = playerName.trim();
       dispatch(gameSliceActions.setPlayerName(name));
       AsyncStorage.setItem(STORAGE_KEYS.playerName, JSON.stringify(name));
+    }
+
+    if (mode === GAME_BOARD_MODE.player1) {
+      AsyncStorage.setItem(
+        STORAGE_KEYS.cardsVanishTime,
+        JSON.stringify(cardsVanishTime),
+      );
     }
   };
 
@@ -78,6 +87,16 @@ export const NamesModal = ({
       });
     } else {
       setPlayerName(trimmedText);
+    }
+  };
+
+  const handleSetVanishTime = (operation: string) => {
+    if (operation === "+") {
+      if (cardsVanishTime >= 5) return;
+      dispatch(gameSliceActions.setCardsVanishTime(cardsVanishTime + 0.1));
+    } else {
+      if (cardsVanishTime <= 0.1) return;
+      dispatch(gameSliceActions.setCardsVanishTime(cardsVanishTime - 0.1));
     }
   };
 
@@ -111,6 +130,47 @@ export const NamesModal = ({
             errorText={errorText[0]}
             testID="player1Name"
           />
+          {mode === GAME_BOARD_MODE.player1 ? (
+            <ThemedView style={styles.rowAligned}>
+              <View style={styles.rowAligned}>
+                <Text>{t("settings.cardsVanishTime")}: </Text>
+                <Text
+                  style={[
+                    styles.vanishTimeValue,
+                    {
+                      backgroundColor: theme.colors.secondaryContainer,
+                    },
+                  ]}
+                >
+                  {cardsVanishTime.toFixed(1)}
+                </Text>
+              </View>
+              <View style={styles.vanishTimeIconsContainer}>
+                <IconButton
+                  icon="plus"
+                  size={20}
+                  onPress={() => handleSetVanishTime("+")}
+                  style={[
+                    styles.vanishTimeIcon,
+                    {
+                      backgroundColor: theme.colors.secondaryContainer,
+                    },
+                  ]}
+                />
+                <IconButton
+                  icon="minus"
+                  size={20}
+                  onPress={() => handleSetVanishTime("-")}
+                  style={[
+                    styles.vanishTimeIcon,
+                    {
+                      backgroundColor: theme.colors.secondaryContainer,
+                    },
+                  ]}
+                />
+              </View>
+            </ThemedView>
+          ) : null}
           {isPlayer2Mode ? (
             <ThemedTextInput
               label={t("game.player2Name")}
@@ -125,7 +185,7 @@ export const NamesModal = ({
           <ThemedButton
             text={t("buttons.confirm")}
             type="primary"
-            onPress={handleSaveName}
+            onPress={handleConfirm}
           />
           <ThemedButton
             text={t("buttons.cancel")}

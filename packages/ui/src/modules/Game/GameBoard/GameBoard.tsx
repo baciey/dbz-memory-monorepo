@@ -52,6 +52,7 @@ export const GameBoard = ({
   const singlePlayerName = useAppSelector(gameSelectors.getPlayerName);
   const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
   const { images } = useGetImages();
+  const cardsVanishTime = useAppSelector(gameSelectors.getCardsVanishTime);
 
   useEffect(() => {
     const shuffledBoardImages = getShuffledBoardImages(images.board);
@@ -235,7 +236,7 @@ export const GameBoard = ({
         if (updatedCards.every((card) => card.isPaired)) {
           setEndTime(Date.now());
         }
-      }, 2000);
+      }, cardsVanishTime * 1000);
     }
 
     setCards(updatedCards);
