@@ -15,6 +15,7 @@ import { useGetImages } from "../../hooks/useGetImages";
 import { GameBoardMultiplayer } from "../../modules/Game/GameBoardMultiplayer";
 import { Lobby } from "../../modules/Game/Lobby";
 import { MultiPlayerGame } from "../../modules/Game/slice.types";
+import { useGetCardsVanishTimeFromAsyncStorage } from "../../hooks/useGetCArdsVanishTimeFromAsyncStorage";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export const HomePage = () => {
   } = useGetScreenDimensions();
 
   useGetPlayerNameFromAsyncStorage();
+  useGetCardsVanishTimeFromAsyncStorage();
 
   const [gameMode, setGameMode] = useState<GAME_BOARD_MODE | null>(null);
   const [isLobbyVisible, setIsLobbyVisible] = useState(false);
