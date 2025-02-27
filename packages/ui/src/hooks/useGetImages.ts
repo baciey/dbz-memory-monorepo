@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { STORAGE_BUCKET } from "../constants/database";
+import { TESTING_MODE } from "../constants/config";
 
 export type Images = {
   board: string[];
@@ -51,14 +52,16 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.png",
       };
       setPublicUrl(publicUrl);
+      const board = TESTING_MODE
+        ? [
+            boardImagesMapped[0],
+            boardImagesMapped[1],
+            boardImagesMapped[2],
+            boardImagesMapped[3],
+          ]
+        : boardImagesMapped;
       setImages({
-        // board: [
-        //   boardImagesMapped[0],
-        //   boardImagesMapped[1],
-        //   boardImagesMapped[2],
-        //   boardImagesMapped[3],
-        // ],// @todo only for testing
-        board: boardImagesMapped,
+        board: board,
         main: main,
         logos: logoImagesMapped,
       });
