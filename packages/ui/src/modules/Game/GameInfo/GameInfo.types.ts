@@ -9,4 +9,5 @@ export type GameInfoProps = {
   player2Score?: number;
   player1Name?: string;
   player2Name?: string | null;
+  moves?: number;
 };

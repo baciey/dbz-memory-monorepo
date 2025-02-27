@@ -15,7 +15,7 @@ import { useGetImages } from "../../hooks/useGetImages";
 import { GameBoardMultiplayer } from "../../modules/Game/GameBoardMultiplayer";
 import { Lobby } from "../../modules/Game/Lobby";
 import { MultiPlayerGame } from "../../modules/Game/slice.types";
-import { useGetCardsVanishTimeFromAsyncStorage } from "../../hooks/useGetCArdsVanishTimeFromAsyncStorage";
+import { useGetCardsVanishTimeFromAsyncStorage } from "../../hooks/useGetCardsVanishTimeFromAsyncStorage";
 
 export const HomePage = () => {
   const { t } = useTranslation();
@@ -98,7 +98,9 @@ export const HomePage = () => {
               : () => {
                   setAlert(t("home.returnAlert"));
                   setIsAlertWithCancel(true);
-                  setAlertOnPress(handleReturnToMenu);
+                  setAlertOnPress(() => {
+                    return handleReturnToMenu;
+                  });
                 }
           }
           style={[
