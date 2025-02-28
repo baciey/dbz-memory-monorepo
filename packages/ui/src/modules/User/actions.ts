@@ -74,11 +74,13 @@ const logoutMe = (): PayloadThunkAction => {
 };
 
 const uploadAvatar = (
-  me: Me,
   isWeb: boolean,
   setIsAvatarLoaded: Dispatch<SetStateAction<boolean>>,
 ): PayloadThunkAction => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const me = getState().user.me;
+    if (!me) return;
+
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: false,
       allowsEditing: true,
@@ -120,9 +122,24 @@ const uploadAvatar = (
   };
 };
 
+const changeAvatar = (avatarPath: string): PayloadThunkAction => {
+  return async (dispatch, getState) => {
+    const me = getState().user.me;
+    if (!me) return;
+
+    dispatch(userSliceActions.meUpdateLoading());
+    const newMe = {
+      id: me.id,
+      avatar_url: avatarPath,
+    };
+    dispatch(userActions.updateMe(newMe, me.session));
+  };
+};
+
 export const userActions = {
   getMe,
   updateMe,
   logoutMe,
   uploadAvatar,
+  changeAvatar,
 };
