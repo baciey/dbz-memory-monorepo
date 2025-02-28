@@ -31,4 +31,7 @@ export const styles = StyleSheet.create({
     height: 150,
     marginTop: 16,
   },
+  listItem: {
+    marginBottom: 8,
+  },
 });
