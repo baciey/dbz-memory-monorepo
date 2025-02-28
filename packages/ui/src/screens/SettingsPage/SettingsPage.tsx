@@ -19,12 +19,13 @@ import { Account } from "./Account";
 import { globalStyles } from "../../styles/globalStyles";
 import { useGetImages } from "../../hooks/useGetImages";
 import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { userSelectors } from "../../modules/User/selectors";
 import { userActions } from "../../modules/User/actions";
 import { appActions } from "../../modules/App/actions";
 import { appSelectors } from "../../modules/App/selectors";
 import { ACTION_STATUS } from "../../modules/App/slice.types";
+import { STORAGE_BUCKET } from "../../constants/database";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -35,12 +36,13 @@ export const SettingsPage = () => {
   const meStatus = useAppSelector(userSelectors.getMeStatus);
   const meUpdateStatus = useAppSelector(userSelectors.getMeUpdateStatus);
   const isAuthenticated = Boolean(me?.session);
-  const { publicUrl } = useGetImages();
+  const { publicUrl, images } = useGetImages();
   const { t } = useTranslation();
   const { isWeb } = useGetScreenDimensions();
   const theme = useTheme();
 
   const [isLanguageMenuVisible, setIsLanguageMenuVisible] = useState(false);
+  const [isImagesListVisible, setIsImagesListVisible] = useState(false);
   const [isAvatarLoaded, setIsAvatarLoaded] = useState(false);
 
   const changeThemeMode = () => {
@@ -57,8 +59,13 @@ export const SettingsPage = () => {
   const uploadAvatar = () => {
     if (me) {
       if (!isWeb) setIsAvatarLoaded(false);
-      dispatch(userActions.uploadAvatar(me, isWeb, setIsAvatarLoaded));
+      dispatch(userActions.uploadAvatar(isWeb, setIsAvatarLoaded));
     }
+  };
+
+  const changeAvatar = (avatarPath: string) => {
+    setIsImagesListVisible(false);
+    dispatch(userActions.changeAvatar(avatarPath));
   };
 
   const avatar = useMemo(() => {
@@ -149,6 +156,36 @@ export const SettingsPage = () => {
           mode="contained"
           onPress={uploadAvatar}
         />
+
+        <Menu
+          visible={isImagesListVisible}
+          onDismiss={() => setIsImagesListVisible(false)}
+          anchor={
+            <IconButton
+              icon="menu"
+              size={32}
+              mode="contained"
+              onPress={() => setIsImagesListVisible(true)}
+            />
+          }
+        >
+          {images.board.map((image, index) => {
+            const avatarPath = STORAGE_BUCKET.board + image.split("/").pop();
+            return (
+              <Pressable
+                onPress={() => changeAvatar(avatarPath)}
+                testID={`image-${index}`}
+                key={index}
+              >
+                <Avatar.Image
+                  size={50}
+                  source={{ uri: image }}
+                  style={styles.listItem}
+                />
+              </Pressable>
+            );
+          })}
+        </Menu>
       </ThemedView>
       <Account />
     </ThemedView>
