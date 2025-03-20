@@ -16,12 +16,17 @@
     "logoutFailed": "Wylogowanie nie powiodło się.",
     "registerInfo": "Jesteś użytkownikiem gościnnym. Możesz stać się stałym użytkownikiem i zapisać wszystkie swoje dane. Czy chcesz kontynuować? W pierwszym kroku będziesz musiał potwierdzić swój e-mail. W drugim kroku ustawisz hasło.",
     "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?",
-    "appVersion": "Wersja aplikacji"
+    "appVersion": "Wersja aplikacji",
+    "availableVersion": "Dostępna wersja"
   },
   "home": {
     "home": "Strona główna",
     "returnAlert": "Czy chcesz wrócić do menu głównego?",
-    "goBack": "Wróć"
+    "goBack": "Wróć",
+    "newVersionAvailable": "Dostępna jest nowa wersja",
+    "pleaseUpdate": "Proszę zaktualizować aplikację",
+    "update": "Aktualizuj",
+    "cancel": "Anuluj"
   },
   "statistics": {
     "statistics": "Statystyki",
