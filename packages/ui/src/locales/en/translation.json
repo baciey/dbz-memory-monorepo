@@ -16,12 +16,17 @@
     "logoutFailed": "Log out failed.",
     "registerInfo": "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
     "logoutWarning": "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
-    "appVersion": "App version"
+    "appVersion": "App version",
+    "availableVersion": "Available version"
   },
   "home": {
     "home": "Home",
     "returnAlert": "Do you want to return to main menu?",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "newVersionAvailable": "New version is available",
+    "pleaseUpdate": "Please update the application",
+    "update": "Update",
+    "cancel": "Cancel"
   },
   "statistics": {
     "statistics": "Statistics",
