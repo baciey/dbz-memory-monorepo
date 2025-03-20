@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "monorepo",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -14,7 +14,8 @@
     "reset-dev": "git checkout dev && git fetch origin && git reset --hard origin/dev",
     "remove-nm": "rm -rf apps/**/node_modules packages/**/node_modules node_modules && yarn install",
     "local-build": "cd apps/expo-app && eas build --platform android --preview --local",
-    "test": "cd packages/ui && yarn test && cd .."
+    "test": "cd packages/ui && yarn test && cd ..",
+    "sync-versions": "node scripts/sync-versions.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

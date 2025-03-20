@@ -15,7 +15,8 @@
     "youAreLoggedIn": "Jesteś zalogowany.",
     "logoutFailed": "Wylogowanie nie powiodło się.",
     "registerInfo": "Jesteś użytkownikiem gościnnym. Możesz stać się stałym użytkownikiem i zapisać wszystkie swoje dane. Czy chcesz kontynuować? W pierwszym kroku będziesz musiał potwierdzić swój e-mail. W drugim kroku ustawisz hasło.",
-    "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?"
+    "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?",
+    "appVersion": "Wersja aplikacji"
   },
   "home": {
     "home": "Strona główna",
