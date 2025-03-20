@@ -26,7 +26,7 @@ import { appActions } from "../../modules/App/actions";
 import { appSelectors } from "../../modules/App/selectors";
 import { ACTION_STATUS } from "../../modules/App/slice.types";
 import { STORAGE_BUCKET } from "../../constants/database";
-import { version } from "../../../../../package.json";
+import { version as userVersion } from "../../../../../package.json";
 
 export const SettingsPage = () => {
   const dispatch = useAppDispatch();
@@ -191,7 +191,7 @@ export const SettingsPage = () => {
       <Account />
       <Text
         style={styles.appVersionText}
-      >{`${t("settings.appVersion")}: ${version}`}</Text>
+      >{`${t("settings.appVersion")}: ${userVersion}`}</Text>
     </ThemedView>
   );
 };

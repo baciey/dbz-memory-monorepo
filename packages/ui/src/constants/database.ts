@@ -3,6 +3,7 @@ export enum DATABASE_TABLE {
   two_player_games = "two_player_games",
   one_player_games = "one_player_games",
   multi_player_games = "multi_player_games",
+  app_version = "app_version",
 }
 
 export enum STORAGE_BUCKET {
