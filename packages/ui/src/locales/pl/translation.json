@@ -15,8 +15,7 @@
     "youAreLoggedIn": "Jesteś zalogowany.",
     "logoutFailed": "Wylogowanie nie powiodło się.",
     "registerInfo": "Jesteś użytkownikiem gościnnym. Możesz stać się stałym użytkownikiem i zapisać wszystkie swoje dane. Czy chcesz kontynuować? W pierwszym kroku będziesz musiał potwierdzić swój e-mail. W drugim kroku ustawisz hasło.",
-    "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?",
-    "cardsVanishTime": "Czas zniknięcia kart"
+    "logoutWarning": "Zaraz się wylogujesz. Jesteś użytkownikiem gościnnym, więc stracisz wszystkie swoje dane. Czy jesteś pewien?"
   },
   "home": {
     "home": "Strona główna",
@@ -39,8 +38,6 @@
     "multiplayer": "Wielu graczy"
   },
   "game": {
-    "startTimer": "Naciśnij dowolną kartę, aby uruchomić stoper",
-    "sec": "sek",
     "seconds": "sekundy",
     "time": "Czas",
     "winner": "Zwycięzca",
@@ -76,7 +73,8 @@
     "joinGameError": "Nie możesz dołączyć do tej gry z powodu problemów technicznych. Spróbuj ponownie.",
     "moves": "Ruchy",
     "result": "Wynik",
-    "movesInfo": "Każdy ruch powyżej 20 daje dodatkowe 3 sekundy do czasu końcowego"
+    "movesInfo": "Każdy ruch powyżej 18 daje dodatkowe 3 sekundy do czasu końcowego",
+    "cardsVanishTime": "Czas zniknięcia kart"
   },
   "buttons": {
     "confirm": "Potwierdź",

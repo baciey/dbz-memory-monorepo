@@ -15,8 +15,7 @@
     "youAreLoggedIn": "You are logged in.",
     "logoutFailed": "Log out failed.",
     "registerInfo": "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
-    "logoutWarning": "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
-    "cardsVanishTime": "Cards vanish time"
+    "logoutWarning": "You are about to log out. You are a guest user so you will lose all your data. Are you sure?"
   },
   "home": {
     "home": "Home",
@@ -39,8 +38,6 @@
     "multiplayer": "Multiplayer"
   },
   "game": {
-    "startTimer": "Press any card to start the timer",
-    "sec": "sec",
     "seconds": "seconds",
     "time": "Time",
     "winner": "Winner",
@@ -76,7 +73,8 @@
     "joinGameError": "You can't join this game for some technical reason. Please try again.",
     "moves": "Moves",
     "result": "Result",
-    "movesInfo": "Each move over 20 gives you an extra 3 seconds to final time"
+    "movesInfo": "Each move over 18 gives you an extra 3 seconds to final time",
+    "cardsVanishTime": "Cards vanish time"
   },
   "buttons": {
     "confirm": "Confirm",

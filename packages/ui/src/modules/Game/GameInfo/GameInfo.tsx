@@ -27,11 +27,7 @@ export const GameInfo = ({
   if (mode === GAME_BOARD_MODE.player1) {
     return (
       <ThemedView style={styles.container}>
-        <Text variant="titleMedium">
-          {elapsedTime === 0
-            ? t("game.startTimer")
-            : `${t("game.time")}: ${elapsedTime} ${t("game.sec")}`}
-        </Text>
+        <Text variant="titleMedium">{`${t("game.time")}: ${elapsedTime}`}</Text>
         <Text variant="titleMedium">{`${t("game.moves")}: ${moves}`}</Text>
       </ThemedView>
     );

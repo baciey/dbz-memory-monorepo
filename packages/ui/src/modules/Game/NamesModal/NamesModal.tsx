@@ -131,45 +131,50 @@ export const NamesModal = ({
             testID="player1Name"
           />
           {mode === GAME_BOARD_MODE.player1 ? (
-            <ThemedView style={styles.rowAligned}>
+            <>
+              <ThemedView style={styles.rowAligned}>
+                <View style={styles.rowAligned}>
+                  <Text>{t("game.cardsVanishTime")}: </Text>
+                  <Text
+                    style={[
+                      styles.vanishTimeValue,
+                      {
+                        backgroundColor: theme.colors.secondaryContainer,
+                      },
+                    ]}
+                  >
+                    {cardsVanishTime.toFixed(1)}
+                  </Text>
+                </View>
+                <View style={styles.vanishTimeIconsContainer}>
+                  <IconButton
+                    icon="plus"
+                    size={20}
+                    onPress={() => handleSetVanishTime("+")}
+                    style={[
+                      styles.vanishTimeIcon,
+                      {
+                        backgroundColor: theme.colors.secondaryContainer,
+                      },
+                    ]}
+                  />
+                  <IconButton
+                    icon="minus"
+                    size={20}
+                    onPress={() => handleSetVanishTime("-")}
+                    style={[
+                      styles.vanishTimeIcon,
+                      {
+                        backgroundColor: theme.colors.secondaryContainer,
+                      },
+                    ]}
+                  />
+                </View>
+              </ThemedView>
               <View style={styles.rowAligned}>
-                <Text>{t("settings.cardsVanishTime")}: </Text>
-                <Text
-                  style={[
-                    styles.vanishTimeValue,
-                    {
-                      backgroundColor: theme.colors.secondaryContainer,
-                    },
-                  ]}
-                >
-                  {cardsVanishTime.toFixed(1)}
-                </Text>
+                <Text>{t("game.movesInfo")}: </Text>
               </View>
-              <View style={styles.vanishTimeIconsContainer}>
-                <IconButton
-                  icon="plus"
-                  size={20}
-                  onPress={() => handleSetVanishTime("+")}
-                  style={[
-                    styles.vanishTimeIcon,
-                    {
-                      backgroundColor: theme.colors.secondaryContainer,
-                    },
-                  ]}
-                />
-                <IconButton
-                  icon="minus"
-                  size={20}
-                  onPress={() => handleSetVanishTime("-")}
-                  style={[
-                    styles.vanishTimeIcon,
-                    {
-                      backgroundColor: theme.colors.secondaryContainer,
-                    },
-                  ]}
-                />
-              </View>
-            </ThemedView>
+            </>
           ) : null}
           {isPlayer2Mode ? (
             <ThemedTextInput
