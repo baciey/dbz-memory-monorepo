@@ -15,7 +15,8 @@
     "youAreLoggedIn": "You are logged in.",
     "logoutFailed": "Log out failed.",
     "registerInfo": "You are a guest user. You can turn into a permanent user and save all your data. Do you want to continue? In first step you will need to confirm your email. In second step you will need to set a password.",
-    "logoutWarning": "You are about to log out. You are a guest user so you will lose all your data. Are you sure?"
+    "logoutWarning": "You are about to log out. You are a guest user so you will lose all your data. Are you sure?",
+    "appVersion": "App version"
   },
   "home": {
     "home": "Home",

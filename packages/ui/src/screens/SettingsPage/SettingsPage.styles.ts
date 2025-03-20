@@ -34,4 +34,7 @@ export const styles = StyleSheet.create({
   listItem: {
     marginBottom: 8,
   },
+  appVersionText: {
+    marginTop: 16,
+  },
 });
