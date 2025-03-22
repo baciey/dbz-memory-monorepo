@@ -51,6 +51,7 @@ export const useGetImages = (): { images: Images; publicUrl: string } => {
         bgMobile: publicUrl + STORAGE_BUCKET.main + "bgMobile.png",
         cardBack: publicUrl + STORAGE_BUCKET.main + "cardBack.png",
       };
+
       setPublicUrl(publicUrl);
       const board = TESTING_MODE
         ? [
