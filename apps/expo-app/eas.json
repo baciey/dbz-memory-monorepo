@@ -30,7 +30,8 @@
       },
       "ios": {
         "image": "latest"
-      }
+      },
+      "autoIncrement": true,
     }
   },
   "submit": {
