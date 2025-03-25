@@ -44,7 +44,6 @@ export const GameBoard = ({
   const [elapsedTime, setElapsedTime] = useState<number>(0); // Elapsed time for 1-player mode
   const [playerTurn, setPlayerTurn] = useState<PLAYER_TURN>(1);
   const [scores, setScores] = useState<Scores>({ player1: 0, player2: 0 });
-
   const me = useAppSelector(userSelectors.getMe);
   const player1Name =
     useAppSelector(gameSelectors.getPlayersNames)[0] || t("game.player1");
@@ -90,14 +89,17 @@ export const GameBoard = ({
     if (
       mode === GAME_BOARD_MODE.player1 &&
       endTime &&
+      startTime &&
       singlePlayerName &&
       me?.id
     ) {
       if (!alertOnPress) {
-        let finalScore = elapsedTime;
+        const time = parseFloat(((endTime - startTime) / 1000).toFixed(2));
+        let finalScore = time;
+
         if (moves.current > MOVES_LIMIT) {
           finalScore =
-            elapsedTime + (moves.current - MOVES_LIMIT) * MOVES_TIME_MULTIPLIER;
+            time + (moves.current - MOVES_LIMIT) * MOVES_TIME_MULTIPLIER;
         }
 
         dispatch(
@@ -109,7 +111,7 @@ export const GameBoard = ({
           ),
         );
 
-        const alert = `${t("game.congratulations")}! ${t("game.youHaveFinishedGame")}\n${t("game.time")}: ${elapsedTime}\n${t("game.moves")}: ${moves.current}\n${t("game.result")}: ${finalScore} (${t("game.movesInfo")})`;
+        const alert = `${t("game.congratulations")}! ${t("game.youHaveFinishedGame")}\n${t("game.time")}: ${time}\n${t("game.moves")}: ${moves.current}\n${t("game.result")}: ${finalScore} (${t("game.movesInfo")})`;
         setAlert(alert);
         setAlertOnPress(() => {
           return () => {
@@ -120,7 +122,7 @@ export const GameBoard = ({
     }
   }, [
     endTime,
-    elapsedTime,
+    startTime,
     singlePlayerName,
     mode,
     me?.id,
