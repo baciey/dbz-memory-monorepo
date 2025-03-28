@@ -41,7 +41,8 @@
     "p2Name": "P2 Name",
     "p1Score": "P1 Score",
     "p2Score": "P2 Score",
-    "multiplayer": "Multiplayer"
+    "multiplayer": "Multiplayer",
+    "tripleMode": "Triple mode"
   },
   "game": {
     "seconds": "seconds",

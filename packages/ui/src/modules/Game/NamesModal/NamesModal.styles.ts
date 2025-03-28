@@ -34,4 +34,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     borderRadius: GLOBAL_STYLES.br.small,
   },
+  switch: {
+    marginLeft: 16,
+  },
 });

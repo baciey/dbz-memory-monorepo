@@ -49,6 +49,7 @@ export const MOCK_GAME_STATE: GameState = {
   multiPlayerGames: [],
   multiPlayerGamesStatus: ACTION_STATUS.SUCCESS,
   cardsVanishTime: 5,
+  showTripleMode: false,
 };
 
 export const MOCK_APP_STATE: AppState = {

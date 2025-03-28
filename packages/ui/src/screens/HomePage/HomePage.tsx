@@ -36,6 +36,7 @@ export const HomePage = () => {
   const [alert, setAlert] = useState<string>("");
   const [alertOnPress, setAlertOnPress] = useState<(() => void) | undefined>();
   const [isAlertWithCancel, setIsAlertWithCancel] = useState<boolean>(false);
+  const [isTriple, setIsTriple] = useState(false);
 
   const handleSetGameMode = (mode: GAME_BOARD_MODE | null) => {
     setGameMode(mode);
@@ -146,19 +147,23 @@ export const HomePage = () => {
             if (gameMode === GAME_BOARD_MODE.multiplayer)
               setIsLobbyVisible(true);
           }}
+          isTriple={isTriple}
+          setIsTriple={setIsTriple}
         />
       )}
       {(gameMode === GAME_BOARD_MODE.player1 ||
-        gameMode === GAME_BOARD_MODE.player2) &&
-        !isNamesModalVisible && (
+        gameMode === GAME_BOARD_MODE.player2) && (
+        <View style={{ opacity: isNamesModalVisible ? 0 : 1 }}>
           <GameBoard
             mode={gameMode}
             handleSetGameMode={handleSetGameMode}
             setAlert={setAlert}
             setAlertOnPress={setAlertOnPress}
             alertOnPress={alertOnPress}
+            isTriple={isTriple}
           />
-        )}
+        </View>
+      )}
 
       {gameMode === GAME_BOARD_MODE.multiplayer &&
         !isNamesModalVisible &&
