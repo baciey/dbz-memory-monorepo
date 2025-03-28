@@ -4,11 +4,13 @@ import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions";
 type UseCalculateCardAndBoardDimensionsProps = {
   setCardWidth: Dispatch<SetStateAction<number>>;
   setContainerWidth: Dispatch<SetStateAction<number>>;
+  isTriple: boolean;
 };
 
 export const useCalculateCardAndBoardDimensions = ({
   setCardWidth,
   setContainerWidth,
+  isTriple,
 }: UseCalculateCardAndBoardDimensionsProps) => {
   const { width: deviceWidth, height: deviceHeight } = useGetScreenDimensions();
 
@@ -16,8 +18,8 @@ export const useCalculateCardAndBoardDimensions = ({
     const padding = 16;
     const gap = 16;
     const scrollBarWidth = 20;
-    const smallScreenItemsInRow = 4;
-    const largeScreenItemsInRow = 5;
+    const smallScreenItemsInRow = isTriple ? 5 : 4;
+    const largeScreenItemsInRow = isTriple ? 6 : 5;
 
     const isSmallScreen = deviceWidth <= 600;
     const itemsInRow = isSmallScreen
@@ -31,5 +33,5 @@ export const useCalculateCardAndBoardDimensions = ({
 
     setCardWidth(cardWidth);
     setContainerWidth(containerWidth);
-  }, [deviceWidth, deviceHeight, setCardWidth, setContainerWidth]);
+  }, [deviceWidth, deviceHeight, setCardWidth, setContainerWidth, isTriple]);
 };

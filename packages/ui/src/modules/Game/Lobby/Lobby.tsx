@@ -30,7 +30,7 @@ export const Lobby = ({
   const theme = useTheme();
   const { t } = useTranslation();
   const { images } = useGetImages();
-  const shuffledBoardImages = getShuffledBoardImages(images.board);
+  const shuffledBoardImages = getShuffledBoardImages(images.board, false);
 
   const isUserAlreadyGameOwner = multiPlayerGames.some(
     (game) =>

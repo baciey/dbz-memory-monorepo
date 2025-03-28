@@ -16,12 +16,15 @@ import { capitalizeFirst } from "../../../utils/capitalizeFirst";
 import { useValidation } from "../../../hooks/useValidation";
 import { gameSelectors } from "../selectors";
 import { View } from "react-native";
+import { CustomSwitch } from "../../../components/CustomSwitch";
 
 export const NamesModal = ({
   isVisible,
   mode,
   onCancel,
   onConfirm,
+  isTriple,
+  setIsTriple,
 }: NamesModalProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -130,6 +133,30 @@ export const NamesModal = ({
             errorText={errorText[0]}
             testID="player1Name"
           />
+
+          {isPlayer2Mode ? (
+            <ThemedTextInput
+              label={t("game.player2Name")}
+              value={playersNames[1]}
+              onChangeText={(text) => handleInputChange(1, text)}
+              errorText={errorText[1]}
+              testID="player2Name"
+            />
+          ) : null}
+          <View style={styles.rowAligned}>
+            <Text
+              style={{
+                color: theme.colors.onBackground,
+              }}
+            >
+              {t("statistics.tripleMode")}
+            </Text>
+            <CustomSwitch
+              value={isTriple}
+              onValueChange={() => setIsTriple(!isTriple)}
+              style={styles.switch}
+            />
+          </View>
           {mode === GAME_BOARD_MODE.player1 ? (
             <>
               <ThemedView style={styles.rowAligned}>
@@ -175,15 +202,6 @@ export const NamesModal = ({
                 <Text>{t("game.movesInfo")}: </Text>
               </View>
             </>
-          ) : null}
-          {isPlayer2Mode ? (
-            <ThemedTextInput
-              label={t("game.player2Name")}
-              value={playersNames[1]}
-              onChangeText={(text) => handleInputChange(1, text)}
-              errorText={errorText[1]}
-              testID="player2Name"
-            />
           ) : null}
         </ThemedView>
         <ThemedView type="surface" style={styles.buttonsContainer}>

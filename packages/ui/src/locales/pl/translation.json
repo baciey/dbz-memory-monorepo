@@ -41,7 +41,8 @@
     "p2Name": "G2 imię",
     "p1Score": "G1 wynik",
     "p2Score": "G2 wynik",
-    "multiplayer": "Wielu graczy"
+    "multiplayer": "Wielu graczy",
+    "tripleMode": "Tryb potrójny"
   },
   "game": {
     "seconds": "sekundy",

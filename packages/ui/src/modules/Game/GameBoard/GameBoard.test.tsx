@@ -11,6 +11,7 @@ describe("GameBoard", () => {
     setAlert: jest.fn(),
     setAlertOnPress: jest.fn(),
     alertOnPress: jest.fn(),
+    isTriple: false,
   };
 
   it("presses two cards in 1-player mode", async () => {
