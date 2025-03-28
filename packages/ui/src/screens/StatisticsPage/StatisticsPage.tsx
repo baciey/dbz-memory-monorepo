@@ -91,22 +91,15 @@ export const StatisticsPage = () => {
 
   const fetchGames = useCallback(() => {
     if (me?.id) {
-      dispatch(
-        gameActions.getOnePlayerGames(
-          me.id,
-          showPersonalGames,
-          showTripleMode,
-          searchQuery,
-        ),
-      );
-      dispatch(gameActions.getTwoPlayerGames(me.id, searchQuery));
+      dispatch(gameActions.getOnePlayerGames(searchQuery));
+      dispatch(gameActions.getTwoPlayerGames(searchQuery));
       dispatch(gameActions.getMultiPlayerGames());
     }
-  }, [me, dispatch, showPersonalGames, showTripleMode, searchQuery]);
+  }, [dispatch, searchQuery, me?.id]);
 
   useEffect(() => {
     fetchGames();
-  }, [fetchGames, tab]);
+  }, [fetchGames, tab, showPersonalGames, showTripleMode]);
 
   return (
     <ThemedView style={globalStyles.pageContainer}>
@@ -181,9 +174,7 @@ export const StatisticsPage = () => {
           <View style={styles.switchContainer}>
             <Text
               style={{
-                color: isTwoPlayerTab
-                  ? theme.colors.onSurfaceDisabled
-                  : theme.colors.onBackground,
+                color: theme.colors.onBackground,
               }}
             >
               {t("statistics.tripleMode")}
@@ -193,7 +184,6 @@ export const StatisticsPage = () => {
               onValueChange={() => {
                 dispatch(gameSliceActions.setShowTripleMode(!showTripleMode));
               }}
-              disabled={isTwoPlayerTab}
             />
           </View>
         </View>

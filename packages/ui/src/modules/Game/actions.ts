@@ -10,6 +10,8 @@ import {
   UpdateMultiPlayerGameRequestParams,
 } from "./slice.types";
 import { proccessMultiPlayerGame } from "./utils";
+import { gameSelectors } from "./selectors";
+import { userSelectors } from "../User/selectors";
 
 // for testing purposes
 const onePlayerGames = [
@@ -210,15 +212,12 @@ const twoPlayerGames = [
 ];
 const isMock = false;
 
-const getOnePlayerGames = (
-  userId: string,
-  showPersonal?: boolean,
-  showTripleMode?: boolean,
-  searchQuery: string = "",
-): PayloadThunkAction => {
-  return async (dispatch) => {
+const getOnePlayerGames = (searchQuery: string = ""): PayloadThunkAction => {
+  return async (dispatch, getState) => {
     dispatch(gameSliceActions.onePlayerGamesLoading());
-
+    const showTripleMode = gameSelectors.getShowTripleMode(getState());
+    const showPersonal = gameSelectors.getShowPersonalGames(getState());
+    const userId = userSelectors.getMe(getState())?.id;
     supabase
       .from(DATABASE_TABLE.one_player_games)
       .select(`id, name, time, created_at, is_triple, profiles ( avatar_url )`)
@@ -262,19 +261,19 @@ const getOnePlayerGames = (
   };
 };
 
-const getTwoPlayerGames = (
-  userId: string,
-  searchQuery: string = "",
-): PayloadThunkAction => {
-  return async (dispatch) => {
+const getTwoPlayerGames = (searchQuery: string = ""): PayloadThunkAction => {
+  return async (dispatch, getState) => {
     dispatch(gameSliceActions.twoPlayerGamesLoading());
+    const showTripleMode = gameSelectors.getShowTripleMode(getState());
+    const userId = userSelectors.getMe(getState())?.id;
 
     supabase
       .from(DATABASE_TABLE.two_player_games)
       .select(
-        `id, player1_name, player2_name, player1_score, player2_score, created_at`,
+        `id, player1_name, player2_name, player1_score, player2_score, is_triple, created_at`,
       )
       .eq("user_id", userId)
+      .eq(showTripleMode ? "is_triple" : "", true)
       .or(
         `player1_name.ilike.%${searchQuery}%,player2_name.ilike.%${searchQuery}%`,
       )
@@ -296,6 +295,7 @@ const getTwoPlayerGames = (
               player2Name: game.player2_name,
               player1Score: game.player1_score,
               player2Score: game.player2_score,
+              isTriple: game.is_triple,
               createdAt: dateFormatter(game.created_at),
             };
           });
@@ -311,13 +311,13 @@ const getTwoPlayerGames = (
 };
 
 const updateOnePlayerGames = (
-  userId: string,
-  name: string,
   time: number,
-  showPersonalGames: boolean,
   isTriple: boolean,
 ): PayloadThunkAction => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = userSelectors.getMe(getState())?.id;
+    const name = gameSelectors.getPlayerName(getState());
+
     await supabase.from(DATABASE_TABLE.one_player_games).insert({
       name: name,
       time: time,
@@ -325,7 +325,7 @@ const updateOnePlayerGames = (
       user_id: userId,
       is_triple: isTriple,
     });
-    dispatch(getOnePlayerGames(userId, showPersonalGames));
+    dispatch(getOnePlayerGames(userId));
   };
 };
 
@@ -334,9 +334,10 @@ const updateTwoPlayerGames = (
   player2name: string,
   player1score: number,
   player2score: number,
-  userId: string,
 ): PayloadThunkAction => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const userId = userSelectors.getMe(getState())?.id;
+
     await supabase.from(DATABASE_TABLE.two_player_games).insert({
       player1_name: player1name,
       player2_name: player2name,
