@@ -213,6 +213,7 @@ const isMock = false;
 const getOnePlayerGames = (
   userId: string,
   showPersonal?: boolean,
+  showTripleMode?: boolean,
   searchQuery: string = "",
 ): PayloadThunkAction => {
   return async (dispatch) => {
@@ -220,8 +221,9 @@ const getOnePlayerGames = (
 
     supabase
       .from(DATABASE_TABLE.one_player_games)
-      .select(`id, name, time, created_at, profiles ( avatar_url )`)
+      .select(`id, name, time, created_at, is_triple, profiles ( avatar_url )`)
       .eq(showPersonal ? "user_id" : "", userId)
+      .eq(showTripleMode ? "is_triple" : "", true)
       .ilike("name", `%${searchQuery}%`)
       .then(({ data, error }) => {
         if (error) {
@@ -243,6 +245,7 @@ const getOnePlayerGames = (
               name: game.name,
               time: game.time,
               id: game.id,
+              isTriple: game.is_triple,
               // @ts-ignore supabase typing issue, avatar_url is not recognized
               avatarUrl: game.profiles.avatar_url || null,
               createdAt: dateFormatter(game.created_at),
@@ -312,6 +315,7 @@ const updateOnePlayerGames = (
   name: string,
   time: number,
   showPersonalGames: boolean,
+  isTriple: boolean,
 ): PayloadThunkAction => {
   return async (dispatch) => {
     await supabase.from(DATABASE_TABLE.one_player_games).insert({
@@ -319,6 +323,7 @@ const updateOnePlayerGames = (
       time: time,
       platform: Platform.OS,
       user_id: userId,
+      is_triple: isTriple,
     });
     dispatch(getOnePlayerGames(userId, showPersonalGames));
   };

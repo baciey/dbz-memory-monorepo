@@ -30,9 +30,12 @@ export const proccessMultiPlayerGame = (
   };
 };
 
-export const getShuffledBoardImages = (images: Images["board"]): CardType[] => {
+export const getShuffledBoardImages = (
+  images: Images["board"],
+  isTriple: boolean,
+): CardType[] => {
   return images
-    .flatMap((image) => [image, image])
+    .flatMap((image) => (isTriple ? [image, image, image] : [image, image]))
     .sort(() => Math.random() - 0.5)
     .map((image) => ({
       isRevealed: false,

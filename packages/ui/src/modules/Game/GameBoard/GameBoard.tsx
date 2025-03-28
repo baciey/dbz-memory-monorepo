@@ -28,6 +28,7 @@ export const GameBoard = ({
   setAlert,
   setAlertOnPress,
   alertOnPress,
+  isTriple,
 }: GameBoardProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ export const GameBoard = ({
   const [cards, setCards] = useState<CardType[]>([]);
   const [firstCard, setFirstCard] = useState<SelectedCardType | null>(null);
   const [secondCard, setSecondCard] = useState<SelectedCardType | null>(null);
+  const [thirdCard, setThirdCard] = useState<SelectedCardType | null>(null);
 
   // Timer and score state
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -57,9 +59,9 @@ export const GameBoard = ({
   const moves = useRef<number>(0);
 
   useEffect(() => {
-    const shuffledBoardImages = getShuffledBoardImages(images.board);
+    const shuffledBoardImages = getShuffledBoardImages(images.board, isTriple);
     setCards(shuffledBoardImages);
-  }, [images]);
+  }, [images, isTriple]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -82,6 +84,7 @@ export const GameBoard = ({
   useCalculateCardAndBoardDimensions({
     setCardWidth,
     setContainerWidth,
+    isTriple,
   });
 
   // Save single player score to the database
@@ -108,6 +111,7 @@ export const GameBoard = ({
             singlePlayerName,
             finalScore,
             showPersonalGames,
+            isTriple,
           ),
         );
 
@@ -133,6 +137,7 @@ export const GameBoard = ({
     setAlert,
     setAlertOnPress,
     alertOnPress,
+    isTriple,
   ]);
 
   // Save 2-players scores to the database
@@ -187,7 +192,72 @@ export const GameBoard = ({
     alertOnPress,
   ]);
 
-  const handleCardPress = (index: number) => {
+  const handleCardPressTriple = (index: number) => {
+    if (firstCard && secondCard && thirdCard) return;
+    if (cards[index].isRevealed) return;
+
+    const updatedCards = [...cards];
+    updatedCards[index].isRevealed = true;
+
+    if (!firstCard) {
+      if (!startTime) setStartTime(Date.now());
+      setFirstCard({ ...updatedCards[index], index });
+    } else if (!secondCard) {
+      setSecondCard({ ...updatedCards[index], index });
+    } else {
+      moves.current += 1;
+      setThirdCard({ ...updatedCards[index], index });
+
+      const isMatch =
+        firstCard.src === secondCard.src &&
+        secondCard.src === updatedCards[index].src;
+
+      setTimeout(() => {
+        if (isMatch) {
+          updatedCards[firstCard.index!].isPaired = true;
+          updatedCards[secondCard.index!].isPaired = true;
+          updatedCards[index].isPaired = true;
+
+          if (mode === GAME_BOARD_MODE.player2) {
+            const key = `player${playerTurn}`;
+            const value =
+              playerTurn === PLAYER_TURN.player1
+                ? SCORES_KEY.player1
+                : SCORES_KEY.player2;
+            setScores((prevScores) => ({
+              ...prevScores,
+              [key]: prevScores[value] + 1,
+            }));
+          }
+        } else {
+          updatedCards[firstCard.index!].isRevealed = false;
+          updatedCards[secondCard.index!].isRevealed = false;
+          updatedCards[index].isRevealed = false;
+
+          if (mode === GAME_BOARD_MODE.player2) {
+            setPlayerTurn((prevTurn) =>
+              prevTurn === PLAYER_TURN.player1
+                ? PLAYER_TURN.player2
+                : PLAYER_TURN.player1,
+            );
+          }
+        }
+
+        setFirstCard(null);
+        setSecondCard(null);
+        setThirdCard(null);
+        setCards(updatedCards);
+
+        if (updatedCards.every((card) => card.isPaired)) {
+          setEndTime(Date.now());
+        }
+      }, cardsVanishTime * 1000);
+    }
+
+    setCards(updatedCards);
+  };
+
+  const handleCardPressDouble = (index: number) => {
     if (firstCard && secondCard) return; // Prevent further clicks
     if (cards[index].isRevealed) return; // Prevent clicking revealed cards
 
@@ -279,7 +349,11 @@ export const GameBoard = ({
             key={index}
             width={cardWidth}
             card={card}
-            onPress={() => handleCardPress(index)}
+            onPress={() =>
+              isTriple
+                ? handleCardPressTriple(index)
+                : handleCardPressDouble(index)
+            }
           />
         ))}
       </ThemedView>

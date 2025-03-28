@@ -36,6 +36,7 @@ export const StatisticsPage = () => {
   const twoPlayerGames = useAppSelector(gameSelectors.getTwoPlayerGames);
   const multiPlayerGames = useAppSelector(gameSelectors.getMultiPlayerGames);
   const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
+  const showTripleMode = useAppSelector(gameSelectors.getShowTripleMode);
 
   const [tab, setTab] = useState(STATISTICS_PAGE_TABS.player1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,12 +92,17 @@ export const StatisticsPage = () => {
   const fetchGames = useCallback(() => {
     if (me?.id) {
       dispatch(
-        gameActions.getOnePlayerGames(me.id, showPersonalGames, searchQuery),
+        gameActions.getOnePlayerGames(
+          me.id,
+          showPersonalGames,
+          showTripleMode,
+          searchQuery,
+        ),
       );
       dispatch(gameActions.getTwoPlayerGames(me.id, searchQuery));
       dispatch(gameActions.getMultiPlayerGames());
     }
-  }, [me, dispatch, showPersonalGames, searchQuery]);
+  }, [me, dispatch, showPersonalGames, showTripleMode, searchQuery]);
 
   useEffect(() => {
     fetchGames();
@@ -151,25 +157,45 @@ export const StatisticsPage = () => {
             inputStyle={styles.searchInput}
           />
         </View>
-        <View style={styles.switchContainer}>
-          <Text
-            style={{
-              color: isTwoPlayerTab
-                ? theme.colors.onSurfaceDisabled
-                : theme.colors.onBackground,
-            }}
-          >
-            {t("statistics.showOnlyYourGames")}
-          </Text>
-          <CustomSwitch
-            value={showPersonalGames}
-            onValueChange={() => {
-              dispatch(
-                gameSliceActions.setShowPersonalGames(!showPersonalGames),
-              );
-            }}
-            disabled={isTwoPlayerTab}
-          />
+        <View style={styles.switchesContainer}>
+          <View style={styles.switchContainer}>
+            <Text
+              style={{
+                color: isTwoPlayerTab
+                  ? theme.colors.onSurfaceDisabled
+                  : theme.colors.onBackground,
+              }}
+            >
+              {t("statistics.showOnlyYourGames")}
+            </Text>
+            <CustomSwitch
+              value={showPersonalGames}
+              onValueChange={() => {
+                dispatch(
+                  gameSliceActions.setShowPersonalGames(!showPersonalGames),
+                );
+              }}
+              disabled={isTwoPlayerTab}
+            />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text
+              style={{
+                color: isTwoPlayerTab
+                  ? theme.colors.onSurfaceDisabled
+                  : theme.colors.onBackground,
+              }}
+            >
+              {t("statistics.tripleMode")}
+            </Text>
+            <CustomSwitch
+              value={showTripleMode}
+              onValueChange={() => {
+                dispatch(gameSliceActions.setShowTripleMode(!showTripleMode));
+              }}
+              disabled={isTwoPlayerTab}
+            />
+          </View>
         </View>
       </View>
 

@@ -6,6 +6,7 @@ export type GameBoardProps = {
   setAlert: Dispatch<SetStateAction<string>>;
   setAlertOnPress: Dispatch<SetStateAction<(() => void) | undefined>>;
   alertOnPress: (() => void) | undefined;
+  isTriple: boolean;
 };
 
 export enum SCORES_KEY {

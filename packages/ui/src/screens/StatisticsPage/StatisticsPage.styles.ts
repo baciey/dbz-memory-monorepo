@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     maxWidth: 500,
     width: "100%",
   },
+  switchesContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   switchContainer: {
     flexDirection: "row",
     alignItems: "center",

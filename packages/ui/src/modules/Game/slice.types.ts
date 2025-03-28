@@ -9,6 +9,7 @@ export interface GameState {
   onePlayerGamesStatus: ACTION_STATUS;
   twoPlayerGamesStatus: ACTION_STATUS;
   showPersonalGames: boolean;
+  showTripleMode: boolean;
   multiPlayerGames: MultiPlayerGame[];
   multiPlayerGamesStatus: ACTION_STATUS;
   cardsVanishTime: number;
