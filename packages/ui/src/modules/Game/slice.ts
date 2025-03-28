@@ -10,6 +10,7 @@ const initialGameState: GameState = {
   onePlayerGamesStatus: ACTION_STATUS.IDLE,
   twoPlayerGamesStatus: ACTION_STATUS.IDLE,
   showPersonalGames: false,
+  showTripleMode: false,
   multiPlayerGames: [],
   multiPlayerGamesStatus: ACTION_STATUS.IDLE,
   cardsVanishTime: 1.5,
@@ -67,6 +68,12 @@ const gameSlice = createSlice({
       action: PayloadAction<GameState["showPersonalGames"]>,
     ) => {
       state.showPersonalGames = action.payload;
+    },
+    setShowTripleMode: (
+      state,
+      action: PayloadAction<GameState["showTripleMode"]>,
+    ) => {
+      state.showTripleMode = action.payload;
     },
     multiPlayerGamesLoading(state) {
       state.multiPlayerGamesStatus = ACTION_STATUS.LOADING;

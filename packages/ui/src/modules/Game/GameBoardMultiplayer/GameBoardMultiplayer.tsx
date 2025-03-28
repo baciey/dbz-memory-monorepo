@@ -23,6 +23,8 @@ import { useGetImages } from "../../../hooks/useGetImages";
 import { defaultTimeToMove } from "./GameBoardMultiPlayer.const";
 import { userSelectors } from "../../User/selectors";
 
+const isTriple = false;
+
 export const GameBoardMultiplayer = ({
   handleSetGameMode,
   initialGame,
@@ -111,7 +113,7 @@ export const GameBoardMultiplayer = ({
   ]);
 
   const resetGame = useCallback(() => {
-    const shuffledBoardImages = getShuffledBoardImages(images.board);
+    const shuffledBoardImages = getShuffledBoardImages(images.board, isTriple);
 
     dispatch(
       gameActions.updateMultiPlayerGame({
@@ -341,6 +343,7 @@ export const GameBoardMultiplayer = ({
   useCalculateCardAndBoardDimensions({
     setCardWidth,
     setContainerWidth,
+    isTriple,
   });
 
   useGameHasEnded({

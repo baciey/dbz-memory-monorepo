@@ -9,6 +9,7 @@ const getTwoPlayerGames = (state: RootState) => state.game.twoPlayerGames;
 const getTwoPlayerGamesStatus = (state: RootState) =>
   state.game.twoPlayerGamesStatus;
 const getShowPersonalGames = (state: RootState) => state.game.showPersonalGames;
+const getShowTripleMode = (state: RootState) => state.game.showTripleMode;
 const getMultiPlayerGames = (state: RootState) => state.game.multiPlayerGames;
 const getMultiPlayerGamesStatus = (state: RootState) =>
   state.game.multiPlayerGamesStatus;
@@ -25,4 +26,5 @@ export const gameSelectors = {
   getMultiPlayerGames,
   getMultiPlayerGamesStatus,
   getCardsVanishTime,
+  getShowTripleMode,
 };

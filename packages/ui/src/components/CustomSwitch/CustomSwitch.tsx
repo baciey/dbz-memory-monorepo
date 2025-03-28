@@ -15,7 +15,7 @@ export const CustomSwitch = ({
       value={value}
       onValueChange={onValueChange}
       {...props}
-      style={style}
+      style={[props.style, style]}
     />
   );
 };
