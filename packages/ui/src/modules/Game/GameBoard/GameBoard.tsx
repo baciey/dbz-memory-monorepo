@@ -52,7 +52,6 @@ export const GameBoard = ({
   const player2Name =
     useAppSelector(gameSelectors.getPlayersNames)[1] || t("game.player2");
   const singlePlayerName = useAppSelector(gameSelectors.getPlayerName);
-  const showPersonalGames = useAppSelector(gameSelectors.getShowPersonalGames);
   const { images } = useGetImages();
   const cardsVanishTime = useAppSelector(gameSelectors.getCardsVanishTime);
 
@@ -93,8 +92,7 @@ export const GameBoard = ({
       mode === GAME_BOARD_MODE.player1 &&
       endTime &&
       startTime &&
-      singlePlayerName &&
-      me?.id
+      singlePlayerName
     ) {
       if (!alertOnPress) {
         const time = parseFloat(((endTime - startTime) / 1000).toFixed(2));
@@ -105,15 +103,7 @@ export const GameBoard = ({
             time + (moves.current - MOVES_LIMIT) * MOVES_TIME_MULTIPLIER;
         }
 
-        dispatch(
-          gameActions.updateOnePlayerGames(
-            me.id,
-            singlePlayerName,
-            finalScore,
-            showPersonalGames,
-            isTriple,
-          ),
-        );
+        dispatch(gameActions.updateOnePlayerGames(finalScore, isTriple));
 
         const alert = `${t("game.congratulations")}! ${t("game.youHaveFinishedGame")}\n${t("game.time")}: ${time}\n${t("game.moves")}: ${moves.current}\n${t("game.result")}: ${finalScore} (${t("game.movesInfo")})`;
         setAlert(alert);
@@ -129,9 +119,7 @@ export const GameBoard = ({
     startTime,
     singlePlayerName,
     mode,
-    me?.id,
     dispatch,
-    showPersonalGames,
     t,
     handleSetGameMode,
     setAlert,
@@ -158,7 +146,6 @@ export const GameBoard = ({
             player2Name,
             scores.player1,
             scores.player2,
-            me.id,
           ),
         );
         const isTie = scores.player1 === scores.player2;
