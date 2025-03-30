@@ -220,7 +220,9 @@ const getOnePlayerGames = (searchQuery: string = ""): PayloadThunkAction => {
     const userId = userSelectors.getMe(getState())?.id;
     supabase
       .from(DATABASE_TABLE.one_player_games)
-      .select(`id, name, time, created_at, is_triple, profiles ( avatar_url )`)
+      .select(
+        `id, name, time, created_at, is_triple, moves, cards_vanish_time, profiles ( avatar_url )`,
+      )
       .eq(showPersonal ? "user_id" : "", userId)
       .eq(showTripleMode ? "is_triple" : "", true)
       .ilike("name", `%${searchQuery}%`)
@@ -245,6 +247,8 @@ const getOnePlayerGames = (searchQuery: string = ""): PayloadThunkAction => {
               time: game.time,
               id: game.id,
               isTriple: game.is_triple,
+              moves: game.moves,
+              cardsVanishTime: game.cards_vanish_time,
               // @ts-ignore supabase typing issue, avatar_url is not recognized
               avatarUrl: game.profiles.avatar_url || null,
               createdAt: dateFormatter(game.created_at),
@@ -313,10 +317,12 @@ const getTwoPlayerGames = (searchQuery: string = ""): PayloadThunkAction => {
 const updateOnePlayerGames = (
   time: number,
   isTriple: boolean,
+  moves: number,
 ): PayloadThunkAction => {
   return async (dispatch, getState) => {
     const userId = userSelectors.getMe(getState())?.id;
     const name = gameSelectors.getPlayerName(getState());
+    const cardsVanishTime = gameSelectors.getCardsVanishTime(getState());
 
     await supabase.from(DATABASE_TABLE.one_player_games).insert({
       name: name,
@@ -324,8 +330,10 @@ const updateOnePlayerGames = (
       platform: Platform.OS,
       user_id: userId,
       is_triple: isTriple,
+      moves: moves,
+      cards_vanish_time: cardsVanishTime,
     });
-    dispatch(getOnePlayerGames(userId));
+    dispatch(getOnePlayerGames());
   };
 };
 
@@ -346,7 +354,7 @@ const updateTwoPlayerGames = (
       platform: Platform.OS,
       user_id: userId,
     });
-    dispatch(getTwoPlayerGames(userId));
+    dispatch(getTwoPlayerGames());
   };
 };
 
