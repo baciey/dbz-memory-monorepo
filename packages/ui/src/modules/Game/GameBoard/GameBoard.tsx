@@ -103,7 +103,9 @@ export const GameBoard = ({
             time + (moves.current - MOVES_LIMIT) * MOVES_TIME_MULTIPLIER;
         }
 
-        dispatch(gameActions.updateOnePlayerGames(finalScore, isTriple));
+        dispatch(
+          gameActions.updateOnePlayerGames(finalScore, isTriple, moves.current),
+        );
 
         const alert = `${t("game.congratulations")}! ${t("game.youHaveFinishedGame")}\n${t("game.time")}: ${time}\n${t("game.moves")}: ${moves.current}\n${t("game.result")}: ${finalScore} (${t("game.movesInfo")})`;
         setAlert(alert);
