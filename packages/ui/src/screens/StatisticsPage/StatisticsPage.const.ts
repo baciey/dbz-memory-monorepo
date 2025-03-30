@@ -8,6 +8,12 @@ export const onePlayerTableConfig = (
     { header: "Avatar", columnWidth: 70, rowId: "avatarUrl" },
     { header: t("statistics.name"), columnWidth: 130, rowId: "name" },
     { header: t("statistics.time"), columnWidth: 70, rowId: "time" },
+    { header: t("game.moves"), columnWidth: 70, rowId: "moves" },
+    {
+      header: t("game.cardsVanishTime"),
+      columnWidth: 140,
+      rowId: "cardsVanishTime",
+    },
     { header: t("statistics.date"), columnWidth: 100, rowId: "createdAt" },
   ];
 };
