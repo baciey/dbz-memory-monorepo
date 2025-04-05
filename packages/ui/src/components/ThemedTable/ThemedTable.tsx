@@ -74,7 +74,7 @@ export const ThemedTable = ({ config, data }: ThemedTableProps) => {
                       const cellWidth = column.columnWidth;
                       const value =
                         column.rowId === "index"
-                          ? index + 1
+                          ? index + 1 + from
                           : item[column.rowId];
 
                       const avatarUrl =

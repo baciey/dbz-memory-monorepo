@@ -171,21 +171,23 @@ export const StatisticsPage = () => {
               disabled={isTwoPlayerTab}
             />
           </View>
-          <View style={styles.switchContainer}>
-            <Text
-              style={{
-                color: theme.colors.onBackground,
-              }}
-            >
-              {t("statistics.tripleMode")}
-            </Text>
-            <CustomSwitch
-              value={showTripleMode}
-              onValueChange={() => {
-                dispatch(gameSliceActions.setShowTripleMode(!showTripleMode));
-              }}
-            />
-          </View>
+          {tab !== STATISTICS_PAGE_TABS.multiplayer && (
+            <View style={styles.switchContainer}>
+              <Text
+                style={{
+                  color: theme.colors.onBackground,
+                }}
+              >
+                {t("statistics.tripleMode")}
+              </Text>
+              <CustomSwitch
+                value={showTripleMode}
+                onValueChange={() => {
+                  dispatch(gameSliceActions.setShowTripleMode(!showTripleMode));
+                }}
+              />
+            </View>
+          )}
         </View>
       </View>
 
