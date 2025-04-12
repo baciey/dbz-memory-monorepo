@@ -1,13 +1,17 @@
 import React, { memo } from "react";
 import { styles } from "./Card.styles";
-import { Image, Pressable, View } from "react-native";
+import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import { CardProps } from "./Card.types";
 import { useGetImages } from "../../../hooks/useGetImages";
 import { TESTING_MODE } from "../../../constants/config";
+import CardBackStatic from "./cardBack.png";
+import { useGetScreenDimensions } from "../../../hooks/useGetScreenDimensions";
 
 export const Card = memo(({ width, card, onPress, index }: CardProps) => {
   const { images } = useGetImages();
+  const { isWeb } = useGetScreenDimensions();
   const cardFrontOpacity = TESTING_MODE ? 1 : 0;
+
   return (
     <Pressable onPress={onPress} testID={`cardContainer-${index}`}>
       <View
@@ -35,11 +39,9 @@ export const Card = memo(({ width, card, onPress, index }: CardProps) => {
         {!card.isRevealed && (
           <Image
             style={[styles.image, TESTING_MODE ? { opacity: 0.3 } : {}]}
-            source={{
-              width: width,
-              height: width,
-              uri: images.main.cardBack || undefined,
-            }}
+            source={isWeb ? { uri: images.main.cardBack } : CardBackStatic}
+            width={width}
+            height={width}
             testID={`cardBack-${index}`}
           />
         )}
