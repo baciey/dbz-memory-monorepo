@@ -143,20 +143,22 @@ export const NamesModal = ({
               testID="player2Name"
             />
           ) : null}
-          <View style={styles.rowAligned}>
-            <Text
-              style={{
-                color: theme.colors.onBackground,
-              }}
-            >
-              {t("statistics.tripleMode")}
-            </Text>
-            <CustomSwitch
-              value={isTriple}
-              onValueChange={() => setIsTriple(!isTriple)}
-              style={styles.switch}
-            />
-          </View>
+          {mode !== GAME_BOARD_MODE.multiplayer && (
+            <View style={styles.rowAligned}>
+              <Text
+                style={{
+                  color: theme.colors.onBackground,
+                }}
+              >
+                {t("statistics.tripleMode")}
+              </Text>
+              <CustomSwitch
+                value={isTriple}
+                onValueChange={() => setIsTriple(!isTriple)}
+                style={styles.switch}
+              />
+            </View>
+          )}
           {mode === GAME_BOARD_MODE.player1 ? (
             <>
               <ThemedView style={styles.rowAligned}>
